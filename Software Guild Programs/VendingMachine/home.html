@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <link rel="stylesheet" href="css/styling">
+
+    <title>Vending Machine</title>
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css" integrity="sha384-HSMxcRTRxnN+Bdg0JdbxYKrThecOKuH5zCYotlSAcp1+c8xmyTe9GYg1l9a69psu" crossorigin="anonymous">
+    </head>
+    <body>
+
+        <div class="container" style="height: 917px; width: 100%;">
+
+            <h2 style="text-align:center;">Vending Machine</h2>      
+       
+            <!-- Dynamically adding items -->
+            <div class="col-md-10" style = "position:relative; left:100px; top:0px; height: 800px; width: 45%;">
+               <div id="itemTable">
+               </div>
+            </div>
+
+            <!-- Transaction Panel -->
+            <div class="col-md-10" style="border: solid; position:relative; left:200px; top:25px; height: 750px; width: 19%;">
+       
+                <!-- User Money -->
+                <h3>Total $ In</h3>
+                <div id="moneyDisplay" class="col-md-2" style="border: solid; position:relative; left:15px; height: 29px; width: 73%;">0.00</div>
+                <button id="addDollar" class="button" style="margin:15px;height:50px;width:100px" onclick="getMoney('dollar')">Add Dollar</button>
+                <button id="addQuarter" class="button" style="margin:15px;height:50px;width:100px" onclick="getMoney('quarter')">Add Quarter</button>
+                <button id="addDime" class="button" style="margin:15px;height:50px;width:100px" onclick="getMoney('dime')">Add Dime</button>
+                <button id="addNickel" class="button" style="margin:15px;height:50px;width:100px" onclick="getMoney('nickel')">Add Nickel</button>
+
+                <!-- Messages -->
+               <h3>Messages</h3>
+                <div id="messages" class="col-md-2" style="border: solid; position:relative; left:5px; top: -10px; height: 50px; width: 73%; margin: 10px;">
+                    <ul class="list-group" style="position:relative; top:1px; width: 114%; left:-14px;" id="errorMessages"></ul></div>
+               <h3>Selected Item:</h3>
+               <div class="col-md-2"id="inputId" style="border: solid; position:relative; left:5px; height: 30px; width: 73%; margin: 10px;"></div>
+               <button id="purchase" class="button" style="margin:15px;height:50px;width:235px" onclick='transaction()'>Make Purchase</button>
+
+               <!-- Change -->
+               <h3>Change</h3>
+               <div id="change" class="col-md-2" style="border: solid; position:relative; left:5px; height: 50px; width: 73%; margin: 10px;"></div>
+               <button id="makeChange" class="button" style="margin:15px;height:50px;width:235px; display:none;" onclick="changeReturn()" >Change Return</button>
+            </div>
+
+        </div>
+
+    <!-- Scripts -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+      
+    <script src="js/home.js"></script>
+
+    </body>
+    </html>

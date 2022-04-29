@@ -1,0 +1,5 @@
+com\perscholas\marstafk\connections\FactoryConnection.class
+com\perscholas\marstafk\connections\EmployeeDAO.class
+com\perscholas\marstafk\connections\EmployeeModel.class
+com\perscholas\marstafk\connections\Main.class
+.netbeans_automatic_build

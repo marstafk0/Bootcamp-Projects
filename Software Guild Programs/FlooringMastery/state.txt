@@ -1,0 +1,3 @@
+Minnesota,MN,25.00
+California,CA,8.50
+Georgia,GA,12.50
