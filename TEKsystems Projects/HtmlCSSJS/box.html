@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>JS Intro</title>
+</head>
+<body>
+
+<div>
+    <h1>
+        Printing Shapes
+    </h1>
+    <input id="width" placeholder="Width">
+    <input id="height" placeholder="Height">
+    <button type="submit" onclick="onSubmit()">Sumbit</button>
+    <p id="pa"></p>
+</div>
+
+    <script>
+        let width = 0;
+        let height = 0;
+
+        function onSubmit() {
+            width = document.getElementById('width').value;
+            height = document.getElementById('height').value;
+            for (let h = 1; h <= height; h++) {
+
+                for (let w = 1; w <= width; w++) {
+                    document.getElementById("pa").innerHTML += "*";
+                }
+                document.getElementById("pa").innerHTML += "<br>";
+
+            }
+        }
+        
+    </script>
+</body>
+
+</html>
