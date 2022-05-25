@@ -12,7 +12,7 @@ $(document).ready(function () {
       method: "GET",
       headers: {
         "X-RapidAPI-Host": "aerisweather1.p.rapidapi.com",
-        "X-RapidAPI-Key": "39125ad083msha052ceab43936bbp11b52bjsne930007ec12f",
+        "X-RapidAPI-Key": "redacted",
       },
     };
 
