@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>JS Intro</title>
+</head>
+<body>
+
+<div>
+    <p id="pa"></p>
+</div>
+
+    <script>
+        
+        function sum2() {
+            let userInput1 = prompt("Enter in a array of numbers seperating them by spaces");
+            let userArr = [userInput1.split(' ')];
+            let userArr2 = userArr[0];
+            let intArray = [];
+            let finalSum = 0;
+
+            for (let i = 0; i < userArr2.length; i++) {
+                intArray.push(parseInt(userArr2[i]));
+
+                finalSum += intArray[i];
+            }
+            console.log(finalSum);
+
+        }
+
+        sum2();
+
+    </script>
+</body>
+
+</html>

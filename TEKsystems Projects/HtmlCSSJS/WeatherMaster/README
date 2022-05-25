@@ -1,0 +1,19 @@
+Instructions To Run Project: Must have node.js installed. If the node_modules package is included, run the command {npm run dev} in a terminal
+in the project root directory. If node_modules is not included in the files, run the commands {npm install three.js} and {npm install gsap} and then run {npm run dev}
+
+Instructions To Use API: Enter into the seacrh box two words in the format
+(string,string) spaces are allowed, must include comma, examples
+include: [city,state], [lat,long], [city, country], [US / CA postal
+code], etc.
+
+Tools and frameworks used:
+
+-Three.js
+-NPM
+-HTML, CSS, JavaScript
+-Tailwind CSS
+-JQuery and Ajax
+
+This is a small website for my SBA at TEKsystems. I used a library called Three.js to create earth, stars, atmosphere and animated mouse movements as well as glsl shaders for the index page.
+I then implemented an api called Aeris Weather to send two string parameters to get the weather forecast information. While my CSS and over-all structure of th wesite is not super impressive,
+I at least hope its entertaining and stylish.
