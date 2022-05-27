@@ -1,13 +1,13 @@
-package com.example.unitTesting;
+package com.example.employeeapp;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class UnitTestingApplication {
+public class EmployeeappApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(UnitTestingApplication.class, args);
+		SpringApplication.run(EmployeeappApplication.class, args);
 	}
 
 }
