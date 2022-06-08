@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="en-US" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <div th:replace="header :: myheader"></div>
+</head>
+<body>
+<div class="row m-4 border border-dark">
+    <div class="col text-center m-3">
+        <table class="table table-striped">
+            <thead>
+            <tr>
+                <th>Classroom ID</th>
+                <th>Classroom Name</th>
+                <th>active</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr th:each="classroom : ${classrooms}">
+                <td th:text="${classroom.id}">Location ID</td>
+                <td th:text="${classroom.className}">Name</td>
+                <td th:text="${classroom.active}">Description</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+<div th:insert="footer :: foot"></div>
+</body>
+</html>
