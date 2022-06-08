@@ -66,12 +66,10 @@ public class FamilyController {
         family.setStateOf(request.getParameter("stateOf"));
         family.setZip(request.getParameter("zip"));
         String[] personIds = request.getParameterValues("personId");
-        System.out.println(personIds[0]);
         List<Person> people = new ArrayList<>();
         if(personIds != null) {
             for (String s : personIds) {
                 Person person = personService.getPersonById(Long.parseLong(s));
-                System.out.println(person.toString());
                 people.add(person);
             }
             family.setPersons(people);
