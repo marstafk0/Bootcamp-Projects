@@ -28,13 +28,13 @@ public class Classroom implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     
-    @Column(name = "className", nullable = false)
+    @Column(name = "class_name", nullable = false)
     private String className;
 
     @Column(name = "active", nullable = false)
     private boolean active = true;
     
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
     @JoinTable(name = "classroom_grade",
             joinColumns = {
                 @JoinColumn(name = "classroom_id")},

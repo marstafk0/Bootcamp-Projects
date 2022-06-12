@@ -22,11 +22,6 @@ public class JogathonMasterServiceImpl implements JogathonMasterService {
     JogathonMasterRepository jMasterRepo;
 
     @Override
-    public List<JogathonMaster> getAllJogathonsByActive(boolean active) {
-        return jMasterRepo.findAllByActive(active);
-    }
-
-    @Override
     public JogathonMaster getJogathonById(long id) {
         return jMasterRepo.findById(id).get();
     }
@@ -35,5 +30,8 @@ public class JogathonMasterServiceImpl implements JogathonMasterService {
     public void saveJogathon(JogathonMaster jogathonMaster) {
         jMasterRepo.save(jogathonMaster);
     }
+
+    @Override
+    public JogathonMaster getActiveJogathon(boolean active) { return jMasterRepo.findByActive(active); }
     
 }

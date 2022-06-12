@@ -21,13 +21,7 @@ public class SponsorController {
 
     @GetMapping("sponsors")
     public String displaySponsors(Model model) {
-        model.addAttribute("sponsors", sponsorService.getAllSponsors(true));
-        return "sponsors";
-    }
-
-    @GetMapping("inactiveSponsors")
-    public String displayInactiveSponsors(Model model) {
-        model.addAttribute("sponsors", sponsorService.getAllSponsors(false));
+        model.addAttribute("sponsors", sponsorService.getAllSponsors());
         return "sponsors";
     }
 
@@ -49,14 +43,6 @@ public class SponsorController {
         sponsor.setCity(request.getParameter("city"));
         sponsor.setStateOf(request.getParameter("state"));
         sponsor.setZip(request.getParameter("zip"));
-        switch(request.getParameter("active").toLowerCase()) {
-            case "inactive", "false", "no" -> {
-                sponsor.setActive(false);
-            }
-            default -> {
-                sponsor.setActive(true);
-            }
-        }
 
         sponsorService.saveSponsor(sponsor);
         return "redirect:/sponsors";
@@ -64,14 +50,6 @@ public class SponsorController {
 
     @PostMapping("editSponsor")
     public String editSponsor(Sponsor sponsor) {
-        sponsorService.saveSponsor(sponsor);
-        return "redirect:/sponsors";
-    }
-
-    @PostMapping("confirmDeactivateSponsor")
-    public String confirmDeactivateSponsor(HttpServletRequest request) {
-        Sponsor sponsor = sponsorService.getSponsorById(Long.parseLong(request.getParameter("id")));
-        sponsor.setActive(false);
         sponsorService.saveSponsor(sponsor);
         return "redirect:/sponsors";
     }

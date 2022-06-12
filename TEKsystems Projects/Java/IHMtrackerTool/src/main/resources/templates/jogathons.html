@@ -12,73 +12,7 @@ Awesome Header by Mark Stafki!
   </head>
   <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-light navbar-light" id="nav">
-      <div class="container">
-        <a href="#" class="navbar-brand"></a>
-
-        <button
-          class="navbar-toggler collapsed"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navmenu"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navmenu">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a href="#" class="nav-link">Students</a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">Teachers</a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">Runners</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Side Navbar -->
-    <div class="wrapper">
-      <input type="checkbox" id="btn" hidden />
-      <label for="btn" class="menu-btn">
-        <i class="bx bx-menu"></i>
-        <i class="bx bxs-chevrons-right"></i>
-      </label>
-      <nav id="sidebar">
-        <div class="title">Jog-A-Thon</div>
-        <ul class="list-items">
-          <li>
-            <a href="#"><i class="bx bx-home-alt-2"></i>Home</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bxs-graduation"></i>Students</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bxs-user-account"></i>Teachers</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bx-money"></i>Sponsors</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bxs-user-detail"></i>Families</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bx-customize"></i>Classrooms</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bx-book"></i>Grades</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bx-envelope"></i>Jog-A-Thons</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
+    <div th:replace="header :: myNav"></div>
 
     <!-- Table for Jogathons -->
     <div class="container-xl">
@@ -90,22 +24,14 @@ Awesome Header by Mark Stafki!
                 <h2>Manage <b>Jog-A-Thons</b></h2>
               </div>
               <div class="col-sm-4">
-                <div class="input-group">
-                  <div class="form-outline">
-                    <input type="search" id="search" class="form-control" placeholder="Search.."/> 
-                  </div>
-                  <button type="button" class="btn btn-secondary">
-                    <i class='bx bx-search-alt-2' ></i>
-                  </button>
-                </div>
               </div>
               <div class="col-sm-4">
                 <a class="btn btn-success addJogathonButton" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add Jog-A-Thon</span></a>
-                <a class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>De-Activate</span></a>
                 <a class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"></i> <span>Sort By</span></a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                   <li><a class="dropdown-item" th:href="@{jogathons}">Clear Filters</a></li>
                   <li><a class="dropdown-item" href="#">Min-Max</a></li>
+                  <li><a class="dropdown-item" th:href="@{inactiveJogathons}">Previous Jog-A-Thons</a></li>
                 </ul>
               </div>
 
@@ -114,12 +40,6 @@ Awesome Header by Mark Stafki!
           <table class="table table-striped table-hover">
             <thead>
             <tr>
-              <th>
-            <span class="custom-checkbox">
-              <input type="checkbox" id="selectAll">
-              <label for="selectAll"></label>
-            </span>
-              </th>
               <th>ID</th>
               <th>Jog-A-Thon Date</th>
               <th>Comments</th>
@@ -127,14 +47,8 @@ Awesome Header by Mark Stafki!
               <th>Actions</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="myTable">
             <tr th:each="jogathon : ${jogathons}">
-              <td>
-            <span class="custom-checkbox">
-              <input type="checkbox" id="checkbox1" name="options[]" value="1">
-              <label for="checkbox1"></label>
-            </span>
-              </td>
               <td th:text="${jogathon.id}">ID</td>
               <td th:text="${jogathon.runDate}">Name</td>
               <td th:text="${jogathon.comments}">Contact</td>
@@ -166,12 +80,12 @@ Awesome Header by Mark Stafki!
           <div class="modal-dialog">
               <div class="modal-content">
                   <div class="modal-header">
-                    <h4 class="modal-title">Add Student</h4>
+                    <h4 class="modal-title">Add Jog-A-Thon</h4>
                     <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                   </div>
                   <div class="modal-body">
                     <div class="form-group">
-                      <label>Start Date</label>
+                      <label>Run Date</label>
                       <input type="text" class="form-control" id="runDate" name="runDate" required/>
                     </div>
                     <div class="form-group">
@@ -180,7 +94,10 @@ Awesome Header by Mark Stafki!
                     </div>
                     <div class="form-group">
                       <label>Is Active?</label>
-                      <input type="text" class="form-control" id="active" name="active"/>
+                      <select id="active" name="active" class="selectpicker mt-2 mb-2 w-100">
+                        <option value="true">Active</option>
+                        <option value="false">Inactive</option>                                                              
+                      </select>
                     </div>
                   </div>
                   <div class="modal-footer">
@@ -193,7 +110,7 @@ Awesome Header by Mark Stafki!
       </form>
     </div>
 
-    <!-- Edit Modal HTML -->
+    <!-- Edit Jog-A-Thon Modal -->
     <div class="editJogathonForm">
       <form th:action="@{editJogathon}" method="post">
         <div id="editJogathonModal" class="modal fade">
@@ -206,16 +123,21 @@ Awesome Header by Mark Stafki!
               <div class="modal-body">
                 <div class="form-group">
                   <input type="hidden" value="" id="id" name="id"/>
-                  <label>Start Date</label>
+                  <label>Run Date</label>
                   <input type="text" value="" class="form-control" id="runDate" name="runDate" required/>
                 </div>
                 <div class="form-group">
                   <label>Comments</label>
                   <input type="text" value="" class="form-control" id="comments" name="comments" required/>
                 </div>
-                <div class="form-group">
-                  <label>Is Active?</label>
-                  <input type="text" value="" class="form-control" id="active" name="active"/>
+                <div class="activeStatusJ">
+                  <div class="form-group">
+                    <label>Is Active?</label>
+                        <select id="active" name="active" class="selectpicker mt-2 mb-2 w-100">
+                          <option value="true">Active</option>
+                          <option value="false">Inactive</option>                                                              
+                        </select>
+                  </div>
                 </div>
               </div>
               <div class="modal-footer">
@@ -264,7 +186,7 @@ Awesome Header by Mark Stafki!
             <div class="modal-body">
               <div class="form-group">
                 <input type="hidden" value="" id="id" name="id"/>
-                <label>Start Date</label>
+                <label>Run Date</label>
                 <input type="text" value="" class="form-control" id="runDate" name="runDate" disabled/>
               </div>
               <div class="form-group">
@@ -273,7 +195,10 @@ Awesome Header by Mark Stafki!
               </div>
               <div class="form-group">
                 <label>Is Active?</label>
-                <input type="text" value="" class="form-control" id="active" name="active" disabled/>
+                    <select id="active" name="active" class="selectpicker mt-2 mb-2 w-100" disabled>
+                      <option value="true">Active</option>
+                      <option value="false">Inactive</option>                                                              
+                    </select>
               </div>
             </div>
             <div class="modal-footer">

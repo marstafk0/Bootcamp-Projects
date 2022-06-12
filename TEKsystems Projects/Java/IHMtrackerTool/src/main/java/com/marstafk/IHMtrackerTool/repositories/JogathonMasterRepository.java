@@ -9,5 +9,6 @@ public interface JogathonMasterRepository extends JpaRepository<JogathonMaster, 
     
     //@Query(value = "SELECT * FROM jogathon_master j WHERE j.active = :active", nativeQuery = true)
     public List<JogathonMaster> findAllByActive(boolean active);
+    public JogathonMaster findByActive(boolean active);
     
 }

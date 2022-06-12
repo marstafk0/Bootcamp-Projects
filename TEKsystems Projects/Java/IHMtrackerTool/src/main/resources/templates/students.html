@@ -12,73 +12,7 @@ Awesome Header by Mark Stafki!
   </head>
   <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-light navbar-light" id="nav">
-      <div class="container">
-        <a href="#" class="navbar-brand"></a>
-
-        <button
-          class="navbar-toggler collapsed"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navmenu"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navmenu">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a href="#" class="nav-link">Students</a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">Teachers</a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">Runners</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Side Navbar -->
-    <div class="wrapper">
-      <input type="checkbox" id="btn" hidden />
-      <label for="btn" class="menu-btn">
-        <i class="bx bx-menu"></i>
-        <i class="bx bxs-chevrons-right"></i>
-      </label>
-      <nav id="sidebar">
-        <div class="title">Jog-A-Thon</div>
-        <ul class="list-items">
-          <li>
-            <a href="#"><i class="bx bx-home-alt-2"></i>Home</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bxs-graduation"></i>Students</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bxs-user-account"></i>Teachers</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bx-money"></i>Sponsors</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bxs-user-detail"></i>Families</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bx-customize"></i>Classrooms</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bx-book"></i>Grades</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bx-envelope"></i>Jog-A-Thons</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
+    <div th:replace="header :: myNav"></div>
 
     <!-- Main Body of Page -->
     <!-- Dynamic table for Students -->
@@ -93,7 +27,7 @@ Awesome Header by Mark Stafki!
                 <div class="col-sm-4">
                   <div class="input-group">
                     <div class="form-outline">
-                      <input type="search" id="search" class="form-control" placeholder="Search.."/> 
+                      <input type="search" id="myInput" class="form-control" placeholder="Search.."/>
                     </div>
                     <button type="button" class="btn btn-secondary">
                       <i class='bx bx-search-alt-2' ></i>
@@ -133,7 +67,7 @@ Awesome Header by Mark Stafki!
                 <th>Actions</th>
               </tr>
               </thead>
-              <tbody>
+              <tbody id="myTable">
               <tr th:each="student : ${students}">
                 <td>
 							<span class="custom-checkbox">
@@ -148,8 +82,8 @@ Awesome Header by Mark Stafki!
                 <td th:text="${student.gradeName}">Grade</td>
                 <td>
                   <a th:href="@{studentDetails/(id=${student.id})}" class="dBtn" ><i class='bx bx-dots-vertical-rounded' data-toggle="tooltip" title="Details"></i></a>
-                  <a th:href="@{editPerson/(id=${student.id})}" class="eBtn" ><i class='bx bx-edit-alt' data-toggle="tooltip" title="Edit"></i></a>
-                  <a th:href="@{deactivatePerson/(id=${student.id})}" class="eBtnTwo" ><i class='bx bx-trash' data-toggle="tooltip" title="Delete"></i></a>
+                  <a th:href="@{editStudent/(id=${student.id})}" class="eBtn" ><i class='bx bx-edit-alt' data-toggle="tooltip" title="Edit"></i></a>
+                  <a th:href="@{deactivatePerson/(id=${student.id})}" class="eBtnTwo" ><i class='bx bx-trash' data-toggle="tooltip" title="De-Activate"></i></a>
                 </td>
               </tr>
               </tbody>
@@ -166,7 +100,7 @@ Awesome Header by Mark Stafki!
         </div>
       </div>
 
-        <!-- Add Modal HTML-->
+        <!-- Add Student Modal -->
       <div class="myFormThree">
         <form th:action="@{addStudent}" method="post">
           <div id="addStudentModal" class="modal fade">
@@ -199,16 +133,23 @@ Awesome Header by Mark Stafki!
                       </div>
                       <div class="form-group">
                         <label>Family</label>
-                        <select id="family" name="family" class="form-control" >
+                        <select id="family" name="familyId" class="selectpicker mt-1 mb-2 w-100" title="Select family..." data-live-search="true">
                           <option value="0">None</option>
                           <option th:each="family : ${families}" 
                                             th:value="${family.id}" 
-                                            th:text="${family.familyName}">Families</option>                                                                  
+                                            th:text="${family.familyName}">Family Name</option>                                                          
                         </select>
                       </div>
                       <div class="form-group">
                         <label>Is Active?</label>
-                        <input type="text" class="form-control" id="active" name="active"/>
+                        <select id="active" name="active" class="selectpicker mt-2 mb-2 w-100">
+                          <option value="true">Active</option>
+                          <option value="false">Inactive</option>                                                              
+                        </select>
+                      </div>
+                      <div class="form-group">
+                        <label>Laps for Current Jog-A-Thon (optional)</label>
+                        <input type="text" class="form-control" id="laps" name="laps"/>
                       </div>
                     </div>
                     <div class="modal-footer">
@@ -223,7 +164,7 @@ Awesome Header by Mark Stafki!
 
       <!-- Edit Modal HTML -->
       <div class="myForm">
-        <form th:action="@{savePerson}" method="post">
+        <form th:action="@{saveStudent}" method="post">
           <div id="editStudentModal" class="modal fade">
             <div class="modal-dialog">
               <div class="modal-content">
@@ -232,39 +173,50 @@ Awesome Header by Mark Stafki!
                   <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
                 </div>
                 <div class="modal-body">
-                  <div class="form-group">
-                    <input type="hidden" value="" id="id" name="id"/>
-                    <label>First Name</label>
-                    <input type="text" value="" class="form-control" id="firstName" name="firstName" required/>
+                    <div class="form-group">
+                      <input type="hidden" value="" id="id" name="id"/>
+                      <label>First Name</label>
+                      <input type="text" value="" class="form-control" id="firstName" name="firstName" required/>
+                    </div>
+                    <div class="form-group">
+                      <label>Last Name</label>
+                      <input type="text" value="" class="form-control" id="lastName" name="lastName" required/>
+                    </div>
+                    <div class="form-group">
+                      <label>Contact</label>
+                      <input type="text" value="" class="form-control" id="contact" name="contact" required/>
+                    </div>
+                    <div class="form-group">
+                      <label>Grade</label>
+                      <select id="grade" name="grade" class="form-control" >
+                        <option th:each="grade : ${grades}" 
+                                          th:value="${grade.id}" 
+                                          th:text="${grade.gradeName}">Grades</option>                                                                  
+                      </select>
+                    </div>
+                    <div class="familyDrop">
+                      <div class="form-group">
+                        <label>Family</label>
+                        <select id="family" name="familyId" class="selectpicker mt-1 mb-2 w-100" title="Select family..." data-live-search="true">
+                          <option value="0">None</option>
+                          <option th:each="family : ${families}" 
+                                            th:value="${family.id}" 
+                                            th:text="${family.familyName}">Family Name</option>                                                          
+                        </select>
+                      </div>
+                  </div>
+                  <div class="activeStatus">
+                    <div class="form-group">
+                      <label>Is Active?</label>
+                          <select id="active" name="active" class="selectpicker mt-2 mb-2 w-100">
+                            <option value="true">Active</option>
+                            <option value="false">Inactive</option>                                                              
+                          </select>
+                    </div>
                   </div>
                   <div class="form-group">
-                    <label>Last Name</label>
-                    <input type="text" value="" class="form-control" id="lastName" name="lastName" required/>
-                  </div>
-                  <div class="form-group">
-                    <label>Contact</label>
-                    <input type="text" value="" class="form-control" id="contact" name="contact" required/>
-                  </div>
-                  <div class="form-group">
-                    <label>Grade</label>
-                    <select id="grade" name="grade" class="form-control" >
-                      <option th:each="grade : ${grades}" 
-                                        th:value="${grade.id}" 
-                                        th:text="${grade.gradeName}">Grades</option>                                                                  
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Family</label>
-                    <select id="family" name="family" class="form-control" >
-                      <option value="0">None</option>
-                      <option th:each="family : ${families}" 
-                                        th:value="${family.id}" 
-                                        th:text="${family.familyName}">Families</option>                                                              
-                    </select>
-                  </div>
-                  <div class="form-group">
-                    <label>Is Active?</label>
-                    <input type="text" value="" class="form-control" id="active" name="active"/>
+                    <label>Laps for Current Jog-A-Thon (optional)</label>
+                    <input type="text" class="form-control" id="laps" name="laps"/>
                   </div>
                 </div>
                 <div class="modal-footer">
@@ -338,7 +290,14 @@ Awesome Header by Mark Stafki!
                   </div>
                   <div class="form-group">
                     <label>Is Active?</label>
-                    <input type="text" value="" class="form-control" id="active" name="active" disabled/>
+                        <select id="active" name="active" class="selectpicker mt-2 mb-2 w-100" disabled>
+                          <option value="true">Active</option>
+                          <option value="false">Inactive</option>                                                              
+                        </select>
+                  </div>
+                  <div class="form-group">
+                    <label>Add Laps for Current Jog-A-Thon</label>
+                    <input type="text" class="form-control" id="laps" name="laps"/>
                   </div>
                 </div>
                 <div class="modal-footer">

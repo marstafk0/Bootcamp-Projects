@@ -12,73 +12,7 @@ Awesome Header by Mark Stafki!
   </head>
   <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-light navbar-light" id="nav">
-      <div class="container">
-        <a href="#" class="navbar-brand"></a>
-
-        <button
-          class="navbar-toggler collapsed"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navmenu"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navmenu">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a href="#" class="nav-link">Students</a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">Teachers</a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">Runners</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Side Navbar -->
-    <div class="wrapper">
-      <input type="checkbox" id="btn" hidden />
-      <label for="btn" class="menu-btn">
-        <i class="bx bx-menu"></i>
-        <i class="bx bxs-chevrons-right"></i>
-      </label>
-      <nav id="sidebar">
-        <div class="title">Jog-A-Thon</div>
-        <ul class="list-items">
-          <li>
-            <a href="#"><i class="bx bx-home-alt-2"></i>Home</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bxs-graduation"></i>Students</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bxs-user-account"></i>Teachers</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bx-money"></i>Sponsors</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bxs-user-detail"></i>Families</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bx-customize"></i>Classrooms</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bx-book"></i>Grades</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bx-envelope"></i>Jog-A-Thons</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
+    <div th:replace="header :: myNav"></div>
 
     <!-- Table for Sponsors -->
     <div class="container-xl">
@@ -92,7 +26,7 @@ Awesome Header by Mark Stafki!
               <div class="col-sm-4">
                 <div class="input-group">
                   <div class="form-outline">
-                    <input type="search" id="search" class="form-control" placeholder="Search.."/> 
+                    <input type="search" id="myInput" class="form-control" placeholder="Search.."/> 
                   </div>
                   <button type="button" class="btn btn-secondary">
                     <i class='bx bx-search-alt-2' ></i>
@@ -101,12 +35,10 @@ Awesome Header by Mark Stafki!
               </div>
               <div class="col-sm-4">
                 <a class="btn btn-success addSponsorButton" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add Sponsor</span></a>
-                <a class="btn btn-danger" data-toggle="modal"><i class="material-icons">&#xE15C;</i> <span>De-Activate</span></a>
                 <a class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"></i> <span>Sort By</span></a>
                 <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                   <li><a class="dropdown-item" th:href="@{sponsors}">Clear Filters</a></li>
                   <li><a class="dropdown-item" href="#">Min-Max</a></li>
-                  <li><a class="dropdown-item" th:href="@{inactiveSponsors}">Inactive Sponsors</a></li>
                 </ul>
               </div>
 
@@ -132,7 +64,7 @@ Awesome Header by Mark Stafki!
               <th>Actions</th>
             </tr>
             </thead>
-            <tbody>
+            <tbody id="myTable">
             <tr th:each="sponsor : ${sponsors}">
               <td>
             <span class="custom-checkbox">
@@ -151,7 +83,6 @@ Awesome Header by Mark Stafki!
               <td>
                 <a th:href="@{getSponsor/(id=${sponsor.id})}" class="sdBtn" ><i class='bx bx-dots-vertical-rounded' data-toggle="tooltip" title="Details"></i></a>
                 <a th:href="@{getSponsor/(id=${sponsor.id})}" class="esBtn" ><i class='bx bx-edit-alt' data-toggle="tooltip" title="Edit"></i></a>
-                <a th:href="@{getSponsor/(id=${sponsor.id})}" class="dsBtn" ><i class='bx bx-trash' data-toggle="tooltip" title="De-Activate"></i></a>
               </td>
             </tr>
             </tbody>
@@ -168,7 +99,7 @@ Awesome Header by Mark Stafki!
       </div>
     </div>
 
-    <!-- Add Jogathon Modal -->
+    <!-- Add Sponsor Modal -->
     <div class="addSponsorForm">
       <form th:action="@{addSponsor}" method="post">
         <div id="addSponsorModal" class="modal fade">
@@ -205,15 +136,11 @@ Awesome Header by Mark Stafki!
                     </div>
                     <div class="form-group">
                         <label>State</label>
-                        <input type="text" class="form-control" id="state" name="state"/>
+                        <input type="text" class="form-control" id="stateOf" name="stateOf"/>
                     </div>
                     <div class="form-group">
                         <label>Zip Code</label>
                         <input type="text" class="form-control" id="zip" name="zip"/>
-                    </div>
-                    <div class="form-group">
-                        <label>Is Active?</label>
-                        <input type="text" class="form-control" id="active" name="active"/>
                     </div>
                     </div>
                   <div class="modal-footer">
@@ -264,15 +191,11 @@ Awesome Header by Mark Stafki!
                 </div>
                 <div class="form-group">
                     <label>State</label>
-                    <input type="text" class="form-control" id="state" name="state"/>
+                    <input type="text" class="form-control" id="stateOf" name="stateOf"/>
                 </div>
                 <div class="form-group">
                     <label>Zip Code</label>
                     <input type="text" class="form-control" id="zip" name="zip"/>
-                </div>
-                <div class="form-group">
-                    <label>Is Active?</label>
-                    <input type="text" class="form-control" id="active" name="active"/>
                 </div>
               </div>
               <div class="modal-footer">
@@ -346,21 +269,16 @@ Awesome Header by Mark Stafki!
               </div>
               <div class="form-group">
                 <label>State</label>
-                <input type="text" value="" class="form-control" id="state" name="state" disabled/>
+                <input type="text" value="" class="form-control" id="stateOf" name="stateOf" disabled/>
               </div>
               <div class="form-group">
                 <label>Zip Code</label>
                 <input type="text" value="" class="form-control" id="zip" name="zip" disabled/>
               </div>
-              <div class="form-group">
-                <label>Is Active?</label>
-                <input type="text" value="" class="form-control" id="active" name="active" disabled/>
-              </div>
             </div>
             <div class="modal-footer">
               <input type="button" class="btn btn-default close" data-dismiss="modal" value="Close">
             </div>
-
           </div>
         </div>
       </div>

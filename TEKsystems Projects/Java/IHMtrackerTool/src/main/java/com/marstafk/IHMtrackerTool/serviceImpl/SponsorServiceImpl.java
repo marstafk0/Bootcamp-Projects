@@ -20,12 +20,17 @@ public class SponsorServiceImpl implements SponsorService {
     }
 
     @Override
-    public List<Sponsor> getAllSponsors(boolean active) {
-        return sponsorRepository.findAllByActive(active);
+    public List<Sponsor> getAllSponsors() {
+        return sponsorRepository.findAll();
     }
 
     @Override
     public void saveSponsor(Sponsor sponsor) {
         sponsorRepository.save(sponsor);
+    }
+
+    @Override
+    public Sponsor getSponsorByPledgeId(long id) {
+        return sponsorRepository.findByPledgeId(id);
     }
 }

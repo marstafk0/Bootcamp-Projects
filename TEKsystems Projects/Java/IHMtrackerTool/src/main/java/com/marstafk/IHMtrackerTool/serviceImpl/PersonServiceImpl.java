@@ -20,23 +20,13 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<Person> getAllStudentsAZlastName() {
-        return personRepository.findAllByOrderByLastNameAsc(); 
+    public List<Person> getAllStudentsAZlastName(String type) {
+        return personRepository.findAllByOrderByLastNameAsc(type);
     }
 
     @Override
     public List<Person> getAllStudentsGrade() {
-        return personRepository.findAllByGrade();
-    }
-
-    @Override
-    public List<Person> getAllStudentsMoney() {
-        return null;
-    }
-
-    @Override
-    public List<Person> getAllTeachers() {
-        return null;
+        return personRepository.findAllGradesByType();
     }
 
     @Override
@@ -48,37 +38,37 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public void updatePerson(Person person) {
-        personRepository.updatePerson(person.getFirstName(), person.getLastName(), person.getContact(), person.isActive(), person.getId());
-    }
-
-    @Override
-    public void addPerson(Person person) {
+    public void savePerson(Person person) {
         personRepository.save(person);
     }
 
     @Override
-    public void deletePerson(long id) {
-
+    public List<Person> getAllStudentsAZfirstName(String type) {
+        return personRepository.findAllByOrderByFirstNameAsc(type);
     }
 
     @Override
-    public List<Person> getAllStudentsAZfirstName() {
-        return personRepository.findAllByOrderByFirstNameAsc(); 
+    public List<Person> getAllPersonsByGradeId(long id) {
+        return personRepository.findAllStudentsByGradeId(id);
     }
 
     @Override
-    public List<Person> getAllActiveStudents() {
-        
-//        Pageable paging = PageRequest.of(pageNo, pageSize);
-//        Page<Person> pagedResult = personRepository.findAllByActive(paging);
-//
-//        return pagedResult.toList();
-        return personRepository.findAllByActive();
+    public List<Person> getAllActiveStudents(String type) {
+        return personRepository.findAllByActive(type);
     }
 
     @Override
-    public List<Person> getAllInactiveStudents() {
-        return personRepository.findAllByInactive();
+    public List<Person> getAllPersonsByClassroomId(long id) {
+        return personRepository.findAllStudentsByClassroomId(id);
+    }
+
+    @Override
+    public Person getPersonByPledgeId(long id) {
+        return personRepository.findByPledgeId(id);
+    }
+
+    @Override
+    public List<Person> getAllInactiveStudents(String type) {
+        return personRepository.findAllByInactive(type);
     }
 }

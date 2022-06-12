@@ -27,6 +27,11 @@ public class GradeServiceImpl implements GradeService{
     }
 
     @Override
+    public List<Grade> getAllGradesByClassroomId(long id) {
+        return gradeRepository.findAllGradesByClassroomId(id);
+    }
+
+    @Override
     public Grade getGradeById(Long id) {
         return gradeRepository.findById(id).get();
     }

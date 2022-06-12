@@ -6,14 +6,20 @@ package com.marstafk.IHMtrackerTool.service;
 
 import com.marstafk.IHMtrackerTool.models.PersonType;
 
+import java.util.List;
+
 /**
  *
  * @author boss_
  */
 public interface PersonTypeService {
     
-    void savePersonType(PersonType personType);
+    public void savePersonType(PersonType personType);
     
-    PersonType getPersonTypeByName(String statusName);
+    public PersonType getPersonTypeByName(String statusName);
+
+    public List<PersonType> getAllPersonTypes();
+
+    public PersonType getPersonTypeById(long id);
     
 }

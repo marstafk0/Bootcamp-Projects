@@ -39,5 +39,10 @@ public class ClassroomServiceImpl implements ClassroomService {
     public Classroom getClassroomByGradeId(long id) {
         return classroomRepository.findByGradeId(id);
     }
+
+    @Override
+    public void deleteClassroom(long id) {
+        classroomRepository.deleteById(id);
+    }
     
 }

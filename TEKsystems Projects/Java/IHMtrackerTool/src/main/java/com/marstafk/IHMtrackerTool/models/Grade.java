@@ -28,7 +28,7 @@ public class Grade implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     
-    @Column(name = "gradeName", nullable = false)
+    @Column(name = "grade_name", nullable = false)
     private String gradeName;
 
     @Column(name = "active", nullable = false)

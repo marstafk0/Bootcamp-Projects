@@ -27,7 +27,7 @@ public class JogathonMaster {
     @Column(name = "comments", nullable = true)
     private String comments;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
     @JoinTable(name = "jogathon_master_person_laps",
             joinColumns = {
                     @JoinColumn(name = "jogathon_master_id")},
@@ -41,4 +41,9 @@ public class JogathonMaster {
         this.comments = comments;
         this.laps = laps;
     }
+
+    public void addLaps(PersonLaps personLaps) {
+        this.laps.add(personLaps);
+    }
+
 }

@@ -33,7 +33,7 @@ public class PersonType implements Serializable {
     @Column(name = "active", nullable = false)
     private boolean active = true;
 
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
     @JoinTable(name = "person_type_person",
             joinColumns = {
                 @JoinColumn(name = "person_type_id")},

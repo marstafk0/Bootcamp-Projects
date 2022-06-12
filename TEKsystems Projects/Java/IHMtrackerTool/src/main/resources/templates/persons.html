@@ -12,73 +12,7 @@ Awesome Header by Mark Stafki!
   </head>
   <body>
 
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg bg-light navbar-light" id="nav">
-      <div class="container">
-        <a href="#" class="navbar-brand"></a>
-
-        <button
-          class="navbar-toggler collapsed"
-          type="button"
-          data-bs-toggle="collapse"
-          data-bs-target="#navmenu"
-        >
-          <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <div class="collapse navbar-collapse" id="navmenu">
-          <ul class="navbar-nav ms-auto">
-            <li class="nav-item">
-              <a href="#" class="nav-link">Students</a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">Teachers</a>
-            </li>
-            <li class="nav-item">
-              <a href="#" class="nav-link">Runners</a>
-            </li>
-          </ul>
-        </div>
-      </div>
-    </nav>
-
-    <!-- Side Navbar -->
-    <div class="wrapper">
-      <input type="checkbox" id="btn" hidden />
-      <label for="btn" class="menu-btn">
-        <i class="bx bx-menu"></i>
-        <i class="bx bxs-chevrons-right"></i>
-      </label>
-      <nav id="sidebar">
-        <div class="title">Jog-A-Thon</div>
-        <ul class="list-items">
-          <li>
-            <a href="#"><i class="bx bx-home-alt-2"></i>Home</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bxs-graduation"></i>Students</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bxs-user-account"></i>Teachers</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bx-money"></i>Sponsors</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bxs-user-detail"></i>Families</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bx-customize"></i>Classrooms</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bx-book"></i>Grades</a>
-          </li>
-          <li>
-            <a href="#"><i class="bx bx-envelope"></i>Jog-A-Thons</a>
-          </li>
-        </ul>
-      </nav>
-    </div>
+    <div th:replace="header :: myNav"></div>
 
     <!-- Main Body of Page -->
     <!-- Dynamic table for Persons -->
@@ -93,7 +27,7 @@ Awesome Header by Mark Stafki!
                 <div class="col-sm-4">
                   <div class="input-group">
                     <div class="form-outline">
-                      <input type="search" id="search" class="form-control" placeholder="Search.."/> 
+                        <input type="search" id="myInput" class="form-control" placeholder="Search.."/> 
                     </div>
                     <button type="button" class="btn btn-secondary">
                       <i class='bx bx-search-alt-2' ></i>
@@ -133,7 +67,7 @@ Awesome Header by Mark Stafki!
                 <th>Actions</th>
               </tr>
               </thead>
-              <tbody>
+              <tbody id="myTable">
               <tr th:each="person : ${persons}">
                 <td>
 							<span class="custom-checkbox">

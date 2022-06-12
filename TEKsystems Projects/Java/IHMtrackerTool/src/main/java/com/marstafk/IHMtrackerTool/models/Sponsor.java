@@ -33,16 +33,16 @@ public class Sponsor implements Serializable {
     @Column(name = "lname")
     private String lastName;
     
-    @Column(name = "addressOne")
+    @Column(name = "address_one")
     private String addressOne;
     
-    @Column(name = "addressTwo")
+    @Column(name = "address_two")
     private String addressTwo;
     
     @Column(name = "city")
     private String city;
     
-    @Column(name = "stateOf")
+    @Column(name = "state_of")
     private String stateOf;
     
     @Column(name = "zip")
@@ -50,9 +50,6 @@ public class Sponsor implements Serializable {
     
     @Column(name = "phone")
     private String phone;
-
-    @Column(name = "active", nullable = false)
-    private boolean active = true;
     
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
     @JoinTable(name = "sponsor_pledge",
@@ -63,7 +60,7 @@ public class Sponsor implements Serializable {
     private List<Pledge> pledges;
 
     public Sponsor(String firstName, String lastName, String addressOne, String addressTwo, String city,
-                   String stateOf, String zip, String phone, List<Pledge> pledges, boolean active) {
+                   String stateOf, String zip, String phone, List<Pledge> pledges) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.addressOne = addressOne;
@@ -72,8 +69,11 @@ public class Sponsor implements Serializable {
         this.stateOf = stateOf;
         this.zip = zip;
         this.phone = phone;
-        this.active = active;
         this.pledges = pledges;
+    }
+
+    public void addPledges(Pledge pledge) {
+        this.pledges.add(pledge);
     }
 
 }

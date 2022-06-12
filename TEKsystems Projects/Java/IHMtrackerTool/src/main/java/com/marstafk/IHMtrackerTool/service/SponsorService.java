@@ -7,7 +7,9 @@ import java.util.List;
 public interface SponsorService {
 
     public Sponsor getSponsorById(long id);
-    public List<Sponsor> getAllSponsors(boolean active);
+    public List<Sponsor> getAllSponsors();
     public void saveSponsor(Sponsor sponsor);
+
+    public Sponsor getSponsorByPledgeId(long id);
 
 }

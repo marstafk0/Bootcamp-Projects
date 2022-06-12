@@ -10,6 +10,8 @@ import com.marstafk.IHMtrackerTool.service.PersonTypeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  *
  * @author boss_
@@ -29,4 +31,15 @@ public class PersonTypeServiceImpl implements PersonTypeService{
     public PersonType getPersonTypeByName(String statusName) {
         return personTypeRepository.findByStatusName(statusName);
     }
+
+    @Override
+    public List<PersonType> getAllPersonTypes() {
+        return personTypeRepository.findAll();
+    }
+
+    @Override
+    public PersonType getPersonTypeById(long id) {
+        return personTypeRepository.findById(id).get();
+    }
+
 }

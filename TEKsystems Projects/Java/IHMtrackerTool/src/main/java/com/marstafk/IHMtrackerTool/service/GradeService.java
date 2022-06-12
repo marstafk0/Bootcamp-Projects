@@ -14,6 +14,8 @@ import java.util.List;
 public interface GradeService {
     
     List<Grade> getAllGrades();
+
+    List<Grade> getAllGradesByClassroomId(long id);
     
     Grade getGradeById(Long id);
     

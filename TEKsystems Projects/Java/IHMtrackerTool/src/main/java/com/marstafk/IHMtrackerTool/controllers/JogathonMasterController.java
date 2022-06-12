@@ -4,10 +4,7 @@
  */
 package com.marstafk.IHMtrackerTool.controllers;
 
-import com.marstafk.IHMtrackerTool.models.Family;
-import com.marstafk.IHMtrackerTool.models.JogathonMaster;
-import com.marstafk.IHMtrackerTool.models.Person;
-import com.marstafk.IHMtrackerTool.models.Sponsor;
+import com.marstafk.IHMtrackerTool.models.*;
 import com.marstafk.IHMtrackerTool.service.JogathonMasterService;
 
 import java.time.LocalDate;
@@ -16,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+import com.marstafk.IHMtrackerTool.service.PersonLapsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,15 +33,19 @@ public class JogathonMasterController {
     
     @Autowired
     JogathonMasterService jMasterService;
-    
-    private List<JogathonMaster> jogathons = new ArrayList<>();
+
+    @Autowired
+    PersonLapsService personLapsService;
     
     @GetMapping("jogathons")
     public String displayJogathons(Model model) {
-        jogathons.clear();
-        
-        jogathons = jMasterService.getAllJogathonsByActive(true);
-        model.addAttribute("jogathons", jogathons);
+        model.addAttribute("jogathons", jMasterService.getActiveJogathon(true));
+        return "jogathons";
+    }
+
+    @GetMapping("inactiveJogathons")
+    public String displayInactiveJogathons(Model model) {
+        model.addAttribute("jogathons", jMasterService.getActiveJogathon(false));
         return "jogathons";
     }
 
@@ -72,7 +74,20 @@ public class JogathonMasterController {
     }
 
     @PostMapping("editJogathon")
-    public String editJogathon(JogathonMaster jogathonMaster) {
+    public String editJogathon(HttpServletRequest request) {
+        long id = Long.parseLong(request.getParameter("id"));
+        JogathonMaster jogathonMaster = jMasterService.getJogathonById(id);
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.US);
+        jogathonMaster.setRunDate(LocalDate.parse(request.getParameter("runDate"), formatter));
+        jogathonMaster.setComments(request.getParameter("comments"));
+        switch(request.getParameter("active").toLowerCase()) {
+            case "inactive", "false", "no" -> {
+                jogathonMaster.setActive(false);
+            }
+            default -> {
+                jogathonMaster.setActive(true);
+            }
+        }
         jMasterService.saveJogathon(jogathonMaster);
         return "redirect:/jogathons";
     }
@@ -82,6 +97,10 @@ public class JogathonMasterController {
         JogathonMaster jogathonMaster = jMasterService.getJogathonById(Long.parseLong(request.getParameter("id")));
         jogathonMaster.setActive(false);
         jMasterService.saveJogathon(jogathonMaster);
+        for(PersonLaps p : personLapsService.getAllByActive(true)) {
+            p.setActive(false);
+            personLapsService.savePersonLaps(p);
+        }
         return "redirect:/jogathons";
     }
     

@@ -38,7 +38,7 @@ public class Person implements Serializable {
     private boolean active = true;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
-    @JoinTable(name = "person_pledges",
+    @JoinTable(name = "person_pledge",
             joinColumns = {
                     @JoinColumn(name = "person_id")},
             inverseJoinColumns = {
@@ -60,6 +60,14 @@ public class Person implements Serializable {
         this.pledges = pledges;
         this.laps = laps;
         this.active = active;
+    }
+
+    public void addPledges(Pledge pledge) {
+        this.pledges.add(pledge);
+    }
+
+    public void addPersonLaps(PersonLaps personLaps) {
+        this.laps.add(personLaps);
     }
     
 }

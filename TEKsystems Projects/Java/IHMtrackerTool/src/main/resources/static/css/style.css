@@ -219,6 +219,12 @@
   table.table td a.dsBtn {
   	color: #F44336;
   }
+  table.table td a.efBtn {
+  	color: #FFC107;
+  }
+  table.table td a.dfBtn {
+  	color: #F44336;
+  }
   table.table td i {
   	font-size: 19px;
   }

@@ -27,13 +27,13 @@ public class PledgeType implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(name = "pledgeName", nullable = false)
+    @Column(name = "pledge_name", nullable = false)
     private String pledgeName;
 
     @Column(name = "active", nullable = false)
     private boolean active = true;
     
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
     @JoinTable(name = "pledge_type_pledge",
             joinColumns = {
                 @JoinColumn(name = "pledge_type_id")},
@@ -45,6 +45,10 @@ public class PledgeType implements Serializable {
         this.pledgeName = pledgeName;
         this.pledges = pledges;
         this.active = active;
+    }
+
+    public void addPledge(Pledge pledge) {
+        this.pledges.add(pledge);
     }
 
 }

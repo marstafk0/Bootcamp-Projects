@@ -18,8 +18,12 @@ public class PersonLaps {
     @Column(name = "laps", nullable = false)
     private int laps;
 
-    public PersonLaps(int laps) {
+    @Column(name = "active", nullable = false)
+    private boolean active;
+
+    public PersonLaps(int laps, boolean active) {
         this.laps = laps;
+        this.active = active;
     }
 
 }

@@ -81,18 +81,24 @@ public class FamilyController {
     @PostMapping("editFamily")
     public String editFamily(Family family, HttpServletRequest request) {
         String[] personIds = request.getParameterValues("personId");
-        List<Person> persons = new ArrayList<>();
-        for (String s : personIds) {
-            Person person = personService.getPersonById(Long.parseLong(s));
-            persons.add(person);
-        }
-        List<Person> emptyList = new ArrayList<>();
-        if (!persons.isEmpty()) {
-            for (Person p : persons) {
-                emptyList.add(p);
+        if(personIds != null) {
+            List<Person> persons = new ArrayList<>();
+            for (String s : personIds) {
+                Person person = personService.getPersonById(Long.parseLong(s));
+                persons.add(person);
             }
+            List<Person> emptyList = new ArrayList<>();
+            if (!persons.isEmpty()) {
+                for (Person p : persons) {
+                    emptyList.add(p);
+                }
+            }
+            family.setPersons(emptyList);
+            familyService.saveFamily(family);
+            return "redirect:/families";
         }
-        family.setPersons(emptyList);
+        List<Person> nullList = new ArrayList<>();
+        family.setPersons(nullList);
         familyService.saveFamily(family);
         return "redirect:/families";
     }

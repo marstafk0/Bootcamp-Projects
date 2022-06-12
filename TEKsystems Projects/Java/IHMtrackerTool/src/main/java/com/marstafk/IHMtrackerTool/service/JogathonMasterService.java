@@ -12,9 +12,9 @@ import java.util.List;
  * @author boss_
  */
 public interface JogathonMasterService {
-    
-    public List<JogathonMaster> getAllJogathonsByActive(boolean active);
     public JogathonMaster getJogathonById(long id);
     public void saveJogathon(JogathonMaster jogathonMaster);
+
+    public JogathonMaster getActiveJogathon(boolean active);
     
 }

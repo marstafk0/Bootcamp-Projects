@@ -28,14 +28,14 @@ public class Pledge implements Serializable {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     
-    @Column(name = "perLap", nullable = false)
-    private BigDecimal perLap;
+    @Column(name = "per_lap", nullable = false)
+    private BigDecimal perLap = new BigDecimal(0.00);
     
     @Column(name = "total", nullable = false)
-    private BigDecimal total;
+    private BigDecimal total = new BigDecimal(0.00);
     
-    @Column(name = "oneTime", nullable = false)
-    private BigDecimal oneTime;
+    @Column(name = "one_time", nullable = false)
+    private BigDecimal oneTime = new BigDecimal(0.00);
 
     @Column(name = "active", nullable = false)
     private boolean active = true;
@@ -44,7 +44,7 @@ public class Pledge implements Serializable {
     private int week;
 
     @Column(name = "collected", nullable = false)
-    private boolean collected = true;
+    private boolean collected;
 
     @Column(name = "receipt", nullable = false)
     private boolean receipt = false;
