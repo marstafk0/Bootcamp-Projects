@@ -16,9 +16,9 @@ import java.util.List;
  */
 public interface FamilyRepository extends JpaRepository<Family, Long> {
 
-    @Query(value = "SELECT * FROM family f JOIN family_person fp ON f.id = fp.family_id JOIN "
-            + "person p ON fp.person_id = p.id WHERE p.id = :id", nativeQuery = true)
-    public Family findByStudentId(Long id);
+    @Query(value = "SELECT f.* FROM family f JOIN family_person fp ON f.id = fp.family_id JOIN "
+            + "person p ON fp.person_id = p.id WHERE p.id = :id AND p.active = true AND f.active = true", nativeQuery = true)
+    public Family findByPersonId(Long id);
 
     public List<Family> findAllByActive(boolean active);
     

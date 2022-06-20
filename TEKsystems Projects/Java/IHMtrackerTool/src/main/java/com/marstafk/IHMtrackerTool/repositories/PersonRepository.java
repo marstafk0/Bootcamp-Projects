@@ -24,17 +24,17 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
             "WHERE pt.status_name = :type AND p.active = :active", nativeQuery = true)
     public List<Person> findAllByStatusName(String type, boolean active);
 
-    @Query(value = "SELECT * FROM person p JOIN person_type_person ptp ON p.id = ptp.person_id "
+    @Query(value = "SELECT p.* FROM person p JOIN person_type_person ptp ON p.id = ptp.person_id "
             + "JOIN person_type pt ON pt.id = ptp.person_type_id WHERE pt.status_name = :type "
             + "AND p.active = true ORDER BY p.lname ASC", nativeQuery = true)
     public List<Person> findAllByOrderByLastNameAsc(String type);
     
-    @Query(value = "SELECT * FROM person p JOIN person_type_person ptp ON p.id = ptp.person_id "
+    @Query(value = "SELECT p.* FROM person p JOIN person_type_person ptp ON p.id = ptp.person_id "
             + "JOIN person_type pt ON pt.id = ptp.person_type_id WHERE pt.status_name = :type "
             + "AND p.active = true ORDER BY p.fname ASC", nativeQuery = true)
     public List<Person> findAllByOrderByFirstNameAsc(String type);
     
-    @Query(value = "SELECT * FROM person p JOIN person_type_person ptp ON p.id = ptp.person_id "
+    @Query(value = "SELECT p.* FROM person p JOIN person_type_person ptp ON p.id = ptp.person_id "
             + "JOIN person_type pt ON pt.id = ptp.person_type_id WHERE pt.status_name = :type "
             + "AND p.active = true", nativeQuery = true)
     public List<Person> findAllByActive(String type);
@@ -45,7 +45,7 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     public List<Person> findAllByInactive(String type);
     
     @Query(value = """
-                   SELECT * FROM person p JOIN grade_person gp 
+                   SELECT p.* FROM person p JOIN grade_person gp 
                    ON p.id = gp.person_id JOIN grade g 
                    ON g.id = gp.grade_id JOIN person_type_person ptp 
                    ON ptp.person_id = p.id JOIN person_type pt 
@@ -55,7 +55,7 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
 
     public List<Person> findAllByActive(boolean active);
 
-    @Query(value = "SELECT * FROM person p JOIN grade_person gp \n" +
+    @Query(value = "SELECT p.* FROM person p JOIN grade_person gp \n" +
             "                   ON p.id = gp.person_id JOIN grade g \n" +
             "                   ON g.id = gp.grade_id JOIN person_type_person ptp \n" +
             "                   ON ptp.person_id = p.id JOIN person_type pt \n" +
@@ -71,6 +71,10 @@ public interface PersonRepository extends JpaRepository<Person, Long> {
     @Query(value = "SELECT p.* FROM person p JOIN person_pledge pp ON pp.person_id = p.id JOIN pledge pl ON pl.id = pp.pledges_id " +
             "WHERE pl.id = :id AND p.active = true", nativeQuery = true)
     public Person findByPledgeId(long id);
+
+    @Query(value = "SELECT p.* FROM person p JOIN person_run pr ON p.id = pr.person_id " +
+            "JOIN run r ON r.id = pr.run_id WHERE r.id = :id AND p.active = true", nativeQuery = true)
+    public Person findByRunId(long id);
     
     //--------------------- TEACHERS ----------------------- //
     

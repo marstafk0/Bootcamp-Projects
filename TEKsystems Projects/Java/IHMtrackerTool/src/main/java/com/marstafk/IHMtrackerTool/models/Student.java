@@ -21,5 +21,5 @@ public class Student {
     private String contact;
     private String gradeName;
     private String classroom;
-    
+
 }

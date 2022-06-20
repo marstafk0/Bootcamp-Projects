@@ -6,7 +6,7 @@ import java.util.List;
 
 public interface ClassroomService {
 
-    List<Classroom> getAllClassrooms();
+    List<Classroom> getAllClassrooms(boolean active);
     Classroom getClassroomByName(String classroomName);
     Classroom getClassroomById(long id);
     void saveClassroom(Classroom classroom);

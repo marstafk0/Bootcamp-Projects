@@ -2,7 +2,6 @@ package com.marstafk.IHMtrackerTool.models;
 
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.apache.tomcat.jni.Local;
 
 import javax.persistence.*;
 import java.time.LocalDate;
@@ -28,22 +27,34 @@ public class JogathonMaster {
     private String comments;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
-    @JoinTable(name = "jogathon_master_person_laps",
+    @JoinTable(name = "jogathon_master_run",
             joinColumns = {
                     @JoinColumn(name = "jogathon_master_id")},
             inverseJoinColumns = {
-                    @JoinColumn(name = "person_laps_id")})
-    private List<PersonLaps> laps;
+                    @JoinColumn(name = "run_id")})
+    private List<Run> runs;
 
-    public JogathonMaster(LocalDate runDate, boolean active, String comments, List<PersonLaps> laps) {
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
+    @JoinTable(name = "jogathon_master_pledge",
+            joinColumns = {
+                    @JoinColumn(name = "jogathon_master_id")},
+            inverseJoinColumns = {
+                    @JoinColumn(name = "pledge_id")})
+    private List<Pledge> pledges;
+
+    public JogathonMaster(LocalDate runDate, boolean active, String comments, List<Run> laps) {
         this.runDate = runDate;
         this.active = active;
         this.comments = comments;
-        this.laps = laps;
+        this.runs = laps;
     }
 
-    public void addLaps(PersonLaps personLaps) {
-        this.laps.add(personLaps);
+    public void addRuns(Run run) {
+        this.runs.add(run);
+    }
+
+    public void addPledges(Pledge pledge) {
+        this.pledges.add(pledge);
     }
 
 }

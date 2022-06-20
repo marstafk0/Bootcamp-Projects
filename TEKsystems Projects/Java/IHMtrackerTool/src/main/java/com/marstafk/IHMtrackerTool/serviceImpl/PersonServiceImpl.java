@@ -63,6 +63,10 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
+    public Person getPersonByRunId(long id) { return personRepository.findByRunId(id); }
+
+
+    @Override
     public Person getPersonByPledgeId(long id) {
         return personRepository.findByPledgeId(id);
     }

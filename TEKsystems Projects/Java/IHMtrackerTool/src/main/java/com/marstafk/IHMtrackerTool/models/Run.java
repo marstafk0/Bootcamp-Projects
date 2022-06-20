@@ -8,8 +8,8 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name = "person_laps")
-public class PersonLaps {
+@Table(name = "run")
+public class Run {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -18,12 +18,8 @@ public class PersonLaps {
     @Column(name = "laps", nullable = false)
     private int laps;
 
-    @Column(name = "active", nullable = false)
-    private boolean active;
-
-    public PersonLaps(int laps, boolean active) {
+    public Run(int laps) {
         this.laps = laps;
-        this.active = active;
     }
 
 }

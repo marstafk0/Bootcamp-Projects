@@ -1,6 +1,7 @@
 package com.marstafk.IHMtrackerTool.controllers;
 
 import com.marstafk.IHMtrackerTool.models.Family;
+import com.marstafk.IHMtrackerTool.models.Grade;
 import com.marstafk.IHMtrackerTool.models.Person;
 import com.marstafk.IHMtrackerTool.service.FamilyService;
 import com.marstafk.IHMtrackerTool.service.PersonService;
@@ -27,7 +28,13 @@ public class FamilyController {
 
     @GetMapping("families")
     public String displayFamilies(Model model) {
-        model.addAttribute("persons", personService.getAllPeople(true));
+        List<Person> personList = new ArrayList<>();
+        for (Person p : personService.getAllPeople(true)) {
+            if(familyService.getFamilyByPersonId(p.getId()) == null) {
+                personList.add(p);
+            }
+        }
+        model.addAttribute("persons", personList);
         model.addAttribute("families", familyService.getAllFamilies(true));
         return "families";
     }
@@ -43,15 +50,25 @@ public class FamilyController {
     @ResponseBody
     public List<List<Object>> getFamily(@RequestParam("id") long id) {
         List<Object> families = new ArrayList<>();
+        List<Object> persons = new ArrayList<>();
+        List<Object> availPersons = new ArrayList<>();
         Family family = familyService.getFamilyById(id);
         families.add(family);
-        List<Object> persons = new ArrayList<>();
         for (Person p : family.getPersons()) {
             persons.add(p);
+        }
+        for (Person p : personService.getAllPeople(true)) {
+            if(familyService.getFamilyByPersonId(p.getId()) == null) {
+                availPersons.add(p);
+            }
+        }
+        for (Object p : persons) {
+            availPersons.add(p);
         }
         List<List<Object>> listOfLists = new ArrayList<>();
         listOfLists.add(families);
         listOfLists.add(persons);
+        listOfLists.add(availPersons);
         return listOfLists;
     }
 

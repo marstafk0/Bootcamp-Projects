@@ -34,12 +34,17 @@ public class PersonTypeServiceImpl implements PersonTypeService{
 
     @Override
     public List<PersonType> getAllPersonTypes() {
-        return personTypeRepository.findAll();
+        return personTypeRepository.findAllOrderByAsc();
     }
 
     @Override
     public PersonType getPersonTypeById(long id) {
         return personTypeRepository.findById(id).get();
+    }
+
+    @Override
+    public List<PersonType> getAllByPersonId(long id) {
+        return personTypeRepository.findAllByPersonId(id);
     }
 
 }

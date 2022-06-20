@@ -16,8 +16,8 @@ public class ClassroomServiceImpl implements ClassroomService {
     ClassroomRepository classroomRepository;
 
     @Override
-    public List<Classroom> getAllClassrooms() {
-        return classroomRepository.findAll();
+    public List<Classroom> getAllClassrooms(boolean active) {
+        return classroomRepository.findAllByActive(active);
     }
 
     @Override

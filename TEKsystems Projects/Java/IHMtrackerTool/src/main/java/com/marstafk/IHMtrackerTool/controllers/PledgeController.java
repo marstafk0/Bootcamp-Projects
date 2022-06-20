@@ -1,11 +1,9 @@
 package com.marstafk.IHMtrackerTool.controllers;
 
-import com.marstafk.IHMtrackerTool.models.Person;
-import com.marstafk.IHMtrackerTool.models.Pledge;
-import com.marstafk.IHMtrackerTool.models.PledgeType;
-import com.marstafk.IHMtrackerTool.models.Sponsor;
+import com.marstafk.IHMtrackerTool.models.*;
 import com.marstafk.IHMtrackerTool.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +14,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.NoSuchElementException;
 
@@ -35,11 +34,36 @@ public class PledgeController {
     SponsorService sponsorService;
 
     @Autowired
-    PersonLapsService personLapsService;
+    RunService runService;
+
+    @Autowired
+    JogathonMasterService jogathonMasterService;
 
     @GetMapping("pledges")
     public String displayPledges(Model model) {
         model.addAttribute("pledges", pledgeService.getAllPledges(true));
+        model.addAttribute("persons", personService.getAllPeople(true));
+        model.addAttribute("pledgeTypes", pledgeTypeService.getAllPledgeTypes(true));
+        model.addAttribute("sponsors", sponsorService.getAllSponsors());
+        return "pledges";
+    }
+
+    @GetMapping("minmax")
+    public String minMax(Model model) {
+        List<Pledge> pledges = pledgeService.getAllPledges(true);
+        pledges.sort(Comparator.comparing(Pledge::getTotal).reversed());
+        model.addAttribute("pledges", pledges);
+        model.addAttribute("persons", personService.getAllPeople(true));
+        model.addAttribute("pledgeTypes", pledgeTypeService.getAllPledgeTypes(true));
+        model.addAttribute("sponsors", sponsorService.getAllSponsors());
+        return "pledges";
+    }
+
+    @GetMapping("weekPledges")
+    public String weekPledges(Model model) {
+        List<Pledge> pledges = pledgeService.getAllPledges(true);
+        pledges.sort(Comparator.comparing(Pledge::getWeek));
+        model.addAttribute("pledges", pledges);
         model.addAttribute("persons", personService.getAllPeople(true));
         model.addAttribute("pledgeTypes", pledgeTypeService.getAllPledgeTypes(true));
         model.addAttribute("sponsors", sponsorService.getAllSponsors());
@@ -82,8 +106,8 @@ public class PledgeController {
 
         Person person = personService.getPersonById(Long.parseLong(request.getParameter("personId")));
 
-        if (pledge.isCollected() && personLapsService.getByPersonId(person.getId()) != null) {
-            pledge.setTotal(pledge.getOneTime().add((pledge.getPerLap().multiply(new BigDecimal(personLapsService.getByPersonId(person.getId()).getLaps())))));
+        if (pledge.isCollected() && runService.getByPersonId(person.getId()) != null) {
+            pledge.setTotal(pledge.getOneTime().add((pledge.getPerLap().multiply(new BigDecimal(runService.getByPersonId(person.getId()).getLaps())))));
         } else {
             pledge.setTotal(pledge.getOneTime());
         }
@@ -105,6 +129,12 @@ public class PledgeController {
         } catch (NoSuchElementException e) {
 
         }
+        if(jogathonMasterService.getActiveJogathon(true).getPledges() == null) {
+            jogathonMasterService.getActiveJogathon(true).setPledges(new ArrayList<>());
+        }
+        JogathonMaster jogathonMaster = jogathonMasterService.getActiveJogathon(true);
+        jogathonMaster.addPledges(pledge);
+        jogathonMasterService.saveJogathon(jogathonMaster);
         return "redirect:/pledges";
     }
 
@@ -153,11 +183,16 @@ public class PledgeController {
 
         }
 
-        if (pledge.isCollected() && personLapsService.getByPersonId(person.getId()) != null) {
-            pledge.setTotal(pledge.getOneTime().add((pledge.getPerLap().multiply(new BigDecimal(personLapsService.getByPersonId(person.getId()).getLaps())))));
+        if (pledge.isCollected() && runService.getByPersonId(person.getId()) != null) {
+            pledge.setTotal(pledge.getOneTime().add((pledge.getPerLap().multiply(new BigDecimal(runService.getByPersonId(person.getId()).getLaps())))));
         } else {
             pledge.setTotal(pledge.getOneTime());
         }
+
+        JogathonMaster jogathonMaster = jogathonMasterService.getActiveJogathon(true);
+        jogathonMaster.getPledges().removeIf(pledge1 -> pledge1.getId() == pledge.getId());
+        jogathonMaster.addPledges(pledge);
+        jogathonMasterService.saveJogathon(jogathonMaster);
 
         pledgeService.savePledge(pledge);
         return "redirect:/pledges";

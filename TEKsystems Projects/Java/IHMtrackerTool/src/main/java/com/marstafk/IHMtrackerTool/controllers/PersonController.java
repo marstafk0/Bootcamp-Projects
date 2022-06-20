@@ -11,7 +11,6 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 import javax.servlet.http.HttpServletRequest;
 
 @Controller
@@ -36,7 +35,7 @@ public class PersonController {
     JogathonMasterService jogathonMasterService;
 
     @Autowired
-    PersonLapsService personLapsService;
+    RunService runService;
 
     private List<Student> studentAttr = new ArrayList<>();
 
@@ -46,7 +45,7 @@ public class PersonController {
         studentAttr = compileAttr(personService.getAllPeopleByType(personTypeService.getPersonTypeById(1).getStatusName(), true));
         model.addAttribute("students", studentAttr);
         model.addAttribute("grades", gradeService.getAllGrades());
-        model.addAttribute("classrooms", classroomService.getAllClassrooms());
+        model.addAttribute("classrooms", classroomService.getAllClassrooms(true));
         model.addAttribute("families", familyService.getAllFamilies(true));
         return "students";
     }
@@ -57,7 +56,7 @@ public class PersonController {
         studentAttr = compileAttr(personService.getAllStudentsAZlastName(personTypeService.getPersonTypeById(1).getStatusName()));
         model.addAttribute("students", studentAttr);
         model.addAttribute("grades", gradeService.getAllGrades());
-        model.addAttribute("classrooms", classroomService.getAllClassrooms());
+        model.addAttribute("classrooms", classroomService.getAllClassrooms(true));
         model.addAttribute("families", familyService.getAllFamilies(true));
         return "students";
     }
@@ -68,7 +67,7 @@ public class PersonController {
         studentAttr = compileAttr(personService.getAllStudentsAZfirstName(personTypeService.getPersonTypeById(1).getStatusName()));
         model.addAttribute("students", studentAttr);
         model.addAttribute("grades", gradeService.getAllGrades());
-        model.addAttribute("classrooms", classroomService.getAllClassrooms());
+        model.addAttribute("classrooms", classroomService.getAllClassrooms(true));
         model.addAttribute("families", familyService.getAllFamilies(true));
         return "students";
     }
@@ -79,7 +78,7 @@ public class PersonController {
         studentAttr = compileAttr(personService.getAllStudentsGrade());
         model.addAttribute("students", studentAttr);
         model.addAttribute("grades", gradeService.getAllGrades());
-        model.addAttribute("classrooms", classroomService.getAllClassrooms());
+        model.addAttribute("classrooms", classroomService.getAllClassrooms(true));
         model.addAttribute("families", familyService.getAllFamilies(true));
         return "students";
     }
@@ -90,7 +89,7 @@ public class PersonController {
         studentAttr = compileAttr(personService.getAllInactiveStudents(personTypeService.getPersonTypeById(1).getStatusName()));
         model.addAttribute("students", studentAttr);
         model.addAttribute("grades", gradeService.getAllGrades());
-        model.addAttribute("classrooms", classroomService.getAllClassrooms());
+        model.addAttribute("classrooms", classroomService.getAllClassrooms(true));
         model.addAttribute("families", familyService.getAllFamilies(true));
         return "students";
     }
@@ -102,16 +101,12 @@ public class PersonController {
         List<Object> person = new ArrayList<>();
         List<Object> grade = new ArrayList<>();
         List<Object> family = new ArrayList<>();
-        List<Object> laps = new ArrayList<>();
         person.add(personService.getPersonById(id));
         grade.add(gradeService.getGradeByPersonId(id));
-        family.add(familyService.getFamilyByStudentId(id));
-        laps.add(personLapsService.getByPersonId(id));
-        System.out.println(personLapsService.getByPersonId(id));
+        family.add(familyService.getFamilyByPersonId(id));
         objects.add(person);
         objects.add(grade);
         objects.add(family);
-        objects.add(laps);
         return objects;
     }
 
@@ -123,22 +118,22 @@ public class PersonController {
         List<Object> grade = new ArrayList<>();
         List<Object> classroom = new ArrayList<>();
         List<Object> family = new ArrayList<>();
-        List<Object> laps = new ArrayList<>();
         person.add(personService.getPersonById(id));
         grade.add(gradeService.getGradeByPersonId(id));
         classroom.add(classroomService.getClassroomByGradeId(gradeService.getGradeByPersonId(id).getId()));
-        family.add(familyService.getFamilyByStudentId(id));
-        laps.add(personLapsService.getByPersonId(id));
+        family.add(familyService.getFamilyByPersonId(id));
         objects.add(person);
         objects.add(grade);
         objects.add(classroom);
         objects.add(family);
-        objects.add(laps);
         return objects;
     }
 
     @PostMapping("saveStudent")
     public String savePerson(Person person, @RequestParam("grade") Long id, HttpServletRequest request) {
+        Person oldPerson = personService.getPersonById(person.getId());
+        List<Run> runs = oldPerson.getRuns();
+        person.setRuns(runs);
         // If grade is 0 or below, ignore and leave empty.
         if (id > 0) {
             Grade grade = gradeService.getGradeById(id);
@@ -156,7 +151,7 @@ public class PersonController {
             grade.addStudent(person);
             gradeService.saveGrade(grade);
         }
-        Family oldFamily = familyService.getFamilyByStudentId(person.getId());
+        Family oldFamily = familyService.getFamilyByPersonId(person.getId());
         long famId = 0;
         try {
             famId = Long.parseLong(request.getParameter("familyId"));
@@ -182,18 +177,6 @@ public class PersonController {
             Family family = familyService.getFamilyById(famId);
             family.addPerson(person);
             familyService.saveFamily(family);
-        }
-
-        int laps;
-        try {
-            laps = Integer.parseInt(request.getParameter("laps"));
-        } catch (Exception e) {
-            laps = 0;
-        }
-        if (laps > 0) {
-            List<PersonLaps> emp = new ArrayList<>();
-            emp.add(new PersonLaps(laps, true));
-            person.setLaps(emp);
         }
 
         personService.savePerson(person);
@@ -236,22 +219,6 @@ public class PersonController {
                 student.setActive(true);
             }
         }
-        int laps = 0;
-        try {
-            laps = Integer.parseInt(request.getParameter("laps"));
-        } catch (NumberFormatException e) {
-
-        }
-        if (laps != 0) {
-            PersonLaps personLaps = new PersonLaps(laps, true);
-            personLapsService.savePersonLaps(personLaps);
-            List<PersonLaps> totalLaps = new ArrayList<>();
-            totalLaps.add(personLaps);
-            JogathonMaster jogathonMaster = jogathonMasterService.getActiveJogathon(true);
-            jogathonMaster.addLaps(personLaps);
-            jogathonMasterService.saveJogathon(jogathonMaster);
-            student.setLaps(totalLaps);
-        }
         personService.savePerson(student);
 
         Grade grade = gradeService.getGradeById(id);
@@ -289,8 +256,6 @@ public class PersonController {
 
     // --------------------------- TEACHERS -------------------------------//
 
-    private List<Person> teachers = new ArrayList<>();
-
     @GetMapping("teachers")
     public String displayTeachers(Model model) {
         model.addAttribute("teachers", personService.getAllPeopleByType(personTypeService.getPersonTypeById(2).getStatusName(), true));
@@ -310,7 +275,7 @@ public class PersonController {
     public List<Object> editTeacher(@RequestParam("id") long id) {
         List<Object> objects = new ArrayList<>();
         objects.add(personService.getPersonById(id));
-        objects.add(familyService.getFamilyByStudentId(id));
+        objects.add(familyService.getFamilyByPersonId(id));
         return objects;
     }
 
@@ -353,7 +318,7 @@ public class PersonController {
 
     @PostMapping("saveTeacher")
     public String saveTeacher(Person person, HttpServletRequest request) {
-        Family oldFamily = familyService.getFamilyByStudentId(person.getId());
+        Family oldFamily = familyService.getFamilyByPersonId(person.getId());
         long id = 0;
         try {
             id = Long.parseLong(request.getParameter("familyId"));
@@ -394,7 +359,157 @@ public class PersonController {
         return "redirect:/teachers";
     }
 
-    // -------------------------------- PERSONS ----------------------------------- //
+    // -------------------------------- LAPS ----------------------------------- //
 
+    @GetMapping("lapDetails")
+    @ResponseBody
+    public Run lapDetails(@RequestParam("id") long id) {
+        if (runService.getByPersonId(id) != null) {
+            return runService.getByPersonId(id);
+        }
+
+        Run run = new Run(0);
+        runService.saveRun(run);
+        Person person = personService.getPersonById(id);
+        if (person.getRuns() != null) {
+            person.addRuns(run);
+        } else {
+            person.setRuns(new ArrayList<>());
+            person.addRuns(run);
+        }
+        personService.savePerson(person);
+        JogathonMaster jogathonMaster = jogathonMasterService.getActiveJogathon(true);
+        if (jogathonMaster.getRuns() != null) {
+            jogathonMaster.addRuns(run);
+        } else {
+            jogathonMaster.setRuns(new ArrayList<>());
+            jogathonMaster.addRuns(run);
+        }
+        jogathonMasterService.saveJogathon(jogathonMaster);
+
+        return run;
+    }
+
+    @PostMapping("editLaps")
+    public String editLaps(Run run) {
+        Person person = personService.getPersonByRunId(run.getId());
+        JogathonMaster jogathonMaster = jogathonMasterService.getActiveJogathon(true);
+
+        person.getRuns().removeIf(r -> r.getId() == run.getId());
+        person.addRuns(run);
+        personService.savePerson(person);
+
+        jogathonMaster.getRuns().removeIf(r -> r.getId() == run.getId());
+        jogathonMaster.addRuns(run);
+        jogathonMasterService.saveJogathon(jogathonMaster);
+
+        runService.saveRun(run);
+        return "redirect:/students";
+    }
+
+    // ----------------------------- PERSON ----------------------------------- //
+
+    @GetMapping("persons")
+    public String displayPersons(Model model) {
+        model.addAttribute("persons", personService.getAllPeopleByType("Member", true));
+        model.addAttribute("grades", gradeService.getAllGrades());
+        model.addAttribute("personTypes", personTypeService.getAllPersonTypes());
+        model.addAttribute("families", familyService.getAllFamilies(true));
+        return "persons";
+    }
+
+    @GetMapping("getPerson")
+    @ResponseBody
+    public List<List<Object>> getPerson(@RequestParam("id") long id) {
+        List<List<Object>> objects = new ArrayList<>();
+        List<Object> person = new ArrayList<>();
+        List<Object> family = new ArrayList<>();
+        person.add(personService.getPersonById(id));
+        family.add(familyService.getFamilyByPersonId(id));
+        objects.add(person);
+        objects.add(family);
+        return objects;
+    }
+
+    @PostMapping("addPerson")
+    public String addPerson(HttpServletRequest request) {
+
+        Person person = new Person();
+        person.setFirstName(request.getParameter("firstName"));
+        person.setLastName(request.getParameter("lastName"));
+        person.setContact(request.getParameter("contact"));
+        person.setActive(true);
+        long famId;
+        try {
+            famId = Long.parseLong(request.getParameter("familyId"));
+        } catch (NumberFormatException e) {
+            famId = 0;
+        }
+        Family family = familyService.getFamilyById(famId);
+
+        person.setActive(true);
+        personService.savePerson(person);
+
+        try {
+            Grade grade = gradeService.getGradeById(Long.parseLong(request.getParameter("gradeId")));
+            grade.addStudent(person);
+            gradeService.saveGrade(grade);
+        } catch (NullPointerException e) {
+
+        }
+
+        PersonType pt = personTypeService.getPersonTypeById(Long.parseLong(request.getParameter("personTypeId")));
+        pt.addPersons(person);
+        personTypeService.savePersonType(pt);
+
+        try {
+            family.addPerson(person);
+            familyService.saveFamily(family);
+        } catch (NullPointerException e) {
+
+        }
+        return "redirect:/persons";
+    }
+
+    @PostMapping("editPerson")
+    public String editPerson(Person person, HttpServletRequest request) {
+        Family oldFamily = familyService.getFamilyByPersonId(person.getId());
+        long famId = 0;
+        try {
+            famId = Long.parseLong(request.getParameter("familyId"));
+        } catch (NumberFormatException e) {
+
+        }
+        if (oldFamily != null) {
+            if (famId > 0 && oldFamily.getId() != 0) {
+                Family family = familyService.getFamilyById(famId);
+                List<Person> persons = oldFamily.getPersons();
+                persons.removeIf(p -> p.getId() == person.getId());
+                oldFamily.setPersons(persons);
+                familyService.saveFamily(oldFamily);
+                family.addPerson(person);
+                familyService.saveFamily(family);
+            } else {
+                List<Person> persons = oldFamily.getPersons();
+                persons.removeIf(p -> p.getId() == person.getId());
+                oldFamily.setPersons(persons);
+                familyService.saveFamily(oldFamily);
+            }
+        } else if (famId > 0) {
+            Family family = familyService.getFamilyById(famId);
+            family.addPerson(person);
+            familyService.saveFamily(family);
+        }
+
+        personService.savePerson(person);
+        return "redirect:/persons";
+    }
+
+    @PostMapping("confirmDeactivatePerson")
+    public String deactivatePerson(@RequestParam("id") long id) {
+        Person person = personService.getPersonById(id);
+        person.setActive(false);
+        return "redirect:/persons";
+    }
 
 }

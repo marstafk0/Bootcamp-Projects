@@ -1,5 +1,6 @@
 package com.marstafk.IHMtrackerTool.controllers;
 
+import com.marstafk.IHMtrackerTool.models.ClassGrade;
 import com.marstafk.IHMtrackerTool.models.Classroom;
 import com.marstafk.IHMtrackerTool.models.Grade;
 import com.marstafk.IHMtrackerTool.models.Person;
@@ -32,8 +33,14 @@ public class ClassroomGradeController {
 
     @GetMapping("classrooms")
     public String displayClassrooms(Model model) {
-        model.addAttribute("classrooms", classroomService.getAllClassrooms());
-        model.addAttribute("grades", gradeService.getAllGrades());
+        List<Grade> grades = new ArrayList<>();
+        for (Grade g : gradeService.getAllGrades()) {
+            if(classroomService.getClassroomByGradeId(g.getId()) == null) {
+                grades.add(g);
+            }
+        }
+        model.addAttribute("classes", bindGradeClassroom(classroomService.getAllClassrooms(true)));
+        model.addAttribute("grades", grades);
         return "classrooms";
     }
 
@@ -48,13 +55,26 @@ public class ClassroomGradeController {
     public List<List<Object>> getClassroom(@RequestParam("id") long id) {
         List<Object> classrooms = new ArrayList<>();
         List<Object> grades = new ArrayList<>();
+        List<Object> availGrades = new ArrayList<>();
+        // Get selected grades
         for (Grade g : gradeService.getAllGradesByClassroomId(id)) {
             grades.add(g);
         }
         List<List<Object>> gradeClassrooms = new ArrayList<>();
+        // Get classroom
         classrooms.add(classroomService.getClassroomById(id));
+        // Get available grades
+        for (Grade g : gradeService.getAllGrades()) {
+            if(classroomService.getClassroomByGradeId(g.getId()) == null) {
+                availGrades.add(g);
+            }
+        }
+        for (Object g : grades) {
+            availGrades.add(g);
+        }
         gradeClassrooms.add(classrooms);
         gradeClassrooms.add(grades);
+        gradeClassrooms.add(availGrades);
         return gradeClassrooms;
     }
 
@@ -100,6 +120,18 @@ public class ClassroomGradeController {
         classroomService.saveClassroom(classroom);
         classroomService.deleteClassroom(classroom.getId());
         return "redirect:/classrooms";
+    }
+
+    private List<ClassGrade> bindGradeClassroom(List<Classroom> classrooms) {
+        List<ClassGrade> classGrades = new ArrayList<>();
+        for (Classroom c : classrooms) {
+            String grades = "";
+            for (Grade g : gradeService.getAllGradesByClassroomId(c.getId())) {
+                grades += g.getGradeName() + " ";
+            }
+            classGrades.add(new ClassGrade(c.getId(), grades, c.getClassName()));
+        }
+        return classGrades;
     }
 
 }

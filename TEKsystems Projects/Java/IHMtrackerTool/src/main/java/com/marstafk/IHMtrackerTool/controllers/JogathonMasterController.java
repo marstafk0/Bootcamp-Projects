@@ -9,11 +9,10 @@ import com.marstafk.IHMtrackerTool.service.JogathonMasterService;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Locale;
 
-import com.marstafk.IHMtrackerTool.service.PersonLapsService;
+import com.marstafk.IHMtrackerTool.service.PledgeService;
+import com.marstafk.IHMtrackerTool.service.RunService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -35,7 +34,10 @@ public class JogathonMasterController {
     JogathonMasterService jMasterService;
 
     @Autowired
-    PersonLapsService personLapsService;
+    PledgeService pledgeService;
+
+    @Autowired
+    RunService runService;
     
     @GetMapping("jogathons")
     public String displayJogathons(Model model) {
@@ -97,9 +99,9 @@ public class JogathonMasterController {
         JogathonMaster jogathonMaster = jMasterService.getJogathonById(Long.parseLong(request.getParameter("id")));
         jogathonMaster.setActive(false);
         jMasterService.saveJogathon(jogathonMaster);
-        for(PersonLaps p : personLapsService.getAllByActive(true)) {
+        for (Pledge p : pledgeService.getAllPledges(true)) {
             p.setActive(false);
-            personLapsService.savePersonLaps(p);
+            pledgeService.savePledge(p);
         }
         return "redirect:/jogathons";
     }

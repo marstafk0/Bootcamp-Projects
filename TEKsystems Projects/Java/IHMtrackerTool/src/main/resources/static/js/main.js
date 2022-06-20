@@ -27,35 +27,52 @@ $(document).ready(function () {
   $(".container-xl .addPledgeButton").on("click", function () {
     $(".addPledgeForm #addPledgeModal").modal("show");
   });
+  $("header #registerBtn").on("click", function () {
+    $(".registerForm #registerModal").modal("show");
+  });
+  $("header #loginBtn").on("click", function () {
+    $(".loginForm #loginModal").modal("show");
+  });
+  $(".container-xl .addPersonButton").on("click", function () {
+    $(".addPersonForm #addPersonModal").modal("show");
+  });
 
   // ------------------------ EDIT STUDENT MODAL ---------------------------- //
   $(".table .eBtn").on("click", function (event) {
     event.preventDefault();
     var href = $(this).attr("href");
+    console.log(href)
     $.get(href, function (list, status) {
-      console.log(list)
       var student = list[0][0];
       var grade = list[1][0];
       var family = list[2][0];
-      var laps = list[3][0];
       $(".myForm #id").val(student.id);
       $(".myForm #firstName").val(student.firstName);
       $(".myForm #lastName").val(student.lastName);
       $(".myForm #contact").val(student.contact);
-      $(".activeStatus .selectpicker").selectpicker("val", '' + student.active + '');
+      $(".activeStatus .selectpicker").selectpicker(
+        "val",
+        "" + student.active + ""
+      );
       $("#grade option[value='" + grade.id + "']").prop("selected", true);
-      if(laps == null) {
-        $(".myForm #laps").val("0");
+      if (family == null) {
+        $(".familyDrop .selectpicker").selectpicker("val", "");
       } else {
-        $(".myForm #laps").val(laps.laps);
-      }
-      if(family == null) {
-        $(".familyDrop .selectpicker").selectpicker("val", '');
-      } else {
-        $(".familyDrop .selectpicker").selectpicker("val", '' + family.id + '');
+        $(".familyDrop .selectpicker").selectpicker("val", "" + family.id + "");
       }
     });
     $(".myForm #editStudentModal").modal("show");
+  });
+
+  // ------------------------ EDIT LAPS MODAL ---------------------------- //
+  $(".table .LBtn").on("click", function (event) {
+    event.preventDefault();
+    var href = $(this).attr("href");
+    $.get(href, function (lap, status) {
+      $(".editLapsForm #id").val(lap.id);
+      $(".editLapsForm #laps").val(lap.laps);
+    });
+    $(".editLapsForm #editLapsModal").modal("show");
   });
 
   // ------------------------ EDIT TEACHER MODAL ---------------------------- //
@@ -69,8 +86,11 @@ $(document).ready(function () {
       $(".editTeacherForm #firstName").val(teacher.firstName);
       $(".editTeacherForm #lastName").val(teacher.lastName);
       $(".editTeacherForm #contact").val(teacher.contact);
-      $(".familyDropT .selectpicker").selectpicker("val", '' + family.id + '');
-      $(".activeStatusT .selectpicker").selectpicker("val", '' + teacher.active + '');
+      $(".familyDropT .selectpicker").selectpicker("val", "" + family.id + "");
+      $(".activeStatusT .selectpicker").selectpicker(
+        "val",
+        "" + teacher.active + ""
+      );
     });
     $(".editTeacherForm #editTeacherModal").modal("show");
   });
@@ -81,11 +101,14 @@ $(document).ready(function () {
     var href = $(this).attr("href");
     $.get(href, function (jogathon, status) {
       $(".editJogathonForm #id").val(jogathon.id);
-      const [year, month, day] = jogathon.runDate.split('-');
-      const result = [month, day, year].join('/');
+      const [year, month, day] = jogathon.runDate.split("-");
+      const result = [month, day, year].join("/");
       $(".editJogathonForm #runDate").val(result);
       $(".editJogathonForm #comments").val(jogathon.comments);
-      $(".activeStatusJ .selectpicker").selectpicker("val", '' + jogathon.active + '');
+      $(".activeStatusJ .selectpicker").selectpicker(
+        "val",
+        "" + jogathon.active + ""
+      );
     });
     $(".editJogathonForm #editJogathonModal").modal("show");
   });
@@ -116,6 +139,18 @@ $(document).ready(function () {
       var family = listOfLists[0];
       var persons = listOfLists[1];
       var fam = family[0];
+      var availPersons = listOfLists[2];
+
+      var options = [];
+      availPersons.forEach(function (item) {
+        var option = '<option value="' + item.id + '">' + item.firstName +  ' ' + item.lastName + '</option>'
+        options.push(option);
+      });
+      
+      $('.personAvail .selectpicker').selectpicker('destroy');
+      $('.personAvail #person').addClass('selectpicker');
+      $('.personAvail .selectpicker').html(options);
+
       $(".editFamilyForm #id").val(fam.id);
       $(".editFamilyForm #familyName").val(fam.familyName);
       $(".editFamilyForm #phone").val(fam.phone);
@@ -124,7 +159,10 @@ $(document).ready(function () {
       $(".editFamilyForm #city").val(fam.city);
       $(".editFamilyForm #stateOf").val(fam.stateOf);
       $(".editFamilyForm #zip").val(fam.zip);
-      $(".activeStatusF .selectpicker").selectpicker("val", '' + fam.active + '');
+      $(".activeStatusF .selectpicker").selectpicker(
+        "val",
+        "" + fam.active + ""
+      );
       let ids = [];
       persons.forEach((element) => {
         console.log(element);
@@ -137,7 +175,7 @@ $(document).ready(function () {
       strIds = strIds.slice(0, -1);
       strIds += "]";
       console.log(strIds);
-      $("#editFamilyModal .selectpicker").selectpicker(
+      $(".personAvail .selectpicker").selectpicker(
         "val",
         JSON.parse(strIds)
       );
@@ -152,7 +190,10 @@ $(document).ready(function () {
     $.get(href, function (personType, status) {
       $(".editPersonTypeForm #id").val(personType.id);
       $(".editPersonTypeForm #statusName").val(personType.statusName);
-      $(".editPersonTypeForm .selectpicker").selectpicker("val", '' + personType.active + '');
+      $(".editPersonTypeForm .selectpicker").selectpicker(
+        "val",
+        "" + personType.active + ""
+      );
     });
     $(".editPersonTypeForm #editPersonTypeModal").modal("show");
   });
@@ -164,7 +205,10 @@ $(document).ready(function () {
     $.get(href, function (pledgeType, status) {
       $(".editPledgeTypeForm #id").val(pledgeType.id);
       $(".editPledgeTypeForm #pledgeName").val(pledgeType.pledgeName);
-      $(".editPledgeTypeForm .selectpicker").selectpicker("val", '' + pledgeType.active + '');
+      $(".editPledgeTypeForm .selectpicker").selectpicker(
+        "val",
+        "" + pledgeType.active + ""
+      );
     });
     $(".editPledgeTypeForm #editPledgeTypeModal").modal("show");
   });
@@ -176,24 +220,41 @@ $(document).ready(function () {
     $.get(href, function (listOfLists, status) {
       var classroom = listOfLists[0][0];
       var grades = listOfLists[1];
+      var availGrades = listOfLists[2];
+
+      var options = [];
+      availGrades.forEach(function (item) {
+        var option = '<option value="' + item.id + '">' + item.gradeName + '</option>'
+        options.push(option);
+      });
+      
+      $('.gradeStatus .selectpicker').selectpicker('destroy');
+      $('.gradeStatus #grade').addClass('selectpicker');
+      $('.gradeStatus .selectpicker').html(options);
+      //$('.gradeStatus .selectpicker').selectpicker('refresh');
+
       $(".editClassroomForm #id").val(classroom.id);
       $(".editClassroomForm #className").val(classroom.className);
-      $(".activeStatusC .selectpicker").selectpicker("val", '' + classroom.active + '');
-      let ids = [];
-      grades.forEach((element) => {
-        ids.push(element.id);
-      });
-      var strIds = "[";
-      for (i = 0; i < ids.length; i++) {
-        strIds += '"' + ids[i] + '",';
-      }
-      strIds = strIds.slice(0, -1);
-      strIds += "]";
-      console.log(strIds);
-      $(".gradeStatus .selectpicker").selectpicker(
+      $(".activeStatusC .selectpicker").selectpicker(
         "val",
-        JSON.parse(strIds)
+        "" + classroom.active + ""
       );
+      let ids = [];
+      var strIds = "[";
+      if (grades.length != 0) {
+        grades.forEach((element) => {
+          ids.push(element.id);
+        });
+        for (i = 0; i < ids.length; i++) {
+          strIds += '"' + ids[i] + '",';
+        }
+        strIds = strIds.slice(0, -1);
+        strIds += "]";
+        $(".gradeStatus .selectpicker").selectpicker("val", JSON.parse(strIds));
+      } else {
+        $(".gradeStatus .selectpicker").selectpicker("show");
+      }
+      
     });
     $(".editClassroomForm #editClassroomModal").modal("show");
   });
@@ -212,18 +273,56 @@ $(document).ready(function () {
       $(".editPledgeForm #oneTime").val(pledge.oneTime);
       $(".editPledgeForm #perLap").val(pledge.perLap);
       $(".editPledgeForm #week").val(pledge.week);
-      $(".collectedDrop .selectpicker").selectpicker("val", '' + pledge.collected + '');
-      $(".receiptDrop .selectpicker").selectpicker("val", '' + pledge.receipt + '');
-      $(".personDrop .selectpicker").selectpicker("val", '' + person.id + '');
-      $(".pledgeTypeDrop .selectpicker").selectpicker("val", '' + pledgeType.id + '');
-      if(sponsor != null) {
-        $(".sponsorDrop .selectpicker").selectpicker("val", '' + sponsor.id + '');
+      $(".collectedDrop .selectpicker").selectpicker(
+        "val",
+        "" + pledge.collected + ""
+      );
+      $(".receiptDrop .selectpicker").selectpicker(
+        "val",
+        "" + pledge.receipt + ""
+      );
+      $(".personDrop .selectpicker").selectpicker("val", "" + person.id + "");
+      $(".pledgeTypeDrop .selectpicker").selectpicker(
+        "val",
+        "" + pledgeType.id + ""
+      );
+      if (sponsor != null) {
+        $(".sponsorDrop .selectpicker").selectpicker(
+          "val",
+          "" + sponsor.id + ""
+        );
       } else {
-        $(".sponsorDrop .selectpicker").selectpicker("val", '0');
+        $(".sponsorDrop .selectpicker").selectpicker("val", "0");
       }
-      $(".activeDrop .selectpicker").selectpicker("val", '' + pledge.active + '');
+      $(".activeDrop .selectpicker").selectpicker(
+        "val",
+        "" + pledge.active + ""
+      );
     });
     $(".editPledgeForm #editPledgeModal").modal("show");
+  });
+
+  // ------------------------ EDIT PERSON MODAL ---------------------------- //
+  $(".table .personEBtn").on("click", function (event) {
+    event.preventDefault();
+    var href = $(this).attr("href");
+    $.get(href, function (list, status) {
+      var person = list[0][0];
+      var family = list[1][0];
+      $(".editPersonForm #id").val(person.id);
+      $(".editPersonForm #firstName").val(person.firstName);
+      $(".editPersonForm #lastName").val(person.lastName);
+      $(".editPersonForm #contact").val(person.contact);
+      if (family == null) {
+        $(".familyDropP .selectpicker").selectpicker("val", "");
+      } else {
+        $(".familyDropP .selectpicker").selectpicker(
+          "val",
+          "" + family.id + ""
+        );
+      }
+    });
+    $(".editPersonForm #editPersonModal").modal("show");
   });
 
   // ------------------------ DE-ACTIVATE STUDENT MODAL ---------------------------- //
@@ -319,6 +418,17 @@ $(document).ready(function () {
     $(".deactivatePledgeForm #de-activatePledgeModal").modal("show");
   });
 
+  // ------------------------ DE-ACTIVATE PERSON MODAL ---------------------------- //
+  $(".table .personDEBTN").on("click", function (event) {
+    event.preventDefault();
+    var href = $(this).attr("href");
+    $.get(href, function (listOfLists, status) {
+      var classroom = listOfLists[0][0];
+      $(".deactivatePersonForm #id").val(classroom.id);
+    });
+    $(".deactivatePersonForm #de-activatePersonModal").modal("show");
+  });
+
   // ------------------------ DETAIL STUDENT MODAL ---------------------------- //
   $(".table .dBtn").on("click", function (event) {
     event.preventDefault();
@@ -328,7 +438,6 @@ $(document).ready(function () {
       var grade = list[1][0];
       var classroom = list[2][0];
       var family = list[3][0];
-      var laps = list[4][0];
       $(".myFormFour #id").val(student.id);
       $(".myFormFour #firstName").val(student.firstName);
       $(".myFormFour #lastName").val(student.lastName);
@@ -344,12 +453,10 @@ $(document).ready(function () {
       } else {
         $(".myFormFour #family").val(family.familyName);
       }
-      if (laps == null) {
-        $(".myFormFour #laps").val("None");
-      } else {
-        $(".myFormFour #laps").val(laps.laps);
-      }
-      $(".myFormFour .selectpicker").selectpicker("val", '' + student.active + '');
+      $(".myFormFour .selectpicker").selectpicker(
+        "val",
+        "" + student.active + ""
+      );
     });
     $(".myFormFour #detailsStudentModal").modal("show");
   });
@@ -370,7 +477,10 @@ $(document).ready(function () {
       } else {
         $(".teacherDetailsForm #family").val(family.familyName);
       }
-      $(".teacherDetailsForm .selectpicker").selectpicker("val", '' + student.active + '');
+      $(".teacherDetailsForm .selectpicker").selectpicker(
+        "val",
+        "" + student.active + ""
+      );
     });
     $(".teacherDetailsForm #detailsTeacherModal").modal("show");
   });
@@ -381,11 +491,14 @@ $(document).ready(function () {
     var href = $(this).attr("href");
     $.get(href, function (jogathon, status) {
       $(".jogathonDetailsForm #id").val(jogathon.id);
-      const [year, month, day] = jogathon.runDate.split('-');
-      const result = [month, day, year].join('/');
+      const [year, month, day] = jogathon.runDate.split("-");
+      const result = [month, day, year].join("/");
       $(".jogathonDetailsForm #runDate").val(result);
       $(".jogathonDetailsForm #comments").val(jogathon.comments);
-      $(".jogathonDetailsForm .selectpicker").selectpicker("val", '' + jogathon.active + '');
+      $(".jogathonDetailsForm .selectpicker").selectpicker(
+        "val",
+        "" + jogathon.active + ""
+      );
     });
     $(".jogathonDetailsForm #detailsJogathonModal").modal("show");
   });
@@ -423,10 +536,19 @@ $(document).ready(function () {
       $(".familyDetailsForm #city").val(fam.city);
       $(".familyDetailsForm #stateOf").val(fam.stateOf);
       $(".familyDetailsForm #zip").val(fam.zip);
-      $(".familyDetailsForm .selectpicker").selectpicker("val", '' + fam.active + '');
-      persons.forEach((element) => {
-        $("#person option[value='" + element.id + "']").prop("selected", true);
+      $(".familyDetailsForm .selectpicker").selectpicker(
+        "val",
+        "" + fam.active + ""
+      );
+      //$("#person option[value='" + element.id + "']").prop("selected", true);
+      $('.familyDetailsForm #person').empty();
+      $.each(persons, function (i, item) {
+        $('.familyDetailsForm #person').append($('<option>', { 
+            value: item.id,
+            text : item.firstName + ' ' + item.lastName 
+        }));
       });
+
     });
     $(".familyDetailsForm #detailsFamilyModal").modal("show");
   });
@@ -438,7 +560,10 @@ $(document).ready(function () {
     $.get(href, function (personType, status) {
       $(".personTypeDetailsForm #id").val(personType.id);
       $(".personTypeDetailsForm #statusName").val(personType.statusName);
-      $(".personTypeDetailsForm .selectpicker").selectpicker("val", '' + personType.active + '');
+      $(".personTypeDetailsForm .selectpicker").selectpicker(
+        "val",
+        "" + personType.active + ""
+      );
     });
     $(".personTypeDetailsForm #detailsPersonTypeModal").modal("show");
   });
@@ -449,8 +574,16 @@ $(document).ready(function () {
     var href = $(this).attr("href");
     $.get(href, function (persons, status) {
       persons.forEach((element) => {
-        $(".personAssDetailsForm #deets").append("<p>" + element.id + ": " + element.firstName + " " + element.lastName + "</p>")
-      })
+        $(".personAssDetailsForm #deets").append(
+          "<p>" +
+            element.id +
+            ": " +
+            element.firstName +
+            " " +
+            element.lastName +
+            "</p>"
+        );
+      });
     });
     $(".personAssDetailsForm #detailsPersonAssModal").modal("show");
   });
@@ -462,37 +595,12 @@ $(document).ready(function () {
     $.get(href, function (pledgeType, status) {
       $(".pledgeTypeDetailsForm #id").val(pledgeType.id);
       $(".pledgeTypeDetailsForm #pledgeName").val(pledgeType.pledgeName);
-      $(".pledgeTypeDetailsForm .selectpicker").selectpicker("val", '' + pledgeType.active + '');
-    });
-    $(".pledgeTypeDetailsForm #detailsPledgeTypeModal").modal("show");
-  });
-
-  // ------------------------ DETAIL CLASSROOM MODAL ---------------------------- //
-  $(".table .cdBtn").on("click", function (event) {
-    event.preventDefault();
-    var href = $(this).attr("href");
-    $.get(href, function (listOfLists, status) {
-      var classroom = listOfLists[0][0];
-      var grades = listOfLists[1];
-      $(".classroomDetailsForm #id").val(classroom.id);
-      $(".classroomDetailsForm #className").val(classroom.className);
-      $(".activething .selectpicker").selectpicker("val", '' + classroom.active + '');
-      let ids = [];
-      grades.forEach((element) => {
-        ids.push(element.id);
-      });
-      var strIds = "[";
-      for (i = 0; i < ids.length; i++) {
-        strIds += '"' + ids[i] + '",';
-      }
-      strIds = strIds.slice(0, -1);
-      strIds += "]";
-      $(".gradeSelect .selectpicker").selectpicker(
+      $(".pledgeTypeDetailsForm .selectpicker").selectpicker(
         "val",
-        JSON.parse(strIds)
+        "" + pledgeType.active + ""
       );
     });
-    $(".classroomDetailsForm #detailsClassroomModal").modal("show");
+    $(".pledgeTypeDetailsForm #detailsPledgeTypeModal").modal("show");
   });
 
   // ---------------------------- DETAIL CLASSROOM MODAL 2 -------------------------//
@@ -501,8 +609,16 @@ $(document).ready(function () {
     var href = $(this).attr("href");
     $.get(href, function (persons, status) {
       persons.forEach((element) => {
-        $(".studentAssDetailsForm #deetsStudents").append("<p>" + element.id + ": " + element.firstName + " " + element.lastName + "</p>")
-      })
+        $(".studentAssDetailsForm #deetsStudents").append(
+          "<p>" +
+            element.id +
+            ": " +
+            element.firstName +
+            " " +
+            element.lastName +
+            "</p>"
+        );
+      });
     });
     $(".studentAssDetailsForm #detailsStudentAssModal").modal("show");
   });
@@ -520,18 +636,56 @@ $(document).ready(function () {
       $(".pledgeDetailsForm #oneTime").val(pledge.oneTime);
       $(".pledgeDetailsForm #perLap").val(pledge.perLap);
       $(".pledgeDetailsForm #week").val(pledge.week);
-      $(".collectedDropD .selectpicker").selectpicker("val", '' + pledge.collected + '');
-      $(".receiptDropD .selectpicker").selectpicker("val", '' + pledge.receipt + '');
-      $(".personDropD .selectpicker").selectpicker("val", '' + person.id + '');
-      $(".pledgeTypeDropD .selectpicker").selectpicker("val", '' + pledgeType.id + '');
-      if(sponsor != null) {
-        $(".sponsorDropD .selectpicker").selectpicker("val", '' + sponsor.id + '');
+      $(".collectedDropD .selectpicker").selectpicker(
+        "val",
+        "" + pledge.collected + ""
+      );
+      $(".receiptDropD .selectpicker").selectpicker(
+        "val",
+        "" + pledge.receipt + ""
+      );
+      $(".personDropD .selectpicker").selectpicker("val", "" + person.id + "");
+      $(".pledgeTypeDropD .selectpicker").selectpicker(
+        "val",
+        "" + pledgeType.id + ""
+      );
+      if (sponsor != null) {
+        $(".sponsorDropD .selectpicker").selectpicker(
+          "val",
+          "" + sponsor.id + ""
+        );
       } else {
-        $(".sponsorDropD .selectpicker").selectpicker("val", '0');
+        $(".sponsorDropD .selectpicker").selectpicker("val", "0");
       }
-      $(".activeDropD .selectpicker").selectpicker("val", '' + pledge.active + '');
+      $(".activeDropD .selectpicker").selectpicker(
+        "val",
+        "" + pledge.active + ""
+      );
     });
     $(".pledgeDetailsForm #detailsPledgeModal").modal("show");
+  });
+
+  // ------------------------ DETAIL PERSON MODAL ---------------------------- //
+  $(".table .personDBtn").on("click", function (event) {
+    event.preventDefault();
+    var href = $(this).attr("href");
+    $.get(href, function (list, status) {
+      var person = list[0][0];
+      var family = list[1][0];
+      $(".detailsPersonForm #id").val(person.id);
+      $(".detailsPersonForm #firstName").val(person.firstName);
+      $(".detailsPersonForm #lastName").val(person.lastName);
+      $(".detailsPersonForm #contact").val(person.contact);
+      if (family == null) {
+        $(".familyDropP .selectpicker").selectpicker("val", "");
+      } else {
+        $(".familyDropP .selectpicker").selectpicker(
+          "val",
+          "" + family.id + ""
+        );
+      }
+    });
+    $(".detailsPersonForm #detailsPersonModal").modal("show");
   });
 
   // ------------------------ HIDE MODALS ---------------------------- //
@@ -550,12 +704,12 @@ $(document).ready(function () {
     $(".editJogathonForm #editJogathonModal").modal("hide");
     $(".jogathonDetailsForm #detailsJogathonModal").modal("hide");
     $(".deactivateJogathonForm #de-activateJogathonModal").modal("hide");
-    
+
     $(".addSponsorForm #addSponsorModal").modal("hide");
     $(".editSponsorForm #editSponsorModal").modal("hide");
     $(".sponsorDetailsForm #detailsSponsorModal").modal("hide");
     $(".deactivateSponsorForm #de-activateSponsorModal").modal("hide");
-    
+
     $(".addFamilyForm #addFamilyModal").modal("hide");
     $(".editFamilyForm #editFamilyModal").modal("hide");
     $(".familyDetailsForm #detailsFamilyModal").modal("hide");
@@ -584,6 +738,18 @@ $(document).ready(function () {
     $(".editPledgeForm #editPledgeModal").modal("hide");
     $(".pledgeDetailsForm #detailsPledgeModal").modal("hide");
     $(".deactivatePledgeForm #de-activatePledgeModal").modal("hide");
+
+    $(".editLapsForm #editLapsModal").modal("hide");
+
+    $(".registerForm #registerModal").modal("hide");
+    $(".loginForm #loginModal").modal("hide");
+
+    $(".addPersonForm #addPersonModal").modal("hide");
+    $(".editPersonForm #editPersonModal").modal("hide");
+    $(".detailsPersonForm #detailsPersonModal").modal("hide");
+    $(".deactivatePersonForm #de-activatePersonModal").modal("hide");
+
+    $('.gradeStatus .selectpicker').empty();
   });
 
   // ------------------------TOOLTIP ---------------------------- //

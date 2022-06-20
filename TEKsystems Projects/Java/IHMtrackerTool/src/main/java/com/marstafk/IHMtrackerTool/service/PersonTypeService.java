@@ -21,5 +21,7 @@ public interface PersonTypeService {
     public List<PersonType> getAllPersonTypes();
 
     public PersonType getPersonTypeById(long id);
+
+    public List<PersonType> getAllByPersonId(long id);
     
 }

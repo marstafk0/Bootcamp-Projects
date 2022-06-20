@@ -15,7 +15,7 @@ public interface FamilyService {
     
     public Family getFamilyById(Long id);
     public List<Family> getAllFamilies(boolean active);
-    public Family getFamilyByStudentId(Long id);
+    public Family getFamilyByPersonId(Long id);
     public void saveFamily(Family family);
     
 }

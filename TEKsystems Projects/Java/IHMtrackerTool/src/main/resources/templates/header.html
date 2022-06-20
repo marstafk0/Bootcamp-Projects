@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+
   <body>
     <div th:fragment="myheader">
       <!-- meta -->
@@ -44,76 +46,225 @@
       />
 
       <link rel="stylesheet" th:href="@{/css/style.css}" />
+
+      <link id="theme-style" rel="stylesheet" th:href="@{/css/portal.css}" />
+
+      <script
+        type="module"
+        crossorigin
+        th:src="@{/js/index.6a15bcf4.js}"
+        src="../static/js/index.6a15bcf4.js"
+      ></script>
+      <link rel="stylesheet" th:href="@{/css/index.b22a48b0.css}" />
     </div>
 
     <div th:fragment="myNav">
       <!-- Navbar -->
-      <nav class="navbar navbar-expand-lg bg-light navbar-light" id="nav">
-        <div class="container">
-          <a href="#" class="navbar-brand"></a>
-
-          <button
-            class="navbar-toggler collapsed"
-            type="button"
-            data-bs-toggle="collapse"
-            data-bs-target="#navmenu"
-          >
-            <span class="navbar-toggler-icon"></span>
-          </button>
-
-          <div class="collapse navbar-collapse" id="navmenu">
-            <ul class="navbar-nav ms-auto">
-              <li class="nav-item">
-                <a href="#" class="nav-link">Students</a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">Teachers</a>
-              </li>
-              <li class="nav-item">
-                <a href="#" class="nav-link">Runners</a>
-              </li>
-            </ul>
+      <header class="app-header fixed-top">
+        <div class="app-header-inner">
+          <div class="container-fluid py-2">
+            <div class="app-header-content">
+              <div class="row justify-content-between align-items-center">
+                <div class="col-auto">
+                  <a
+                    id="sidepanel-toggler"
+                    class="sidepanel-toggler d-inline-block d-xl-none"
+                    href="#"
+                  >
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="30"
+                      height="30"
+                      viewBox="0 0 30 30"
+                      role="img"
+                    >
+                      <title>Menu</title>
+                      <path
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-miterlimit="10"
+                        stroke-width="2"
+                        d="M4 7h22M4 15h22M4 23h22"
+                      ></path>
+                    </svg>
+                  </a>
+                </div>
+                <!--//col-->
+  
+                <div class="app-utilities col-auto">
+                  <div class="app-utility-item app-user-dropdown dropdown">
+                    <a
+                      class="dropdown-toggle"
+                      id="user-dropdown-toggle"
+                      data-bs-toggle="dropdown"
+                      href="#"
+                      role="button"
+                      aria-expanded="false"
+                      ><svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="fill: rgba(0, 0, 0, 1);transform: msFilter;"><path d="M12 2A10.13 10.13 0 0 0 2 12a10 10 0 0 0 4 7.92V20h.1a9.7 9.7 0 0 0 11.8 0h.1v-.08A10 10 0 0 0 22 12 10.13 10.13 0 0 0 12 2zM8.07 18.93A3 3 0 0 1 11 16.57h2a3 3 0 0 1 2.93 2.36 7.75 7.75 0 0 1-7.86 0zm9.54-1.29A5 5 0 0 0 13 14.57h-2a5 5 0 0 0-4.61 3.07A8 8 0 0 1 4 12a8.1 8.1 0 0 1 8-8 8.1 8.1 0 0 1 8 8 8 8 0 0 1-2.39 5.64z"></path><path d="M12 6a3.91 3.91 0 0 0-4 4 3.91 3.91 0 0 0 4 4 3.91 3.91 0 0 0 4-4 3.91 3.91 0 0 0-4-4zm0 6a1.91 1.91 0 0 1-2-2 1.91 1.91 0 0 1 2-2 1.91 1.91 0 0 1 2 2 1.91 1.91 0 0 1-2 2z"></path></svg></a>
+                    <ul
+                      class="dropdown-menu"
+                      aria-labelledby="user-dropdown-toggle"
+                    >
+                      <li>
+                        <a class="dropdown-item" id="loginBtn">Login</a>
+                        <a class="dropdown-item" id="registerBtn" href="#">Register</a>
+                        <a class="dropdown-item" href="login.html">Log Out</a>
+                      </li>
+                    </ul>
+                  </div>
+                  <!--//app-user-dropdown-->
+                </div>
+                <!--//app-utilities-->
+              </div>
+              <!--//row-->
+            </div>
+            <!--//app-header-content-->
           </div>
+          <!--//container-fluid-->
         </div>
-      </nav>
+        <!--//app-header-inner-->
+  
+        <div id="app-sidepanel" class="app-sidepanel">
+          <div id="sidepanel-drop" class="sidepanel-drop"></div>
+          <div class="sidepanel-inner d-flex flex-column">
+            <a href="#" id="sidepanel-close" class="sidepanel-close d-xl-none"
+              >&times;</a
+            >
+  
+            <div class="app-branding">
+              <a class="app-logo" href="index.html"
+                ><img
+                  class="logo-icon me-2"
+                  src="assets/images/app-logo.svg"
+                  alt="logo"
+                /><span class="logo-text">PORTAL</span></a
+              >
+            </div>
+            <!--//app-branding-->
+  
+            <nav id="app-nav-main" class="app-nav app-nav-main flex-grow-1">
+              <ul class="app-menu list-unstyled accordion" id="menu-accordion">
+                <li class="nav-item">
+                  <a class="nav-link" th:href="@{index}">
+                    <span class="nav-icon">
+                      <svg
+                        width="1em"
+                        height="1em"
+                        viewBox="0 0 16 16"
+                        class="bi bi-house-door"
+                        fill="currentColor"
+                        xmlns="http://www.w3.org/2000/svg"
+                      >
+                        <path
+                          fill-rule="evenodd"
+                          d="M7.646 1.146a.5.5 0 0 1 .708 0l6 6a.5.5 0 0 1 .146.354v7a.5.5 0 0 1-.5.5H9.5a.5.5 0 0 1-.5-.5v-4H7v4a.5.5 0 0 1-.5.5H2a.5.5 0 0 1-.5-.5v-7a.5.5 0 0 1 .146-.354l6-6zM2.5 7.707V14H6v-4a.5.5 0 0 1 .5-.5h3a.5.5 0 0 1 .5.5v4h3.5V7.707L8 2.207l-5.5 5.5z"
+                        />
+                        <path
+                          fill-rule="evenodd"
+                          d="M13 2.5V6l-2-2V2.5a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5z"
+                        />
+                      </svg>
+                    </span>
+                    <span class="nav-link-text">Overview</span> </a
+                  ><!--//nav-link-->
+                </li>
+                <!--//nav-item-->
+  
+                <li class="nav-item">
+                  <a class="nav-link" th:href="@{students}">
+                    <span class="nav-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="fill: rgba(0, 0, 0, 1);transform: msFilter;"><path d="M2 7v1l11 4 9-4V7L11 4z"></path><path d="M4 11v4.267c0 1.621 4.001 3.893 9 3.734 4-.126 6.586-1.972 7-3.467.024-.089.037-.178.037-.268V11L13 14l-5-1.667v3.213l-1-.364V12l-3-1z"></path></svg>
+                    </span>
+                    <span class="nav-link-text">Students</span> </a
+                  ><!--//nav-link-->
+                </li>
+                <!--//nav-item-->
+  
+                <li class="nav-item">
+                  <a class="nav-link" th:href="@{teachers}">
+                    <span class="nav-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="fill: rgba(0, 0, 0, 1);transform: msFilter;"><path d="M20 2H8a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V4a2 2 0 0 0-2-2zm-6 2.5a2.5 2.5 0 1 1 0 5 2.5 2.5 0 0 1 0-5zM19 15H9v-.25C9 12.901 11.254 11 14 11s5 1.901 5 3.75V15z"></path><path d="M4 8H2v12c0 1.103.897 2 2 2h12v-2H4V8z"></path></svg>
+                    </span>
+                    <span class="nav-link-text">Teachers</span> </a
+                  ><!--//nav-link-->
+                </li>
+                <!--//nav-item-->
+  
+                <li class="nav-item">
+                  <a class="nav-link" th:href="@{persons}">
+                    <span class="nav-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="fill: rgba(0, 0, 0, 1);transform: msFilter;"><path d="M12 2a5 5 0 1 0 5 5 5 5 0 0 0-5-5zm0 8a3 3 0 1 1 3-3 3 3 0 0 1-3 3zm9 11v-1a7 7 0 0 0-7-7h-4a7 7 0 0 0-7 7v1h2v-1a5 5 0 0 1 5-5h4a5 5 0 0 1 5 5v1z"></path></svg>
+                    </span>
+                    <span class="nav-link-text">Members</span> </a
+                  ><!--//nav-link-->
+                </li>
+                <!--//nav-item-->
+  
+                <li class="nav-item">
+                  <a class="nav-link" th:href="@{sponsors}">
+                    <span class="nav-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="fill: rgba(0, 0, 0, 1);transform: msFilter;"><path d="M21 4H3a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h18a1 1 0 0 0 1-1V5a1 1 0 0 0-1-1zm-1 11a3 3 0 0 0-3 3H7a3 3 0 0 0-3-3V9a3 3 0 0 0 3-3h10a3 3 0 0 0 3 3v6z"></path><path d="M12 8c-2.206 0-4 1.794-4 4s1.794 4 4 4 4-1.794 4-4-1.794-4-4-4zm0 6c-1.103 0-2-.897-2-2s.897-2 2-2 2 .897 2 2-.897 2-2 2z"></path></svg>
+                    </span>
+                    <span class="nav-link-text">Sponsors</span> </a
+                  ><!--//nav-link-->
+                </li>
+                <!--//nav-item-->
+  
+                <li class="nav-item">
+                  <a class="nav-link" th:href="@{families}">
+                    <span class="nav-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="fill: rgba(0, 0, 0, 1);transform: msFilter;"><path d="M15 11h7v2h-7zm1 4h6v2h-6zm-2-8h8v2h-8zM4 19h10v-1c0-2.757-2.243-5-5-5H7c-2.757 0-5 2.243-5 5v1h2zm4-7c1.995 0 3.5-1.505 3.5-3.5S9.995 5 8 5 4.5 6.505 4.5 8.5 6.005 12 8 12z"></path></svg>
+                    </span>
+                    <span class="nav-link-text">Families</span> </a
+                  ><!--//nav-link-->
+                </li>
+                <!--//nav-item-->
+  
+                <li class="nav-item">
+                  <a class="nav-link" th:href="@{pledges}">
+                    <span class="nav-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="fill: rgba(0, 0, 0, 1);transform: msFilter;"><path d="M12 15c-1.84 0-2-.86-2-1H8c0 .92.66 2.55 3 2.92V18h2v-1.08c2-.34 3-1.63 3-2.92 0-1.12-.52-3-4-3-2 0-2-.63-2-1s.7-1 2-1 1.39.64 1.4 1h2A3 3 0 0 0 13 7.12V6h-2v1.09C9 7.42 8 8.71 8 10c0 1.12.52 3 4 3 2 0 2 .68 2 1s-.62 1-2 1z"></path><path d="M5 2H2v2h2v17a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1V4h2V2H5zm13 18H6V4h12z"></path></svg>
+                    </span>
+                    <span class="nav-link-text">Pledges</span> </a
+                  ><!--//nav-link-->
+                </li>
+                <!--//nav-item-->
+  
+                <li class="nav-item">
+                  <a class="nav-link" th:href="@{jogathons}">
+                    <span class="nav-icon">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" style="fill: rgba(0, 0, 0, 1);transform: msFilter;"><circle cx="17" cy="4" r="2"></circle><path d="M15.777 10.969a2.007 2.007 0 0 0 2.148.83l3.316-.829-.483-1.94-3.316.829-1.379-2.067a2.01 2.01 0 0 0-1.272-.854l-3.846-.77a1.998 1.998 0 0 0-2.181 1.067l-1.658 3.316 1.789.895 1.658-3.317 1.967.394L7.434 17H3v2h4.434c.698 0 1.355-.372 1.715-.971l1.918-3.196 5.169 1.034 1.816 5.449 1.896-.633-1.815-5.448a2.007 2.007 0 0 0-1.506-1.33l-3.039-.607 1.772-2.954.417.625z"></path></svg>
+                    </span>
+                    <span class="nav-link-text">Jog-A-Thons</span> </a
+                  ><!--//nav-link-->
+                </li>
+                <!--//nav-item-->
+              </ul>
+              <!--//app-menu-->
+            </nav>
+            <!--//app-nav-->
+  
+            <div class="app-sidepanel-footer">
+              <nav class="app-nav app-nav-footer">
+                <ul class="app-menu footer-menu list-unstyled">
+                  <li class="nav-item"></li>
+                  <!--//nav-item-->
+                  <li class="nav-item"></li>
+                  <!--//nav-item-->
+                  <li class="nav-item"></li>
+                  <!--//nav-item-->
+                </ul>
+                <!--//footer-menu-->
+              </nav>
+            </div>
+            <!--//app-sidepanel-footer-->
+          </div>
+          <!--//sidepanel-inner-->
+        </div>
+        <!--//app-sidepanel-->
+      </header>
+      <!--//app-header-->
 
-      <!-- Side Navbar -->
-      <div class="wrapper">
-        <input type="checkbox" id="btn" hidden />
-        <label for="btn" class="menu-btn">
-          <i class="bx bx-menu"></i>
-          <i class="bx bxs-chevrons-right"></i>
-        </label>
-        <nav id="sidebar">
-          <div class="title">Jog-A-Thon</div>
-          <ul class="list-items">
-            <li>
-              <a href="#"><i class="bx bx-home-alt-2"></i>Home</a>
-            </li>
-            <li>
-              <a href="#"><i class="bx bxs-graduation"></i>Students</a>
-            </li>
-            <li>
-              <a href="#"><i class="bx bxs-user-account"></i>Teachers</a>
-            </li>
-            <li>
-              <a href="#"><i class="bx bx-money"></i>Sponsors</a>
-            </li>
-            <li>
-              <a href="#"><i class="bx bxs-user-detail"></i>Families</a>
-            </li>
-            <li>
-              <a href="#"><i class="bx bx-customize"></i>Classrooms</a>
-            </li>
-            <li>
-              <a href="#"><i class="bx bx-book"></i>Grades</a>
-            </li>
-            <li>
-              <a href="#"><i class="bx bx-envelope"></i>Jog-A-Thons</a>
-            </li>
-          </ul>
-        </nav>
-      </div>
     </div>
   </body>
 </html>

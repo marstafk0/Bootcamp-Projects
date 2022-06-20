@@ -44,9 +44,9 @@ public class FamilyServiceImpl implements FamilyService{
     }
 
     @Override
-    public Family getFamilyByStudentId(Long id) {
+    public Family getFamilyByPersonId(Long id) {
         try {
-            return familyRepository.findByStudentId(id);
+            return familyRepository.findByPersonId(id);
         } catch (NoSuchElementException e) {
             Family family = new Family();
             family.setId(0);

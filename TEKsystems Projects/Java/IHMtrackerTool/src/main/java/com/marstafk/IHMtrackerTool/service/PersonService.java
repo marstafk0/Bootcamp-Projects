@@ -27,6 +27,8 @@ public interface PersonService {
     List<Person> getAllPersonsByClassroomId(long id);
 
     Person getPersonByPledgeId(long id);
+
+    Person getPersonByRunId(long id);
     void savePerson(Person person);
 
 }

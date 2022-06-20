@@ -39,4 +39,29 @@ public class PledgeServiceImpl implements PledgeService{
     public void savePledge(Pledge pledge) {
         pledgeRepository.save(pledge);
     }
+
+    @Override
+    public List<Pledge> getAllByCurrentJog() {
+        return pledgeRepository.findAllbyCurrentJog();
+    }
+
+    @Override
+    public List<Pledge> getAllbyJogIdWeekInactive(long id, int week) {
+        return pledgeRepository.findAllbyJogIdWeekInactive(id, week);
+    }
+
+    @Override
+    public List<Pledge> getAllByWeekCurrent(int week) {
+        return pledgeRepository.findAllByWeekCurrent(week);
+    }
+
+    @Override
+    public List<Pledge> getAllByGradeId(long id) {
+        return pledgeRepository.findAllByGradeId(id);
+    }
+
+    @Override
+    public List<Pledge> getAllByClassroom(long id) {
+        return pledgeRepository.findAllByClassroomId(id);
+    }
 }

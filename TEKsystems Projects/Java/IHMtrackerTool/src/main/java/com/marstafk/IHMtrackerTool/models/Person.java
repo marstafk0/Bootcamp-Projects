@@ -46,19 +46,19 @@ public class Person implements Serializable {
     private List<Pledge> pledges;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
-    @JoinTable(name = "person_person_laps",
+    @JoinTable(name = "person_run",
             joinColumns = {
                     @JoinColumn(name = "person_id")},
             inverseJoinColumns = {
-                    @JoinColumn(name = "person_laps_id")})
-    private List<PersonLaps> laps;
+                    @JoinColumn(name = "run_id")})
+    private List<Run> runs;
 
-    public Person(String firstName, String lastName, String contact, List<Pledge> pledges, List<PersonLaps> laps, boolean active) {
+    public Person(String firstName, String lastName, String contact, List<Pledge> pledges, List<Run> laps, boolean active) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.contact = contact;
         this.pledges = pledges;
-        this.laps = laps;
+        this.runs = laps;
         this.active = active;
     }
 
@@ -66,8 +66,8 @@ public class Person implements Serializable {
         this.pledges.add(pledge);
     }
 
-    public void addPersonLaps(PersonLaps personLaps) {
-        this.laps.add(personLaps);
+    public void addRuns(Run run) {
+        this.runs.add(run);
     }
     
 }
