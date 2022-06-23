@@ -1,5 +1,6 @@
 package com.marstafk.IHMtrackerTool.service;
 
+import com.marstafk.IHMtrackerTool.exceptions.ObjectNotFoundException;
 import com.marstafk.IHMtrackerTool.models.Classroom;
 
 import java.util.List;
@@ -7,10 +8,13 @@ import java.util.List;
 public interface ClassroomService {
 
     List<Classroom> getAllClassrooms(boolean active);
-    Classroom getClassroomByName(String classroomName);
-    Classroom getClassroomById(long id);
+
+    Classroom getClassroomById(long id) throws ObjectNotFoundException;
+
     void saveClassroom(Classroom classroom);
-    Classroom getClassroomByGradeId(long id);
+
+    Classroom getClassroomByGradeId(long id) throws ObjectNotFoundException;
+
     void deleteClassroom(long id);
 
 }

@@ -15,9 +15,6 @@ $(document).ready(function () {
   $(".container-xl .addFamilyButton").on("click", function () {
     $(".addFamilyForm #addFamilyModal").modal("show");
   });
-  $(".container-xl .addPersonTypeButton").on("click", function () {
-    $(".addPersonTypeForm #addPersonTypeModal").modal("show");
-  });
   $(".container-xl .addPledgeTypeButton").on("click", function () {
     $(".addPledgeTypeForm #addPledgeTypeModal").modal("show");
   });
@@ -35,6 +32,39 @@ $(document).ready(function () {
   });
   $(".container-xl .addPersonButton").on("click", function () {
     $(".addPersonForm #addPersonModal").modal("show");
+  });
+  $(".myFormThree #addStudent123").on("click", function (event) {
+    event.preventDefault();
+				// PREPARE FORM DATA
+				var student = {
+					firstName : $("#firstName").val(),
+					lastName : $("#lastName").val(),
+					contact : $("#contact").val(),
+          gradeId : $("#grade").val(),
+          familyId : $("#family").val()
+				}
+        
+				// DO POST
+				$.ajax({
+					type : "POST",
+					contentType : "application/json",
+					url : "addStudentTest",
+					data : JSON.stringify(student),
+					dataType : 'json',
+					success : function(result) {
+						if (result == "undefined" || result.length == 0) {
+							location.href = "/students";
+						} else {
+							console.log(result);
+              $(".myFormThree .errors").html('<p class="alert alert-danger errorMessage" id="errors">Error message</p>');
+						}
+						console.log(result);
+					},
+					error : function(e) {
+						$(".myFormThree .errors").html('<p class="alert alert-danger errorMessage" id="errors">Please your input and try again.</p>');
+						console.log("ERROR: ", e);
+					}
+				});
   });
 
   // ------------------------ EDIT STUDENT MODAL ---------------------------- //
@@ -181,21 +211,6 @@ $(document).ready(function () {
       );
     });
     $(".editFamilyForm #editFamilyModal").modal("show");
-  });
-
-  // ------------------------ EDIT PERSON TYPE MODAL ---------------------------- //
-  $(".table .eptBtn").on("click", function (event) {
-    event.preventDefault();
-    var href = $(this).attr("href");
-    $.get(href, function (personType, status) {
-      $(".editPersonTypeForm #id").val(personType.id);
-      $(".editPersonTypeForm #statusName").val(personType.statusName);
-      $(".editPersonTypeForm .selectpicker").selectpicker(
-        "val",
-        "" + personType.active + ""
-      );
-    });
-    $(".editPersonTypeForm #editPersonTypeModal").modal("show");
   });
 
   // ------------------------ EDIT PLEDGE TYPE MODAL ---------------------------- //
@@ -386,16 +401,6 @@ $(document).ready(function () {
     $(".deactivatePersonTypeForm #de-activatePersonTypeModal").modal("show");
   });
 
-  // ------------------------ DE-ACTIVATE PERSON TYPE MODAL ---------------------------- //
-  $(".table .dPBtn").on("click", function (event) {
-    event.preventDefault();
-    var href = $(this).attr("href");
-    $.get(href, function (pledgeType, status) {
-      $(".deactivatePledgeTypeForm #id").val(pledgeType.id);
-    });
-    $(".deactivatePledgeTypeForm #de-activatePledgeTypeModal").modal("show");
-  });
-
   // ------------------------ DE-ACTIVATE CLASSROOM MODAL ---------------------------- //
   $(".table .dcBtn").on("click", function (event) {
     event.preventDefault();
@@ -411,9 +416,9 @@ $(document).ready(function () {
   $(".table .dplBtn").on("click", function (event) {
     event.preventDefault();
     var href = $(this).attr("href");
-    $.get(href, function (listOfLists, status) {
-      var classroom = listOfLists[0][0];
-      $(".deactivatePledgeForm #id").val(classroom.id);
+    $.get(href, function (objects, status) {
+      var pledge = objects[0];
+      $(".deactivatePledgeForm #id").val(pledge.id);
     });
     $(".deactivatePledgeForm #de-activatePledgeModal").modal("show");
   });
@@ -551,21 +556,6 @@ $(document).ready(function () {
 
     });
     $(".familyDetailsForm #detailsFamilyModal").modal("show");
-  });
-
-  // ---------------------------- DETAIL PERSON TYPE MODAL -------------------------//
-  $(".table .ptdBtn").on("click", function (event) {
-    event.preventDefault();
-    var href = $(this).attr("href");
-    $.get(href, function (personType, status) {
-      $(".personTypeDetailsForm #id").val(personType.id);
-      $(".personTypeDetailsForm #statusName").val(personType.statusName);
-      $(".personTypeDetailsForm .selectpicker").selectpicker(
-        "val",
-        "" + personType.active + ""
-      );
-    });
-    $(".personTypeDetailsForm #detailsPersonTypeModal").modal("show");
   });
 
   // ---------------------------- DETAIL PERSON TYPE MODAL 2 -------------------------//
@@ -715,10 +705,6 @@ $(document).ready(function () {
     $(".familyDetailsForm #detailsFamilyModal").modal("hide");
     $(".deactivateFamilyForm #de-activateFamilyModal").modal("hide");
 
-    $(".addPersonTypeForm #addPersonTypeModal").modal("hide");
-    $(".editPersonTypeForm #editPersonTypeModal").modal("hide");
-    $(".personTypeDetailsForm #detailsPersonTypeModal").modal("hide");
-    $(".deactivatePersonTypeForm #de-activatePersonTypeModal").modal("hide");
     $(".personAssDetailsForm #deets").empty();
     $(".personAssDetailsForm #detailsPersonAssModal").modal("hide");
 

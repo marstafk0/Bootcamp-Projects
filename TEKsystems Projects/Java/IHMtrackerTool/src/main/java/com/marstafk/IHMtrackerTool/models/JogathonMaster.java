@@ -4,27 +4,33 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
-import java.time.LocalDate;
+import javax.validation.constraints.Size;
+import java.io.Serializable;
 import java.util.List;
 
 @Data
 @NoArgsConstructor
 @Entity
 @Table(name = "jogathon_master")
-public class JogathonMaster {
+public class JogathonMaster implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Size(min = 10, max = 10, message = "Please format date as: MM/DD/YYYY")
     @Column(name = "run_date", nullable = false)
-    private LocalDate runDate;
+    private String runDate;
 
     @Column(name = "active", nullable = false)
     private boolean active = true;
 
+    @Size(max = 255, message = "Comments can't be more than 255 characters.")
     @Column(name = "comments", nullable = true)
     private String comments;
+
+    @Column(name = "deletion", nullable = false)
+    private boolean deletion;
 
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
     @JoinTable(name = "jogathon_master_run",
@@ -41,13 +47,6 @@ public class JogathonMaster {
             inverseJoinColumns = {
                     @JoinColumn(name = "pledge_id")})
     private List<Pledge> pledges;
-
-    public JogathonMaster(LocalDate runDate, boolean active, String comments, List<Run> laps) {
-        this.runDate = runDate;
-        this.active = active;
-        this.comments = comments;
-        this.runs = laps;
-    }
 
     public void addRuns(Run run) {
         this.runs.add(run);

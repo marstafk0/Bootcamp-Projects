@@ -4,6 +4,7 @@
  */
 package com.marstafk.IHMtrackerTool.controllers;
 
+import com.marstafk.IHMtrackerTool.exceptions.ObjectNotFoundException;
 import com.marstafk.IHMtrackerTool.models.*;
 import com.marstafk.IHMtrackerTool.repositories.UserRepository;
 import com.marstafk.IHMtrackerTool.service.*;
@@ -11,16 +12,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.persistence.criteria.CriteriaBuilder;
+import javax.validation.Valid;
 import java.math.BigDecimal;
 import java.util.*;
 
 /**
- *
  * @author boss_
  */
 @Controller
@@ -43,12 +44,12 @@ public class IndexController {
 
     @Autowired
     PersonService personService;
-    
+
     @GetMapping("index")
-    public String displayIndex(Model model) {
+    public String displayIndex(Model model) throws ObjectNotFoundException {
         // Total money for current Jog-a-thon
         BigDecimal total = new BigDecimal(0);
-        for (Pledge p : pledgeService.getAllPledges(true)) {
+        for (Pledge p : pledgeService.getAllPledges(true, false)) {
             total = total.add(p.getTotal());
         }
 
@@ -64,7 +65,7 @@ public class IndexController {
             classTotal = new BigDecimal(0);
         }
         classTotals = sortByValue(classTotals);
-        Long[] arrayKeys1 = classTotals.keySet().toArray( new Long[ classTotals.size() ] );
+        Long[] arrayKeys1 = classTotals.keySet().toArray(new Long[classTotals.size()]);
         classId = arrayKeys1[arrayKeys1.length - 1];
         BigDecimal finalClassTotal = classTotals.get(classId);
 
@@ -80,7 +81,7 @@ public class IndexController {
             studentTotal = new BigDecimal(0);
         }
         studentsTotals = sortByValue(studentsTotals);
-        Long[] arrayKeys = studentsTotals.keySet().toArray( new Long[ studentsTotals.size() ] );
+        Long[] arrayKeys = studentsTotals.keySet().toArray(new Long[studentsTotals.size()]);
         studentId = arrayKeys[arrayKeys.length - 1];
 
         model.addAttribute("total", total);
@@ -92,29 +93,31 @@ public class IndexController {
         return "index";
     }
 
-//    @GetMapping("register")
-//    public String showRegistrationForm(Model model) {
-//        model.addAttribute("user", new User());
-//
-//        return "signup_form";
-//    }
+    @GetMapping("register")
+    public String showRegistrationForm(Model model) {
+        model.addAttribute("user", new User());
+
+        return "signup_form";
+    }
 
     @PostMapping("process_register")
-    public String processRegister(User user) {
+    public String processRegister(@Valid User user, BindingResult result) {
         BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         String encodedPassword = passwordEncoder.encode(user.getPassword());
         user.setPassword(encodedPassword);
 
+        if (result.hasErrors()) {
+            return "signup_form";
+        }
         userRepo.save(user);
-
-        return "redirect:/index";
+        return "redirect:/login";
     }
 
     @GetMapping("chartData")
     @ResponseBody
     public List<List<BigDecimal>> chartData() {
         List<List<BigDecimal>> data = new ArrayList<>();
-        JogathonMaster jogathonMaster = jogathonMasterService.getActiveJogathon(true);
+        JogathonMaster jogathonMaster = jogathonMasterService.getActiveAndDeletion(true, false);
 
         Set<Integer> weeks = new HashSet<>();
         for (Pledge p : pledgeService.getAllByCurrentJog()) {
@@ -144,8 +147,7 @@ public class IndexController {
                 }
                 previousMoneyPerWeek.add(total);
             }
-        } catch (NullPointerException e) {
-
+        } catch (NoSuchElementException | NullPointerException | ObjectNotFoundException ex) {
         }
         data.add(weeksList);
         data.add(moneyPerWeek);
@@ -176,17 +178,15 @@ public class IndexController {
         return data;
     }
 
-    private HashMap<Long, BigDecimal> sortByValue(HashMap<Long, BigDecimal> hm)
-    {
+    private HashMap<Long, BigDecimal> sortByValue(HashMap<Long, BigDecimal> hm) {
         // Create a list from elements of HashMap
-        List<Map.Entry<Long, BigDecimal> > list =
-                new LinkedList<Map.Entry<Long, BigDecimal> >(hm.entrySet());
+        List<Map.Entry<Long, BigDecimal>> list =
+                new LinkedList<Map.Entry<Long, BigDecimal>>(hm.entrySet());
 
         // Sort the list
-        Collections.sort(list, new Comparator<Map.Entry<Long, BigDecimal> >() {
+        Collections.sort(list, new Comparator<Map.Entry<Long, BigDecimal>>() {
             public int compare(Map.Entry<Long, BigDecimal> o1,
-                               Map.Entry<Long, BigDecimal> o2)
-            {
+                               Map.Entry<Long, BigDecimal> o2) {
                 return (o1.getValue()).compareTo(o2.getValue());
             }
         });

@@ -10,36 +10,34 @@ import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
 import java.io.Serializable;
-import java.util.HashMap;
 import java.util.List;
 
 /**
- *
  * @author boss_
  */
 // Grade, ie. 5th grade.
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="grade")
+@Table(name = "grade")
 public class Grade implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    
+
     @Column(name = "grade_name", nullable = false)
     private String gradeName;
 
     @Column(name = "active", nullable = false)
     private boolean active = true;
-    
-    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false) 
+
+    @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
     @JoinTable(name = "grade_person",
             joinColumns = {
-                @JoinColumn(name = "grade_id")},
+                    @JoinColumn(name = "grade_id")},
             inverseJoinColumns = {
-                @JoinColumn(name = "person_id")})
+                    @JoinColumn(name = "person_id")})
     private List<Person> persons;
 
     public Grade(String gradeName, List<Person> persons, boolean active) {
@@ -47,9 +45,9 @@ public class Grade implements Serializable {
         this.persons = persons;
         this.active = active;
     }
-    
+
     public void addStudent(Person person) {
-        this.persons.add(person);   
+        this.persons.add(person);
     }
 
 }

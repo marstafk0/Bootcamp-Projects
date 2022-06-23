@@ -1,6 +1,6 @@
 package com.marstafk.IHMtrackerTool.controllers;
 
-import com.marstafk.IHMtrackerTool.service.CustomUserDetailsService;
+import com.marstafk.IHMtrackerTool.serviceImpl.CustomUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -46,9 +46,10 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        http.csrf().disable();
         http.authorizeRequests()
                 .antMatchers(
-                        "/registration**",
+                        "/register**",
                         "/process_register",
                         "/js/**",
                         "/css/**",
@@ -56,6 +57,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                         "/webjars/**",
                         "/chartData",
                         "/chartGradeData",
+                        "/addStudentTest",
                         "/index").permitAll()
                 .anyRequest().authenticated()
                 .and()
@@ -64,7 +66,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 .defaultSuccessUrl("/index")
                 .permitAll()
                 .and()
-                .logout().logoutSuccessUrl("/").permitAll()
+                .logout().logoutSuccessUrl("/index").permitAll()
                 .and().rememberMe();
     }
 

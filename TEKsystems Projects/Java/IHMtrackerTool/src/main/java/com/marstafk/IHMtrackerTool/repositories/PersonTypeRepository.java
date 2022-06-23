@@ -11,10 +11,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 /**
- *
  * @author boss_
  */
-public interface PersonTypeRepository extends JpaRepository<PersonType, Long>{
+public interface PersonTypeRepository extends JpaRepository<PersonType, Long> {
 
     public PersonType findByStatusName(String statusName);
 
@@ -23,6 +22,6 @@ public interface PersonTypeRepository extends JpaRepository<PersonType, Long>{
 
     @Query(value = "SELECT pt.* FROM person_type pt JOIN person_type_person ptp ON ptp.person_type_id = pt.id JOIN " +
             "person p ON p.id = ptp.person_id WHERE p.id = :id AND p.active = true AND pt.active = true", nativeQuery = true)
-    public List<PersonType> findAllByPersonId(long id);
-    
+    public PersonType findByPersonId(long id);
+
 }

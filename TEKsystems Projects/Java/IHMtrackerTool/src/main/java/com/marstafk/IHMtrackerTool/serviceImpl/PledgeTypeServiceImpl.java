@@ -1,5 +1,6 @@
 package com.marstafk.IHMtrackerTool.serviceImpl;
 
+import com.marstafk.IHMtrackerTool.exceptions.ObjectNotFoundException;
 import com.marstafk.IHMtrackerTool.models.PledgeType;
 import com.marstafk.IHMtrackerTool.repositories.PledgeTypeRepository;
 import com.marstafk.IHMtrackerTool.service.PledgeTypeService;
@@ -20,8 +21,12 @@ public class PledgeTypeServiceImpl implements PledgeTypeService {
     }
 
     @Override
-    public PledgeType getPledgeTypeById(long id) {
-        return pledgeTypeRepository.findById(id).get();
+    public PledgeType getPledgeTypeById(long id) throws ObjectNotFoundException {
+        try {
+            return pledgeTypeRepository.findById(id).get();
+        } catch (Exception e) {
+            throw new ObjectNotFoundException("Could not retrieve Pledge Type");
+        }
     }
 
     @Override

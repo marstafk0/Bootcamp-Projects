@@ -1,5 +1,6 @@
 package com.marstafk.IHMtrackerTool.serviceImpl;
 
+import com.marstafk.IHMtrackerTool.exceptions.ObjectNotFoundException;
 import com.marstafk.IHMtrackerTool.models.Classroom;
 import com.marstafk.IHMtrackerTool.repositories.ClassroomRepository;
 import com.marstafk.IHMtrackerTool.service.ClassroomService;
@@ -7,7 +8,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ClassroomServiceImpl implements ClassroomService {
@@ -21,13 +21,12 @@ public class ClassroomServiceImpl implements ClassroomService {
     }
 
     @Override
-    public Classroom getClassroomByName(String classroomName) {
-        return classroomRepository.findByClassName(classroomName);
-    }
-
-    @Override
-    public Classroom getClassroomById(long id) {
-        return classroomRepository.findById(id).get();
+    public Classroom getClassroomById(long id) throws ObjectNotFoundException {
+        try {
+            return classroomRepository.findById(id).get();
+        } catch (Exception e) {
+            throw new ObjectNotFoundException("Could not get Classroom");
+        }
     }
 
     @Override
@@ -36,13 +35,17 @@ public class ClassroomServiceImpl implements ClassroomService {
     }
 
     @Override
-    public Classroom getClassroomByGradeId(long id) {
-        return classroomRepository.findByGradeId(id);
+    public Classroom getClassroomByGradeId(long id) throws ObjectNotFoundException {
+        try {
+            return classroomRepository.findByGradeId(id);
+        } catch (Exception e) {
+            throw new ObjectNotFoundException("Could not get Classroom by grade");
+        }
     }
 
     @Override
     public void deleteClassroom(long id) {
         classroomRepository.deleteById(id);
     }
-    
+
 }

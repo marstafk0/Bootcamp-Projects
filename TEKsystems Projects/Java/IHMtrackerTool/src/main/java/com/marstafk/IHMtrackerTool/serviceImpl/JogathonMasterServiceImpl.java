@@ -4,26 +4,29 @@
  */
 package com.marstafk.IHMtrackerTool.serviceImpl;
 
+import com.marstafk.IHMtrackerTool.exceptions.ObjectNotFoundException;
 import com.marstafk.IHMtrackerTool.models.JogathonMaster;
 import com.marstafk.IHMtrackerTool.repositories.JogathonMasterRepository;
 import com.marstafk.IHMtrackerTool.service.JogathonMasterService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- *
  * @author boss_
  */
 @Service
 public class JogathonMasterServiceImpl implements JogathonMasterService {
-    
+
     @Autowired
     JogathonMasterRepository jMasterRepo;
 
     @Override
-    public JogathonMaster getJogathonById(long id) {
-        return jMasterRepo.findById(id).get();
+    public JogathonMaster getJogathonById(long id) throws ObjectNotFoundException {
+        try {
+            return jMasterRepo.findById(id).get();
+        } catch (Exception e) {
+            throw new ObjectNotFoundException("Could not retrieve Jogathon");
+        }
     }
 
     @Override
@@ -32,6 +35,8 @@ public class JogathonMasterServiceImpl implements JogathonMasterService {
     }
 
     @Override
-    public JogathonMaster getActiveJogathon(boolean active) { return jMasterRepo.findByActive(active); }
-    
+    public JogathonMaster getActiveAndDeletion(boolean active, boolean deletion) {
+        return jMasterRepo.findByActiveAndDeletion(active, deletion);
+    }
+
 }

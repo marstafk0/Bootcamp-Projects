@@ -1,12 +1,11 @@
 package com.marstafk.IHMtrackerTool.serviceImpl;
 
+import com.marstafk.IHMtrackerTool.exceptions.ObjectNotFoundException;
 import com.marstafk.IHMtrackerTool.models.Run;
 import com.marstafk.IHMtrackerTool.repositories.RunRepository;
 import com.marstafk.IHMtrackerTool.service.RunService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
 
 @Service
 public class RunServiceImpl implements RunService {
@@ -15,16 +14,16 @@ public class RunServiceImpl implements RunService {
     RunRepository runRepository;
 
     @Override
-    public Run getByPersonId(long id) {
-        return runRepository.findByPersonId(id);
+    public Run getByPersonId(long id) throws ObjectNotFoundException {
+        try {
+            return runRepository.findByPersonId(id);
+        } catch (Exception e) {
+            throw new ObjectNotFoundException("Could not retrieve Run by Person ID");
+        }
     }
 
     @Override
-    public Run getById(long id) { return runRepository.findById(id).get(); }
-
-    @Override
-    public List<Run> getAllByActive(boolean active) { return runRepository.findAllByActive(active); }
-
-    @Override
-    public void saveRun(Run run) { runRepository.save(run); }
+    public void saveRun(Run run) {
+        runRepository.save(run);
+    }
 }

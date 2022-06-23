@@ -8,29 +8,31 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.List;
 
 /**
- *
  * @author boss_
  */
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="person")
+@Table(name = "person")
 public class Person implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    
+
+    @NotEmpty(message = "First name can't be empty.")
     @Column(name = "fname", nullable = false)
     private String firstName;
-    
+
+    @NotEmpty(message = "Last name can't be empty.")
     @Column(name = "lname", nullable = false)
     private String lastName;
-    
+
     @Column(name = "contact", nullable = false)
     private String contact;
 
@@ -69,5 +71,5 @@ public class Person implements Serializable {
     public void addRuns(Run run) {
         this.runs.add(run);
     }
-    
+
 }

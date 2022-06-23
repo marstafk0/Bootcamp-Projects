@@ -1,5 +1,6 @@
 package com.marstafk.IHMtrackerTool.serviceImpl;
 
+import com.marstafk.IHMtrackerTool.exceptions.ObjectNotFoundException;
 import com.marstafk.IHMtrackerTool.models.Sponsor;
 import com.marstafk.IHMtrackerTool.repositories.SponsorRepository;
 import com.marstafk.IHMtrackerTool.service.SponsorService;
@@ -15,8 +16,13 @@ public class SponsorServiceImpl implements SponsorService {
     SponsorRepository sponsorRepository;
 
     @Override
-    public Sponsor getSponsorById(long id) {
-        return sponsorRepository.findById(id).get();
+    public Sponsor getSponsorById(long id) throws ObjectNotFoundException {
+        try {
+            return sponsorRepository.findById(id).get();
+        } catch (Exception e) {
+            throw new ObjectNotFoundException("Could not retrieve Sponsor");
+        }
+
     }
 
     @Override

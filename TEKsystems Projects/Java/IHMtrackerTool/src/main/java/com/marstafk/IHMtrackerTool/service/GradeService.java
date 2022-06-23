@@ -4,23 +4,24 @@
  */
 package com.marstafk.IHMtrackerTool.service;
 
+import com.marstafk.IHMtrackerTool.exceptions.ObjectNotFoundException;
 import com.marstafk.IHMtrackerTool.models.Grade;
+
 import java.util.List;
 
 /**
- *
  * @author boss_
  */
 public interface GradeService {
-    
+
     List<Grade> getAllGrades();
 
     List<Grade> getAllGradesByClassroomId(long id);
-    
-    Grade getGradeById(Long id);
-    
+
+    Grade getGradeById(Long id) throws ObjectNotFoundException;
+
     void saveGrade(Grade grade);
-    
+
     Grade getGradeByPersonId(Long id);
-    
+
 }

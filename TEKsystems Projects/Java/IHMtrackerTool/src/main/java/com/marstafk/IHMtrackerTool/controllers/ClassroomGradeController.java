@@ -1,5 +1,6 @@
 package com.marstafk.IHMtrackerTool.controllers;
 
+import com.marstafk.IHMtrackerTool.exceptions.ObjectNotFoundException;
 import com.marstafk.IHMtrackerTool.models.ClassGrade;
 import com.marstafk.IHMtrackerTool.models.Classroom;
 import com.marstafk.IHMtrackerTool.models.Grade;
@@ -16,8 +17,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.validation.ConstraintViolation;
+import javax.validation.Validation;
+import javax.validation.Validator;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Controller
 public class ClassroomGradeController {
@@ -31,16 +37,19 @@ public class ClassroomGradeController {
     @Autowired
     PersonService personService;
 
+    private Set<ConstraintViolation<Classroom>> violations = new HashSet<>();
+
     @GetMapping("classrooms")
-    public String displayClassrooms(Model model) {
+    public String displayClassrooms(Model model) throws ObjectNotFoundException {
         List<Grade> grades = new ArrayList<>();
         for (Grade g : gradeService.getAllGrades()) {
-            if(classroomService.getClassroomByGradeId(g.getId()) == null) {
+            if (classroomService.getClassroomByGradeId(g.getId()) == null) {
                 grades.add(g);
             }
         }
         model.addAttribute("classes", bindGradeClassroom(classroomService.getAllClassrooms(true)));
         model.addAttribute("grades", grades);
+        model.addAttribute("errors", violations);
         return "classrooms";
     }
 
@@ -52,7 +61,7 @@ public class ClassroomGradeController {
 
     @GetMapping("getClassroom")
     @ResponseBody
-    public List<List<Object>> getClassroom(@RequestParam("id") long id) {
+    public List<List<Object>> getClassroom(@RequestParam("id") long id) throws ObjectNotFoundException {
         List<Object> classrooms = new ArrayList<>();
         List<Object> grades = new ArrayList<>();
         List<Object> availGrades = new ArrayList<>();
@@ -65,7 +74,7 @@ public class ClassroomGradeController {
         classrooms.add(classroomService.getClassroomById(id));
         // Get available grades
         for (Grade g : gradeService.getAllGrades()) {
-            if(classroomService.getClassroomByGradeId(g.getId()) == null) {
+            if (classroomService.getClassroomByGradeId(g.getId()) == null) {
                 availGrades.add(g);
             }
         }
@@ -80,8 +89,12 @@ public class ClassroomGradeController {
 
     @PostMapping("addClassroom")
     public String addClassroom(HttpServletRequest request) {
+        violations.clear();
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+
         Classroom classroom = new Classroom();
         classroom.setClassName(request.getParameter("className"));
+        classroom.setActive(true);
         String[] ids;
         List<Grade> grades = new ArrayList<>();
         try {
@@ -89,15 +102,23 @@ public class ClassroomGradeController {
             for (String s : ids) {
                 grades.add(gradeService.getGradeById(Long.parseLong(s)));
             }
-        } catch (NullPointerException e) {
+        } catch (ObjectNotFoundException e) {
         }
         classroom.setGrades(grades);
-        classroomService.saveClassroom(classroom);
+
+        violations = validator.validate(classroom);
+
+        if (violations.isEmpty()) {
+            classroomService.saveClassroom(classroom);
+        }
         return "redirect:/classrooms";
     }
 
     @PostMapping("editClassroom")
     public String editClassroom(Classroom classroom, HttpServletRequest request) {
+        violations.clear();
+        Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
+
         String[] ids;
         List<Grade> grades = new ArrayList<>();
         try {
@@ -105,15 +126,21 @@ public class ClassroomGradeController {
             for (String s : ids) {
                 grades.add(gradeService.getGradeById(Long.parseLong(s)));
             }
-        } catch (NullPointerException e) {
+        } catch (ObjectNotFoundException e) {
         }
         classroom.setGrades(grades);
+
+        violations = validator.validate(classroom);
+
+        if (!violations.isEmpty()) {
+            return "redirect:/classrooms";
+        }
         classroomService.saveClassroom(classroom);
         return "redirect:/classrooms";
     }
 
     @PostMapping("confirmDeactivateClassroom")
-    public String confirmDeactivateClassroom(HttpServletRequest request) {
+    public String confirmDeactivateClassroom(HttpServletRequest request) throws ObjectNotFoundException {
         Classroom classroom = classroomService.getClassroomById(Long.parseLong(request.getParameter("id")));
         List<Grade> empty = new ArrayList<>();
         classroom.setGrades(empty);

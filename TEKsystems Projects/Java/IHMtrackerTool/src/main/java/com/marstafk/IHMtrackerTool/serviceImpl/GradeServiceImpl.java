@@ -4,20 +4,21 @@
  */
 package com.marstafk.IHMtrackerTool.serviceImpl;
 
+import com.marstafk.IHMtrackerTool.exceptions.ObjectNotFoundException;
 import com.marstafk.IHMtrackerTool.models.Grade;
 import com.marstafk.IHMtrackerTool.repositories.GradeRepository;
 import com.marstafk.IHMtrackerTool.service.GradeService;
-import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
- *
  * @author boss_
  */
 @Service
-public class GradeServiceImpl implements GradeService{
-    
+public class GradeServiceImpl implements GradeService {
+
     @Autowired
     GradeRepository gradeRepository;
 
@@ -32,8 +33,13 @@ public class GradeServiceImpl implements GradeService{
     }
 
     @Override
-    public Grade getGradeById(Long id) {
-        return gradeRepository.findById(id).get();
+    public Grade getGradeById(Long id) throws ObjectNotFoundException {
+        try {
+            return gradeRepository.findById(id).get();
+        } catch (Exception e) {
+            throw new ObjectNotFoundException("Could not retrieve Grade");
+        }
+
     }
 
     @Override
@@ -45,5 +51,5 @@ public class GradeServiceImpl implements GradeService{
     public Grade getGradeByPersonId(Long id) {
         return gradeRepository.findByPersonId(id);
     }
-    
+
 }

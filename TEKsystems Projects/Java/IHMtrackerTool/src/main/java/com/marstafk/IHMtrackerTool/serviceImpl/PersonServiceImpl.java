@@ -1,5 +1,6 @@
 package com.marstafk.IHMtrackerTool.serviceImpl;
 
+import com.marstafk.IHMtrackerTool.exceptions.ObjectNotFoundException;
 import com.marstafk.IHMtrackerTool.models.Person;
 import com.marstafk.IHMtrackerTool.repositories.PersonRepository;
 import com.marstafk.IHMtrackerTool.service.PersonService;
@@ -30,11 +31,17 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<Person> getAllPeople(boolean active) {return personRepository.findAllByActive(active);}
+    public List<Person> getAllPeople(boolean active) {
+        return personRepository.findAllByActive(active);
+    }
 
     @Override
-    public Person getPersonById(long id) {
-        return personRepository.findById(id).get();
+    public Person getPersonById(long id) throws ObjectNotFoundException {
+        try {
+            return personRepository.findById(id).get();
+        } catch (Exception e) {
+            throw new ObjectNotFoundException("Could not get Person");
+        }
     }
 
     @Override
@@ -48,31 +55,23 @@ public class PersonServiceImpl implements PersonService {
     }
 
     @Override
-    public List<Person> getAllPersonsByGradeId(long id) {
-        return personRepository.findAllStudentsByGradeId(id);
-    }
-
-    @Override
-    public List<Person> getAllActiveStudents(String type) {
-        return personRepository.findAllByActive(type);
-    }
-
-    @Override
     public List<Person> getAllPersonsByClassroomId(long id) {
         return personRepository.findAllStudentsByClassroomId(id);
     }
 
     @Override
-    public Person getPersonByRunId(long id) { return personRepository.findByRunId(id); }
+    public Person getPersonByRunId(long id) {
+        return personRepository.findByRunId(id);
+    }
 
 
     @Override
-    public Person getPersonByPledgeId(long id) {
-        return personRepository.findByPledgeId(id);
+    public Person getPersonByPledgeId(long id) throws ObjectNotFoundException {
+        try {
+            return personRepository.findByPledgeId(id);
+        } catch (Exception e) {
+            throw new ObjectNotFoundException("Could not retrieve Person by Pledge ID.");
+        }
     }
 
-    @Override
-    public List<Person> getAllInactiveStudents(String type) {
-        return personRepository.findAllByInactive(type);
-    }
 }

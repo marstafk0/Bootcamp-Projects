@@ -8,14 +8,13 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 
 /**
- *
  * @author boss_
  */
 @Data
 @AllArgsConstructor
 public class Student {
-    
-    private Long id; 
+
+    private Long id;
     private String firstName;
     private String lastName;
     private String contact;

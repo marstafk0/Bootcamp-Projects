@@ -3,394 +3,432 @@
 Awesome Header by Mark Stafki!
 -->
 <html
-  lang="en-US"
-  xmlns="http://www.w3.org/1999/xhtml"
-  xmlns:th="http://www.thymeleaf.org"
+        lang="en-US"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
 >
-  <head>
+<head>
     <div th:replace="header :: myheader"></div>
-  </head>
-  <body>
+</head>
+<body>
 
-    <div th:replace="header :: myNav"></div>
+<div th:replace="header :: myNav"></div>
 
-    <div class="row">
-      <div class="col-sm-4">
-        
-      </div>
-      <div class="col-sm-4">
+<div class="row">
+    <div class="col-sm-4">
 
-      </div>
-      <div class="col-sm-4">
-
-      </div>
     </div>
+    <div class="col-sm-4">
 
-    <!-- Table for Pledges -->
-    <div class="app-wrapper">
-      <div class="app-content pt-3 p-md-3 p-lg-4">
-    <div class="container-xl mt-5">
-      <div class="table-responsive">
-        <div class="table-wrapper">
-          <div class="table-title">
-            <div class="row">
-              <div class="col-sm-4">
-                <h2>Manage <b>Pledges</b></h2>
-              </div>
-              <div class="col-sm-4">
-                <div class="input-group">
-                  <div class="form-outline">
-                    <input type="search" id="myInput" class="form-control" placeholder="Search.."/> 
-                  </div>
-                </div>
-              </div>
-              <div class="col-sm-4">
-                <a class="btn addPledgeButton add" data-toggle="modal"><i class="material-icons">&#xE147;</i> <span>Add Pledge</span></a>
-                <a class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false"></i><span>Sort By</span></a>
-                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                  <li><a class="dropdown-item" th:href="@{pledges}">Clear Filters</a></li>
-                  <li><a class="dropdown-item" th:href="@{weekPledges}">Week</a></li>
-                  <li><a class="dropdown-item" th:href="@{minmax}">Max-Min $</a></li>
-                </ul>
-              </div>
+    </div>
+    <div class="col-sm-4">
 
+    </div>
+</div>
+
+<!-- Table for Pledges -->
+<div class="app-wrapper">
+    <div class="app-content pt-3 p-md-3 p-lg-4">
+        <div class="container-xl mt-5">
+            <div class="col-12 m-1 text-center"
+                 th:if="${!errors.isEmpty()}">
+                <p class="alert alert-danger" th:each="error : ${errors}"
+                   th:text="${error.message}">Error message</p>
             </div>
-          </div>
-          <table class="table table-striped table-hover">
-            <thead>
-            <tr>
-              <th>ID</th>
-              <th>Total</th>
-              <th>One Time</th>
-              <th>Per Lap</th>
-              <th>Week</th>
-              <th>Collected</th>
-              <th>Receipt</th>
-              <th>Actions</th>
-            </tr>
-            </thead>
-            <tbody id="myTable">
-            <tr th:each="pledge : ${pledges}">
-              <td th:text="${pledge.id}">ID</td>
-              <td th:text="${'$' + pledge.total}">Total</td>
-              <td th:text="${'$' + pledge.oneTime}">One Time</td>
-              <td th:text="${'$' + pledge.perLap}">Per Lap</td>
-              <td th:text="${pledge.week}">Week</td>
-              <td th:text="${pledge.collected}">Collected</td>
-              <td th:text="${pledge.receipt}">Receipt</td>
-              <td>
-                <a th:href="@{getPledge/(id=${pledge.id})}" class="pldBtn" ><i class='bx bx-dots-vertical-rounded' data-toggle="tooltip" title="Details"></i></a>
-                <a th:href="@{getPledge/(id=${pledge.id})}" class="eplBtn" ><i class='bx bx-edit-alt' data-toggle="tooltip" title="Edit"></i></a>
-                <a th:href="@{getPledge/(id=${pledge.id})}" class="dplBtn" ><i class='bx bx-trash' data-toggle="tooltip" title="De-Activate"></i></a>
-              </td>
-            </tr>
-            </tbody>
-          </table>
-
-          <div class="clearfix">
-            <!-- <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div> -->
-            <ul class="pagination">
-              <!-- <li class="page-item disabled"><a href="#">Previous</a></li> -->
-              <!-- <li class="page-item" th:each="i : ${#numbers.sequence(1,students.size-1)}"><a th:href="@{/(page=${i})}" th:text="${i}" class="page-link">1</a></li> -->
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Add Pledge Modal -->
-    <div class="addPledgeForm">
-      <form th:action="@{addPledge}" method="post">
-        <div id="addPledgeModal" class="modal fade">
-          <div class="modal-dialog">
-              <div class="modal-content">
-                  <div class="modal-header">
-                    <h4 class="modal-title">Add Pledge</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                  </div>
-                    <div class="modal-body">
-                        <div class="form-group">
-                            <label>One Time</label>
-                            <input type="text" class="form-control" id="oneTime" name="oneTime" required/>
-                        </div>
-                        <div class="form-group">
-                            <label>Per Lap</label>
-                            <input type="text" class="form-control" id="perLap" name="perLap" required/>
-                        </div>
-                        <div class="form-group">
-                            <label>Week</label>
-                            <input type="text" class="form-control" id="week" name="week" required/>
-                        </div>
-                        <div class="form-group">
-                            <label>Collected?</label>
-                            <select id="collected" name="collected" class="selectpicker mt-2 mb-2 w-100">
-                            <option value="true">Yes</option>
-                            <option value="false">No</option>                                                              
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Receipt?</label>
-                            <select id="receipt" name="receipt" class="selectpicker mt-2 mb-2 w-100">
-                            <option value="false">No</option>
-                            <option value="true">Yes</option>                                                              
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Person</label>
-                            <select id="person" name="personId" class="selectpicker mt-2 mb-2 w-100" data-live-search="true">
-                                <option th:each="person : ${persons}" 
-                                                  th:value="${person.id}" 
-                                                  th:text="${person.firstName + ' ' + person.lastName}">Person Name</option>                                                             
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Pledge Type</label>
-                            <select id="pledgeType" name="pledgeTypeId" class="selectpicker mt-2 mb-2 w-100" data-live-search="true" required>
-                                <option th:each="pledgeType : ${pledgeTypes}" 
-                                                  th:value="${pledgeType.id}" 
-                                                  th:text="${pledgeType.pledgeName}">Pledge Name</option>                                                             
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Sponsor (optional)</label>
-                            <select id="sponsor" name="sponsorId" class="selectpicker mt-2 mb-2 w-100" data-live-search="true">
-                                <option value="0">None</option>
-                                <option th:each="sponsor : ${sponsors}" 
-                                                  th:value="${sponsor.id}" 
-                                                  th:text="${sponsor.firstName}">Sponsor</option>                                                             
-                            </select>
-                        </div>
-                        <div class="form-group">
-                            <label>Is Active?</label>
-                            <select id="active" name="active" class="selectpicker mt-2 mb-2 w-100">
-                            <option value="true">Active</option>
-                            <option value="false">Inactive</option>                                                              
-                            </select>
-                        </div>
-                    </div>
-                  <div class="modal-footer">
-                    <input type="button" class="btn btn-default close" data-dismiss="modal" value="Cancel">
-                    <input type="submit" class="btn btn-secondary" value="Add">
-                  </div>
-              </div>
-          </div>
-        </div>
-      </form>
-    </div>
-
-    <!-- Edit Pledge Modal -->
-    <div class="editPledgeForm">
-      <form th:action="@{editPledge}" method="post">
-        <div id="editPledgeModal" class="modal fade">
-          <div class="modal-dialog">
-            <div class="modal-content">
-              <div class="modal-header">
-                <h4 class="modal-title">Edit Pledge</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-              </div>
-                <div class="modal-body">
-                    <div class="form-group">
-                        <input type="hidden" value="" id="id" name="id"/>
-                        <label>One Time</label>
-                        <input type="text" class="form-control" id="oneTime" name="oneTime" required/>
-                    </div>
-                    <div class="form-group">
-                        <label>Per Lap</label>
-                        <input type="text" class="form-control" id="perLap" name="perLap" required/>
-                    </div>
-                    <div class="form-group">
-                        <label>Week</label>
-                        <input type="text" class="form-control" id="week" name="week" required/>
-                    </div>
-                    <div class="collectedDrop">
-                        <div class="form-group">
-                            <label>Collected?</label>
-                            <select id="collected" name="collected" class="selectpicker mt-2 mb-2 w-100">
-                            <option value="true">Yes</option>
-                            <option value="false">No</option>                                                              
-                            </select>
-                        </div>
-                    </div>
-                    <div class="receiptDrop">
-                        <div class="form-group">
-                            <label>Receipt?</label>
-                            <select id="receipt" name="receipt" class="selectpicker mt-2 mb-2 w-100">
-                            <option value="false">No</option>
-                            <option value="true">Yes</option>                                                              
-                            </select>
-                        </div>
-                    </div>
-                    <div class="personDrop">
-                        <div class="form-group">
-                            <label>Person</label>
-                            <select id="person" name="personId" class="selectpicker mt-2 mb-2 w-100" data-live-search="true">
-                                <option th:each="person : ${persons}" 
-                                                  th:value="${person.id}" 
-                                                  th:text="${person.firstName + ' ' + person.lastName}">Person Name</option>                                                             
-                            </select>
-                        </div>
-                    </div>
-                    <div class="pledgeTypeDrop">
-                        <div class="form-group">
-                            <label>Pledge Type</label>
-                            <select id="pledgeType" name="pledgeTypeId" class="selectpicker mt-2 mb-2 w-100" data-live-search="true" required>
-                                <option th:each="pledgeType : ${pledgeTypes}" 
-                                                  th:value="${pledgeType.id}" 
-                                                  th:text="${pledgeType.pledgeName}">Pledge Name</option>                                                             
-                            </select>
-                        </div>
-                    </div>
-                    <div class="sponsorDrop">
-                        <div class="form-group">
-                            <label>Sponsor (optional)</label>
-                            <select id="sponsor" name="sponsorId" class="selectpicker mt-2 mb-2 w-100" data-live-search="true">
-                                <option value="0">None</option>
-                                <option th:each="sponsor : ${sponsors}" 
-                                                  th:value="${sponsor.id}" 
-                                                  th:text="${sponsor.firstName}">Sponsor</option>                                                             
-                            </select>
-                        </div>
-                    </div>
-                    <div class="activeDrop">
-                        <div class="form-group">
-                            <label>Is Active?</label>
-                            <select id="active" name="active" class="selectpicker mt-2 mb-2 w-100">
-                            <option value="true">Active</option>
-                            <option value="false">Inactive</option>                                                              
-                            </select>
-                        </div>
-                    </div>
-                </div>
-              <div class="modal-footer">
-                <input type="button" class="btn btn-default close" data-dismiss="modal" value="Cancel">
-                <input type="submit" class="btn btn-secondary" value="Save">
-              </div>
+            <div class="col-12 m-1 text-center"
+                 th:if="${!errors2.isEmpty()}">
+                <p class="alert alert-danger" th:each="error2 : ${errors2}"
+                   th:text="${error2}">Error message</p>
             </div>
-          </div>
-        </div>
-      </form>
-    </div>
+            <div class="table-responsive">
+                <div class="table-wrapper">
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h2>Manage <b>Pledges</b></h2>
+                            </div>
+                            <div class="col-sm-4">
+                                <div class="input-group">
+                                    <div class="form-outline">
+                                        <input type="search" id="myInput" class="form-control" placeholder="Search.."/>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-sm-4">
+                                <a class="btn addPledgeButton add" data-toggle="modal"><i class="material-icons">&#xE147;</i>
+                                    <span>Add Pledge</span></a>
+                                <a class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
+                                   data-bs-toggle="dropdown" aria-expanded="false"></i><span>Sort By</span></a>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                    <li><a class="dropdown-item" th:href="@{pledges}">Clear Filters</a></li>
+                                    <li><a class="dropdown-item" th:href="@{weekPledges}">Week</a></li>
+                                    <li><a class="dropdown-item" th:href="@{minmax}">Max-Min $</a></li>
+                                </ul>
+                            </div>
 
-    <!-- De-Activate Pledge Modal -->
-    <div class="deactivatePledgeForm">
-      <form th:action="@{confirmDeactivatePledge}" method="post">
-        <div id="de-activatePledgeModal" class="modal fade">
-            <div class="modal-dialog">
-                <div class="modal-content">
-                    <div class="modal-header">
-                        <h4 class="modal-title">De-activate Pledge</h4>
-                        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
                     </div>
-                    <div class="modal-body">
-                        <p>Are you sure you want to de-activate these Records?</p>
-                        <input type="hidden" value="" id="id" name="id"/>
-                    </div>
-                    <div class="modal-footer">
-                        <input type="button" class="btn btn-default close" data-dismiss="modal" value="Cancel">
-                        <input type="submit" class="btn btn-danger" value="De-activate">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Total</th>
+                            <th>One Time</th>
+                            <th>Per Lap</th>
+                            <th>Week</th>
+                            <th>Collected</th>
+                            <th>Receipt</th>
+                            <th>Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody id="myTable">
+                        <tr th:each="pledge : ${pledges}">
+                            <td th:text="${pledge.id}">ID</td>
+                            <td th:text="${'$' + pledge.total}">Total</td>
+                            <td th:text="${'$' + pledge.oneTime}">One Time</td>
+                            <td th:text="${'$' + pledge.perLap}">Per Lap</td>
+                            <td th:text="${pledge.week}">Week</td>
+                            <td th:text="${pledge.collected}">Collected</td>
+                            <td th:text="${pledge.receipt}">Receipt</td>
+                            <td>
+                                <a th:href="@{getPledge/(id=${pledge.id})}" class="pldBtn"><i
+                                        class='bx bx-dots-vertical-rounded' data-toggle="tooltip"
+                                        title="Details"></i></a>
+                                <a th:href="@{getPledge/(id=${pledge.id})}" class="eplBtn"><i class='bx bx-edit-alt'
+                                                                                              data-toggle="tooltip"
+                                                                                              title="Edit"></i></a>
+                                <a th:href="@{getPledge/(id=${pledge.id})}" class="dplBtn"><i class='bx bx-trash'
+                                                                                              data-toggle="tooltip"
+                                                                                              title="Delete"></i></a>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <div class="clearfix">
+                        <!-- <div class="hint-text">Showing <b>5</b> out of <b>25</b> entries</div> -->
+                        <ul class="pagination">
+                            <!-- <li class="page-item disabled"><a href="#">Previous</a></li> -->
+                            <!-- <li class="page-item" th:each="i : ${#numbers.sequence(1,students.size-1)}"><a th:href="@{/(page=${i})}" th:text="${i}" class="page-link">1</a></li> -->
+                        </ul>
                     </div>
                 </div>
             </div>
         </div>
-      </form>
-    </div>
 
-    <!-- Details Pledge Modal -->
-    <div class="pledgeDetailsForm">
-      <div id="detailsPledgeModal" class="modal fade">
-        <div class="modal-dialog">
-          <div class="modal-content">
-            <div class="modal-header">
-              <h4 class="modal-title">Pledge Details</h4>
-              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-            </div>
-            <div class="modal-body">
-                <div class="form-group">
-                    <label>Total</label>
-                    <input type="text" class="form-control" id="total" name="total"/>
-                </div>
-                <div class="form-group">
-                    <label>One Time</label>
-                    <input type="text" class="form-control" id="oneTime" name="oneTime"/>
-                </div>
-                <div class="form-group">
-                    <label>Per Lap</label>
-                    <input type="text" class="form-control" id="perLap" name="perLap"/>
-                </div>
-                <div class="form-group">
-                    <label>Week</label>
-                    <input type="text" class="form-control" id="week" name="week"/>
-                </div>
-                <div class="collectedDropD">
-                    <div class="form-group">
-                        <label>Collected?</label>
-                        <select id="collected" name="collected" class="selectpicker mt-2 mb-2 w-100" disabled>
-                        <option value="true">Yes</option>
-                        <option value="false">No</option>                                                              
-                        </select>
+        <!-- Add Pledge Modal -->
+        <div class="addPledgeForm">
+            <form th:action="@{addPledge}" method="post">
+                <div id="addPledgeModal" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Add Pledge</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <label>One Time</label>
+                                    <input type="text" class="form-control" id="oneTime" name="oneTime" required/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Per Lap</label>
+                                    <input type="text" class="form-control" id="perLap" name="perLap" required/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Week</label>
+                                    <input type="text" class="form-control" id="week" name="week" required/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Collected?</label>
+                                    <select id="collected" name="collected" class="selectpicker mt-2 mb-2 w-100">
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Receipt?</label>
+                                    <select id="receipt" name="receipt" class="selectpicker mt-2 mb-2 w-100">
+                                        <option value="false">No</option>
+                                        <option value="true">Yes</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Person</label>
+                                    <select id="person" name="personId" class="selectpicker mt-2 mb-2 w-100"
+                                            data-live-search="true">
+                                        <option th:each="person : ${persons}"
+                                                th:value="${person.id}"
+                                                th:text="${person.firstName + ' ' + person.lastName}">Person Name
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Pledge Type</label>
+                                    <select id="pledgeType" name="pledgeTypeId" class="selectpicker mt-2 mb-2 w-100"
+                                            data-live-search="true" required>
+                                        <option th:each="pledgeType : ${pledgeTypes}"
+                                                th:value="${pledgeType.id}"
+                                                th:text="${pledgeType.pledgeName}">Pledge Name
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Sponsor (optional)</label>
+                                    <select id="sponsor" name="sponsorId" class="selectpicker mt-2 mb-2 w-100"
+                                            data-live-search="true">
+                                        <option value="0">None</option>
+                                        <option th:each="sponsor : ${sponsors}"
+                                                th:value="${sponsor.id}"
+                                                th:text="${sponsor.firstName}">Sponsor
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label>Is Active?</label>
+                                    <select id="active" name="active" class="selectpicker mt-2 mb-2 w-100">
+                                        <option value="true">Active</option>
+                                        <option value="false">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-default close" data-dismiss="modal" value="Cancel">
+                                <input type="submit" class="btn btn-secondary" value="Add">
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="receiptDropD">
-                    <div class="form-group">
-                        <label>Receipt?</label>
-                        <select id="receipt" name="receipt" class="selectpicker mt-2 mb-2 w-100" disabled>
-                        <option value="false">No</option>
-                        <option value="true">Yes</option>                                                              
-                        </select>
-                    </div>
-                </div>
-                <div class="personDropD">
-                    <div class="form-group">
-                        <label>Person</label>
-                        <select id="person" name="personId" class="selectpicker mt-2 mb-2 w-100" disabled>
-                            <option th:each="person : ${persons}" 
-                                              th:value="${person.id}" 
-                                              th:text="${person.firstName + ' ' + person.lastName}">Person Name</option>                                                             
-                        </select>
-                    </div>
-                </div>
-                <div class="pledgeTypeDropD">
-                    <div class="form-group">
-                        <label>Pledge Type</label>
-                        <select id="pledgeType" name="pledgeTypeId" class="selectpicker mt-2 mb-2 w-100" disabled>
-                            <option th:each="pledgeType : ${pledgeTypes}" 
-                                              th:value="${pledgeType.id}" 
-                                              th:text="${pledgeType.pledgeName}">Pledge Name</option>                                                             
-                        </select>
-                    </div>
-                </div>
-                <div class="sponsorDropD">
-                    <div class="form-group">
-                        <label>Sponsor</label>
-                        <select id="sponsor" name="sponsorId" class="selectpicker mt-2 mb-2 w-100" disabled>
-                            <option value="0">None</option>
-                            <option th:each="sponsor : ${sponsors}" 
-                                              th:value="${sponsor.id}" 
-                                              th:text="${sponsor.firstName}">Sponsor</option>                                                             
-                        </select>
-                    </div>
-                </div>
-                <div class="activeDropD">
-                    <div class="form-group">
-                        <label>Is Active?</label>
-                        <select id="active" name="active" class="selectpicker mt-2 mb-2 w-100" disabled>
-                        <option value="true">Active</option>
-                        <option value="false">Inactive</option>                                                              
-                        </select>
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-              <input type="button" class="btn btn-default close" data-dismiss="modal" value="Close">
-            </div>
-          </div>
+            </form>
         </div>
-      </div>
-  </div>
-  </div>
-  </div>
 
-    <div th:insert="footer :: foot"></div>
+        <!-- Edit Pledge Modal -->
+        <div class="editPledgeForm">
+            <form th:action="@{editPledge}" method="post">
+                <div id="editPledgeModal" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">Edit Pledge</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="form-group">
+                                    <input type="hidden" value="" id="id" name="id"/>
+                                    <label>One Time</label>
+                                    <input type="text" class="form-control" id="oneTime" name="oneTime" required/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Per Lap</label>
+                                    <input type="text" class="form-control" id="perLap" name="perLap" required/>
+                                </div>
+                                <div class="form-group">
+                                    <label>Week</label>
+                                    <input type="text" class="form-control" id="week" name="week" required/>
+                                </div>
+                                <div class="collectedDrop">
+                                    <div class="form-group">
+                                        <label>Collected?</label>
+                                        <select id="collected" name="collected" class="selectpicker mt-2 mb-2 w-100">
+                                            <option value="true">Yes</option>
+                                            <option value="false">No</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="receiptDrop">
+                                    <div class="form-group">
+                                        <label>Receipt?</label>
+                                        <select id="receipt" name="receipt" class="selectpicker mt-2 mb-2 w-100">
+                                            <option value="false">No</option>
+                                            <option value="true">Yes</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="personDrop">
+                                    <div class="form-group">
+                                        <label>Person</label>
+                                        <select id="person" name="personId" class="selectpicker mt-2 mb-2 w-100"
+                                                data-live-search="true">
+                                            <option th:each="person : ${persons}"
+                                                    th:value="${person.id}"
+                                                    th:text="${person.firstName + ' ' + person.lastName}">Person Name
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="pledgeTypeDrop">
+                                    <div class="form-group">
+                                        <label>Pledge Type</label>
+                                        <select id="pledgeType" name="pledgeTypeId" class="selectpicker mt-2 mb-2 w-100"
+                                                data-live-search="true" required>
+                                            <option th:each="pledgeType : ${pledgeTypes}"
+                                                    th:value="${pledgeType.id}"
+                                                    th:text="${pledgeType.pledgeName}">Pledge Name
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="sponsorDrop">
+                                    <div class="form-group">
+                                        <label>Sponsor (optional)</label>
+                                        <select id="sponsor" name="sponsorId" class="selectpicker mt-2 mb-2 w-100"
+                                                data-live-search="true">
+                                            <option value="0">None</option>
+                                            <option th:each="sponsor : ${sponsors}"
+                                                    th:value="${sponsor.id}"
+                                                    th:text="${sponsor.firstName}">Sponsor
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="activeDrop">
+                                    <div class="form-group">
+                                        <label>Is Active?</label>
+                                        <select id="active" name="active" class="selectpicker mt-2 mb-2 w-100">
+                                            <option value="true">Active</option>
+                                            <option value="false">Inactive</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-default close" data-dismiss="modal" value="Cancel">
+                                <input type="submit" class="btn btn-secondary" value="Save">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
 
-  </body>
+        <!-- De-Activate Pledge Modal -->
+        <div class="deactivatePledgeForm">
+            <form th:action="@{deactivatePledge}" method="post">
+                <div id="de-activatePledgeModal" class="modal fade">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h4 class="modal-title">De-activate Pledge</h4>
+                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                                </button>
+                            </div>
+                            <div class="modal-body">
+                                <p>Are you sure you want to de-activate these Records?</p>
+                                <input type="hidden" value="" id="id" name="id"/>
+                            </div>
+                            <div class="modal-footer">
+                                <input type="button" class="btn btn-default close" data-dismiss="modal" value="Cancel">
+                                <input type="submit" class="btn btn-danger" value="De-activate">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Details Pledge Modal -->
+        <div class="pledgeDetailsForm">
+            <div id="detailsPledgeModal" class="modal fade">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Pledge Details</h4>
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="form-group">
+                                <label>Total</label>
+                                <input type="text" class="form-control" id="total" name="total"/>
+                            </div>
+                            <div class="form-group">
+                                <label>One Time</label>
+                                <input type="text" class="form-control" id="oneTime" name="oneTime"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Per Lap</label>
+                                <input type="text" class="form-control" id="perLap" name="perLap"/>
+                            </div>
+                            <div class="form-group">
+                                <label>Week</label>
+                                <input type="text" class="form-control" id="week" name="week"/>
+                            </div>
+                            <div class="collectedDropD">
+                                <div class="form-group">
+                                    <label>Collected?</label>
+                                    <select id="collected" name="collected" class="selectpicker mt-2 mb-2 w-100"
+                                            disabled>
+                                        <option value="true">Yes</option>
+                                        <option value="false">No</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="receiptDropD">
+                                <div class="form-group">
+                                    <label>Receipt?</label>
+                                    <select id="receipt" name="receipt" class="selectpicker mt-2 mb-2 w-100" disabled>
+                                        <option value="false">No</option>
+                                        <option value="true">Yes</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="personDropD">
+                                <div class="form-group">
+                                    <label>Person</label>
+                                    <select id="person" name="personId" class="selectpicker mt-2 mb-2 w-100" disabled>
+                                        <option th:each="person : ${persons}"
+                                                th:value="${person.id}"
+                                                th:text="${person.firstName + ' ' + person.lastName}">Person Name
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="pledgeTypeDropD">
+                                <div class="form-group">
+                                    <label>Pledge Type</label>
+                                    <select id="pledgeType" name="pledgeTypeId" class="selectpicker mt-2 mb-2 w-100"
+                                            disabled>
+                                        <option th:each="pledgeType : ${pledgeTypes}"
+                                                th:value="${pledgeType.id}"
+                                                th:text="${pledgeType.pledgeName}">Pledge Name
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="sponsorDropD">
+                                <div class="form-group">
+                                    <label>Sponsor</label>
+                                    <select id="sponsor" name="sponsorId" class="selectpicker mt-2 mb-2 w-100" disabled>
+                                        <option value="0">None</option>
+                                        <option th:each="sponsor : ${sponsors}"
+                                                th:value="${sponsor.id}"
+                                                th:text="${sponsor.firstName}">Sponsor
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="activeDropD">
+                                <div class="form-group">
+                                    <label>Is Active?</label>
+                                    <select id="active" name="active" class="selectpicker mt-2 mb-2 w-100" disabled>
+                                        <option value="true">Active</option>
+                                        <option value="false">Inactive</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default close" data-dismiss="modal" value="Close">
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div th:insert="footer :: foot"></div>
+
+</body>
 </html>

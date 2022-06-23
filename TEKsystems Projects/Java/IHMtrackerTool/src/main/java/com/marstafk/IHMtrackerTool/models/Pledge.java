@@ -5,35 +5,36 @@
  */
 package com.marstafk.IHMtrackerTool.models;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.Min;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
 /**
- *
  * @author boss_
  */
 // Pledge info
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="pledge")
+@Table(name = "pledge")
 public class Pledge implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    
+
+    @Min(value = 0, message = "Per lap must be a positive number.")
     @Column(name = "per_lap", nullable = false)
     private BigDecimal perLap = new BigDecimal(0.00);
-    
+
     @Column(name = "total", nullable = false)
     private BigDecimal total = new BigDecimal(0.00);
-    
+
+    @Min(value = 0, message = "One time must be a positive number.")
     @Column(name = "one_time", nullable = false)
     private BigDecimal oneTime = new BigDecimal(0.00);
 
@@ -49,14 +50,7 @@ public class Pledge implements Serializable {
     @Column(name = "receipt", nullable = false)
     private boolean receipt = false;
 
-    public Pledge(BigDecimal perLap, BigDecimal total, BigDecimal oneTime, boolean active, int week, boolean collected, boolean receipt) {
-        this.perLap = perLap;
-        this.total = total;
-        this.oneTime = oneTime;
-        this.active = active;
-        this.week = week;
-        this.collected = collected;
-        this.receipt = receipt;
-    }
+    @Column(name = "deletion", nullable = false)
+    private boolean deletion;
 
 }

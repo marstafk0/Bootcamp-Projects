@@ -1,4 +1,4 @@
-package com.marstafk.IHMtrackerTool.service;
+package com.marstafk.IHMtrackerTool.serviceImpl;
 
 import com.marstafk.IHMtrackerTool.models.CustomUserDetails;
 import com.marstafk.IHMtrackerTool.models.User;

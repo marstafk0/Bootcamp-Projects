@@ -4,24 +4,24 @@
  */
 package com.marstafk.IHMtrackerTool.service;
 
+import com.marstafk.IHMtrackerTool.exceptions.ObjectNotFoundException;
 import com.marstafk.IHMtrackerTool.models.PersonType;
 
 import java.util.List;
 
 /**
- *
  * @author boss_
  */
 public interface PersonTypeService {
-    
+
     public void savePersonType(PersonType personType);
-    
+
     public PersonType getPersonTypeByName(String statusName);
 
     public List<PersonType> getAllPersonTypes();
 
-    public PersonType getPersonTypeById(long id);
+    public PersonType getPersonTypeById(long id) throws ObjectNotFoundException;
 
-    public List<PersonType> getAllByPersonId(long id);
-    
+    public PersonType getByPersonId(long id);
+
 }

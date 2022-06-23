@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Sign Up Jog-A-Thon</title>
+    <!-- Bootstrap CSS File -->
+    <link
+            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
+            rel="stylesheet"
+            integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
+            crossorigin="anonymous"
+    />
+</head>
+<body>
+<div class="container text-center">
+    <div>
+        <h1>User Registration - Sign Up</h1>
+    </div>
+    <form th:action="@{process_register}" th:object="${user}"
+          method="post" style="max-width: 600px; margin: 0 auto;">
+        <div class="m-3">
+            <div class="form-group row">
+                <label class="col-4 col-form-label">E-mail: </label>
+                <div class="col-8 mt-3">
+                    <input type="email" th:field="*{email}" class="form-control" required/>
+                    <div th:if="${#fields.hasErrors('email')}">
+                        <p th:each="error : ${#fields.errors('email')}" class="alert alert-danger"
+                           th:text="${error}">Bad email</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Password: </label>
+                <div class="col-8 mt-3">
+                    <input type="password" th:field="*{password}" class="form-control"
+                           required minlength="6" maxlength="20"/>
+                    <div th:if="${#fields.hasErrors('password')}">
+                        <p th:each="error : ${#fields.errors('password')}" class="alert alert-danger"
+                           th:text="${error}">Bad password</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-4 col-form-label">First Name: </label>
+                <div class="col-8 mt-3">
+                    <input type="text" th:field="*{firstName}" class="form-control"
+                           minlength="2" maxlength="20"/>
+                    <div th:if="${#fields.hasErrors('firstName')}">
+                        <p th:each="error : ${#fields.errors('firstName')}" class="alert alert-danger"
+                           th:text="${error}">Bad first name</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label class="col-4 col-form-label">Last Name: </label>
+                <div class="col-8 mt-3">
+                    <input type="text" th:field="*{lastName}" class="form-control"
+                           required minlength="2" maxlength="20"/>
+                    <div th:if="${#fields.hasErrors('lastName')}">
+                        <p th:each="error : ${#fields.errors('lastName')}" class="alert alert-danger"
+                           th:text="${error}">Bad last name</p>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" class="btn btn-primary mt-3">Sign Up</button>
+            </div>
+        </div>
+    </form>
+</div>
+
+<div th:insert="footer :: foot"></div>
+
+</body>
+</html>

@@ -9,24 +9,25 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.List;
 
 /**
- *
  * @author boss_
  */
 // Type of person, ie. Teacher, Student, Parent, Guardian etc.
 @Data
 @NoArgsConstructor
 @Entity
-@Table(name="person_type")
+@Table(name = "person_type")
 public class PersonType implements Serializable {
-    
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    
+
+    @NotEmpty(message = "Status name can't be empty.")
     @Column(name = "status_name", nullable = false)
     private String statusName;
 
@@ -36,9 +37,9 @@ public class PersonType implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, orphanRemoval = false)
     @JoinTable(name = "person_type_person",
             joinColumns = {
-                @JoinColumn(name = "person_type_id")},
+                    @JoinColumn(name = "person_type_id")},
             inverseJoinColumns = {
-                @JoinColumn(name = "person_id")})
+                    @JoinColumn(name = "person_id")})
     private List<Person> persons;
 
     public PersonType(String statusName, List<Person> persons, boolean active) {
@@ -46,9 +47,9 @@ public class PersonType implements Serializable {
         this.persons = persons;
         this.active = active;
     }
-    
+
     public void addPersons(Person person) {
-        this.persons.add(person); 
+        this.persons.add(person);
     }
-    
+
 }

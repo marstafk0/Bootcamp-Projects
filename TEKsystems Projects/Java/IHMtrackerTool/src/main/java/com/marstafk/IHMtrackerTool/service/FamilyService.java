@@ -5,17 +5,20 @@
 package com.marstafk.IHMtrackerTool.service;
 
 import com.marstafk.IHMtrackerTool.models.Family;
+
 import java.util.List;
 
 /**
- *
  * @author boss_
  */
 public interface FamilyService {
-    
+
     public Family getFamilyById(Long id);
+
     public List<Family> getAllFamilies(boolean active);
+
     public Family getFamilyByPersonId(Long id);
+
     public void saveFamily(Family family);
-    
+
 }

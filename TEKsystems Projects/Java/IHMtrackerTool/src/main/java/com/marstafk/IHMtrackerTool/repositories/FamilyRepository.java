@@ -11,7 +11,6 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 /**
- *
  * @author boss_
  */
 public interface FamilyRepository extends JpaRepository<Family, Long> {
@@ -21,5 +20,5 @@ public interface FamilyRepository extends JpaRepository<Family, Long> {
     public Family findByPersonId(Long id);
 
     public List<Family> findAllByActive(boolean active);
-    
+
 }

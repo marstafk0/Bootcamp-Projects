@@ -11,10 +11,9 @@ import org.springframework.data.jpa.repository.Query;
 import java.util.List;
 
 /**
- *
  * @author boss_
  */
-public interface PledgeTypeRepository extends JpaRepository<PledgeType, Long>{
+public interface PledgeTypeRepository extends JpaRepository<PledgeType, Long> {
 
     public List<PledgeType> findByActive(boolean active);
 

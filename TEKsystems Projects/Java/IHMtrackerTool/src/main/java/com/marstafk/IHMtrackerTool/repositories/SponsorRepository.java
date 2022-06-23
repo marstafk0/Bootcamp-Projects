@@ -8,13 +8,10 @@ import com.marstafk.IHMtrackerTool.models.Sponsor;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 
-import java.util.List;
-
 /**
- *
  * @author boss_
  */
-public interface SponsorRepository extends JpaRepository<Sponsor, Long>{
+public interface SponsorRepository extends JpaRepository<Sponsor, Long> {
 
     @Query(value = "SELECT s.* FROM sponsor s JOIN sponsor_pledge sp ON s.id = sp.sponsor_id JOIN pledge p ON p.id = sp.pledge_id " +
             "WHERE p.id = :id", nativeQuery = true)

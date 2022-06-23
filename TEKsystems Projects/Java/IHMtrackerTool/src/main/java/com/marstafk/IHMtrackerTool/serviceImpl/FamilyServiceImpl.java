@@ -7,18 +7,18 @@ package com.marstafk.IHMtrackerTool.serviceImpl;
 import com.marstafk.IHMtrackerTool.models.Family;
 import com.marstafk.IHMtrackerTool.repositories.FamilyRepository;
 import com.marstafk.IHMtrackerTool.service.FamilyService;
-import java.util.List;
-import java.util.NoSuchElementException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+import java.util.NoSuchElementException;
+
 /**
- *
  * @author boss_
  */
 @Service
-public class FamilyServiceImpl implements FamilyService{
-    
+public class FamilyServiceImpl implements FamilyService {
+
     @Autowired
     FamilyRepository familyRepository;
 
@@ -53,5 +53,5 @@ public class FamilyServiceImpl implements FamilyService{
             return family;
         }
     }
-    
+
 }
