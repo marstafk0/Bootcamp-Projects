@@ -38,5 +38,4 @@ public class JogathonMasterServiceImpl implements JogathonMasterService {
     public JogathonMaster getActiveAndDeletion(boolean active, boolean deletion) {
         return jMasterRepo.findByActiveAndDeletion(active, deletion);
     }
-
 }

@@ -1,5 +1,6 @@
 package com.marstafk.IHMtrackerTool.models;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -10,6 +11,7 @@ import java.util.List;
 
 @Data
 @NoArgsConstructor
+@AllArgsConstructor
 @Entity
 @Table(name = "jogathon_master")
 public class JogathonMaster implements Serializable {
@@ -47,6 +49,15 @@ public class JogathonMaster implements Serializable {
             inverseJoinColumns = {
                     @JoinColumn(name = "pledge_id")})
     private List<Pledge> pledges;
+
+    public JogathonMaster(String s, boolean b, String none, boolean b1, List<Run> runs, List<Pledge> pledges) {
+        this.runDate = s;
+        this.active = b;
+        this.comments = none;
+        this.deletion = b1;
+        this.runs = runs;
+        this.pledges = pledges;
+    }
 
     public void addRuns(Run run) {
         this.runs.add(run);

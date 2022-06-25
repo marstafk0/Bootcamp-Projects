@@ -28,7 +28,7 @@ Awesome Header by Mark Stafki!
                             <div class="col-sm-4">
                             </div>
                             <div class="col-sm-4">
-                                <a class="btn btn-success addPersonTypeButton" data-toggle="modal"><i
+                                <a class="btn addPersonTypeButton" id="AddButton" data-toggle="modal"><i
                                         class="material-icons">&#xE147;</i> <span>Add Person Types</span></a>
                             </div>
                         </div>
@@ -39,6 +39,7 @@ Awesome Header by Mark Stafki!
                             <th>People</th>
                             <th>ID</th>
                             <th>Person Type Name</th>
+                            <th></th>
                         </tr>
                         </thead>
                         <tbody id="myTable">
@@ -48,6 +49,7 @@ Awesome Header by Mark Stafki!
                             </td>
                             <td th:text="${personType.id}">ID</td>
                             <td th:text="${personType.statusName}">Person Type Name</td>
+                            <td></td>
                         </tr>
                         </tbody>
                     </table>
@@ -130,7 +132,7 @@ Awesome Header by Mark Stafki!
                         <div class="modal-content">
                             <div class="modal-header">
                                 <h4 class="modal-title">Add Pledge Type</h4>
-                                <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                                <button type="button" class="close" id="AddButton" data-dismiss="modal" aria-hidden="true">&times;
                                 </button>
                             </div>
                             <div class="modal-body">

@@ -23,6 +23,15 @@ public class RunServiceImpl implements RunService {
     }
 
     @Override
+    public Run getByRunId(long id) throws ObjectNotFoundException {
+        try {
+            return runRepository.findById(id).get();
+        } catch (Exception e) {
+            throw new ObjectNotFoundException("Could not retrieve Run by Run ID");
+        }
+    }
+
+    @Override
     public void saveRun(Run run) {
         runRepository.save(run);
     }

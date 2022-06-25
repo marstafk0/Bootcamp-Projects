@@ -31,6 +31,18 @@
             </div>
 
             <div class="form-group row">
+                <label class="col-4 col-form-label">Username: </label>
+                <div class="col-8 mt-3">
+                    <input type="username" th:field="*{username}" class="form-control"
+                           required minlength="6" maxlength="20"/>
+                    <div th:if="${#fields.hasErrors('username')}">
+                        <p th:each="error : ${#fields.errors('username')}" class="alert alert-danger"
+                           th:text="${error}">Bad username</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
                 <label class="col-4 col-form-label">Password: </label>
                 <div class="col-8 mt-3">
                     <input type="password" th:field="*{password}" class="form-control"

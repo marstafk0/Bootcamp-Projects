@@ -7,6 +7,7 @@ package com.marstafk.IHMtrackerTool.controllers;
 import com.marstafk.IHMtrackerTool.exceptions.ObjectNotFoundException;
 import com.marstafk.IHMtrackerTool.models.JogathonMaster;
 import com.marstafk.IHMtrackerTool.models.Pledge;
+import com.marstafk.IHMtrackerTool.models.Run;
 import com.marstafk.IHMtrackerTool.service.JogathonMasterService;
 import com.marstafk.IHMtrackerTool.service.PledgeService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,9 +25,7 @@ import javax.validation.Validator;
 import java.time.DateTimeException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.HashSet;
-import java.util.Locale;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author boss_
@@ -76,6 +75,7 @@ public class JogathonMasterController {
         violations2.clear();
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
+        // Get the values from the form
         JogathonMaster jogathonMaster = new JogathonMaster();
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.US);
@@ -84,16 +84,15 @@ public class JogathonMasterController {
         } catch (DateTimeException e) {
             violations2.add("Wrong date format! Please use: MM/DD/YYYY");
         }
-        jogathonMaster.setComments(request.getParameter("comments"));
-        jogathonMaster.setActive(true);
+        if (jMasterService.getActiveAndDeletion(true, false) != null) {
+            violations2.add("There is already an active jogathon!");
+        }
 
+        // Validate and save the jogathon
         violations = validator.validate(jogathonMaster);
         if (violations.isEmpty() && violations2.isEmpty()) {
-            JogathonMaster oldJ = jMasterService.getActiveAndDeletion(true, false);
-            if (oldJ != null) {
-                oldJ.setActive(false);
-                jMasterService.saveJogathon(oldJ);
-            }
+            jogathonMaster.setComments(request.getParameter("comments"));
+            jogathonMaster.setActive(true);
             jMasterService.saveJogathon(jogathonMaster);
         }
         return "redirect:/jogathons";
@@ -105,6 +104,7 @@ public class JogathonMasterController {
         violations2.clear();
         Validator validator = Validation.buildDefaultValidatorFactory().getValidator();
 
+        // Get the jogathon to edit
         long id = Long.parseLong(request.getParameter("id"));
         JogathonMaster jogathonMaster = new JogathonMaster();
         try {
@@ -112,6 +112,7 @@ public class JogathonMasterController {
         } catch (ObjectNotFoundException e) {
             violations2.add(e.getMessage());
         }
+        // Set the new values
         try {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/dd/yyyy", Locale.US);
             LocalDate date = LocalDate.parse(request.getParameter("runDate"), formatter);
@@ -121,7 +122,7 @@ public class JogathonMasterController {
         }
         jogathonMaster.setComments(request.getParameter("comments"));
         switch (request.getParameter("active").toLowerCase()) {
-            case "inactive", "false", "no" -> {
+            case "false" -> {
                 jogathonMaster.setActive(false);
             }
             default -> {
@@ -129,6 +130,7 @@ public class JogathonMasterController {
             }
         }
 
+        // Validate and save the jogathon
         violations = validator.validate(jogathonMaster);
         if (violations.isEmpty() && violations2.isEmpty()) {
             jMasterService.saveJogathon(jogathonMaster);
@@ -139,12 +141,14 @@ public class JogathonMasterController {
     @PostMapping("confirmDeactivateJogathon")
     public String confirmDeactivateJogathon(HttpServletRequest request) {
         violations2.clear();
+
+        // Deactivate the old jogathon
         try {
             JogathonMaster jogathonMaster = jMasterService.getJogathonById(Long.parseLong(request.getParameter("id")));
-            jogathonMaster.setDeletion(true);
+            jogathonMaster.setActive(false);
             jMasterService.saveJogathon(jogathonMaster);
             for (Pledge p : pledgeService.getAllPledges(true, false)) {
-                p.setDeletion(true);
+                p.setActive(false);
                 pledgeService.savePledge(p);
             }
         } catch (ObjectNotFoundException e) {

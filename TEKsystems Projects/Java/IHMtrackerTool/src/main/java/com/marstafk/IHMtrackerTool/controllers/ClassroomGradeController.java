@@ -99,8 +99,10 @@ public class ClassroomGradeController {
         List<Grade> grades = new ArrayList<>();
         try {
             ids = request.getParameterValues("gradeId");
-            for (String s : ids) {
-                grades.add(gradeService.getGradeById(Long.parseLong(s)));
+            if(ids != null) {
+                for (String id : ids) {
+                    grades.add(gradeService.getGradeById(Long.parseLong(id)));
+                }
             }
         } catch (ObjectNotFoundException e) {
         }
@@ -123,19 +125,21 @@ public class ClassroomGradeController {
         List<Grade> grades = new ArrayList<>();
         try {
             ids = request.getParameterValues("gradeId");
-            for (String s : ids) {
-                grades.add(gradeService.getGradeById(Long.parseLong(s)));
+            if(ids != null) {
+                for (String s : ids) {
+                    grades.add(gradeService.getGradeById(Long.parseLong(s)));
+                }
             }
         } catch (ObjectNotFoundException e) {
         }
+
         classroom.setGrades(grades);
 
         violations = validator.validate(classroom);
 
-        if (!violations.isEmpty()) {
-            return "redirect:/classrooms";
+        if (violations.isEmpty()) {
+            classroomService.saveClassroom(classroom);
         }
-        classroomService.saveClassroom(classroom);
         return "redirect:/classrooms";
     }
 

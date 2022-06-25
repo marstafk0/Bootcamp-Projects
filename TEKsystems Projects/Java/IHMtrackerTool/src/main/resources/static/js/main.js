@@ -490,24 +490,6 @@ $(document).ready(function () {
     $(".teacherDetailsForm #detailsTeacherModal").modal("show");
   });
 
-  // ---------------------------- DETAIL JOGATHON MODAL -------------------------//
-  $(".table .jdBtn").on("click", function (event) {
-    event.preventDefault();
-    var href = $(this).attr("href");
-    $.get(href, function (jogathon, status) {
-      $(".jogathonDetailsForm #id").val(jogathon.id);
-      const [year, month, day] = jogathon.runDate.split("-");
-      const result = [month, day, year].join("/");
-      $(".jogathonDetailsForm #runDate").val(result);
-      $(".jogathonDetailsForm #comments").val(jogathon.comments);
-      $(".jogathonDetailsForm .selectpicker").selectpicker(
-        "val",
-        "" + jogathon.active + ""
-      );
-    });
-    $(".jogathonDetailsForm #detailsJogathonModal").modal("show");
-  });
-
   // ------------------------ DETAIL SPONSOR MODAL ---------------------------- //
   $(".table .sdBtn").on("click", function (event) {
     event.preventDefault();
@@ -692,7 +674,6 @@ $(document).ready(function () {
 
     $(".addJogathonForm #addJogathonModal").modal("hide");
     $(".editJogathonForm #editJogathonModal").modal("hide");
-    $(".jogathonDetailsForm #detailsJogathonModal").modal("hide");
     $(".deactivateJogathonForm #de-activateJogathonModal").modal("hide");
 
     $(".addSponsorForm #addSponsorModal").modal("hide");

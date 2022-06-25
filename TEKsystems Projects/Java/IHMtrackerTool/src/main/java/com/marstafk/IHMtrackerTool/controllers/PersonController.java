@@ -350,7 +350,7 @@ public class PersonController {
             String name;
             try {
                 name = classroomService.getClassroomByGradeId(g.getId()).getClassName();
-            } catch (ObjectNotFoundException e) {
+            } catch (NullPointerException | ObjectNotFoundException e) {
                 name = "None";
             }
             Student stud = new Student(s.getId(), s.getFirstName(), s.getLastName(), s.getContact(), g.getGradeName(), name);
@@ -523,34 +523,37 @@ public class PersonController {
     @PostMapping("editLaps")
     public String editLaps(HttpServletRequest request, @RequestParam("id") long id) {
         violationsString.clear();
+
+        Run run = new Run();
         try {
-            Run run = runService.getByPersonId(id);
-            try {
-                run.setLaps(Integer.parseInt(request.getParameter("laps")));
-            } catch (NumberFormatException e) {
-                violationsString.add("Please enter a valid number.");
-            }
-
-            JogathonMaster currJ = jogathonMasterService.getActiveAndDeletion(true, false);
-            if (currJ == null) {
-                violationsString.add("Please start a Jogathon before editing laps.");
-            }
-
-            if (violationsString.isEmpty()) {
-                Person person = personService.getPersonByRunId(run.getId());
-
-                person.getRuns().removeIf(r -> r.getId() == run.getId());
-                person.addRuns(run);
-                personService.savePerson(person);
-
-                currJ.getRuns().removeIf(r -> r.getId() == run.getId());
-                currJ.addRuns(run);
-                jogathonMasterService.saveJogathon(currJ);
-
-                runService.saveRun(run);
-            }
+            run = runService.getByRunId(id);
         } catch (ObjectNotFoundException e) {
             violationsString.add(e.getMessage());
+        }
+        try {
+            run.setLaps(Integer.parseInt(request.getParameter("laps")));
+        } catch (NumberFormatException e) {
+            violationsString.add("Please enter a valid number.");
+        }
+
+        JogathonMaster currJ = jogathonMasterService.getActiveAndDeletion(true, false);
+        if (currJ == null) {
+            violationsString.add("Please start a Jogathon before editing laps.");
+        }
+
+        if (violationsString.isEmpty()) {
+            Person person = personService.getPersonByRunId(run.getId());
+
+            Run finalRun = run;
+            person.getRuns().removeIf(r -> r.getId() == finalRun.getId());
+            person.addRuns(run);
+            personService.savePerson(person);
+
+            currJ.getRuns().removeIf(r -> r.getId() == finalRun.getId());
+            currJ.addRuns(run);
+            jogathonMasterService.saveJogathon(currJ);
+
+            runService.saveRun(run);
         }
         return "redirect:/students";
     }

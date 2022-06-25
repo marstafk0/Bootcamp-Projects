@@ -6,6 +6,7 @@ package com.marstafk.IHMtrackerTool.controllers;
 
 import com.marstafk.IHMtrackerTool.exceptions.ObjectNotFoundException;
 import com.marstafk.IHMtrackerTool.models.*;
+import com.marstafk.IHMtrackerTool.repositories.RoleRepository;
 import com.marstafk.IHMtrackerTool.repositories.UserRepository;
 import com.marstafk.IHMtrackerTool.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +29,6 @@ import java.util.*;
 public class IndexController {
 
     @Autowired
-    private UserRepository userRepo;
-
-    @Autowired
     private PledgeService pledgeService;
 
     @Autowired
@@ -45,7 +43,13 @@ public class IndexController {
     @Autowired
     PersonService personService;
 
-    @GetMapping("index")
+    @Autowired
+    private UserRepository userRepo;
+
+    @Autowired
+    private RoleRepository roleRepo;
+
+    @GetMapping(value = {"index", ""})
     public String displayIndex(Model model) throws ObjectNotFoundException {
         // Total money for current Jog-a-thon
         BigDecimal total = new BigDecimal(0);
@@ -89,7 +93,7 @@ public class IndexController {
         model.addAttribute("classroom", classroomService.getClassroomById(classId));
         model.addAttribute("student", personService.getPersonById(studentId));
         model.addAttribute("studentGrade", gradeService.getGradeByPersonId(studentId));
-        model.addAttribute("user", new User());
+        //model.addAttribute("user", new User());
         return "index";
     }
 
@@ -109,6 +113,13 @@ public class IndexController {
         if (result.hasErrors()) {
             return "signup_form";
         }
+        user.setEnabled(true);
+
+        Role role = roleRepo.findById(2).get();
+        Set<Role> roles = new HashSet<>();
+        roles.add(role);
+        user.setRoles(roles);
+
         userRepo.save(user);
         return "redirect:/login";
     }

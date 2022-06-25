@@ -38,7 +38,7 @@ Awesome Header by Mark Stafki!
                             <div class="col-sm-4">
                             </div>
                             <div class="col-sm-4">
-                                <a class="btn addJogathonButton add" data-toggle="modal"><i class="material-icons">&#xE147;</i>
+                                <a class="btn addJogathonButton add" id="AddButton" data-toggle="modal"><i class="material-icons">&#xE147;</i>
                                     <span>Add Jog-A-Thon</span></a>
                                 <a class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
                                    data-bs-toggle="dropdown" aria-expanded="false"></i> <span>Sort By</span></a>
@@ -68,15 +68,12 @@ Awesome Header by Mark Stafki!
                             <td th:text="${jogathon.comments}">Contact</td>
                             <td th:text="${jogathon.active}">Active</td>
                             <td>
-                                <a th:href="@{getJogathon/(id=${jogathon.id})}" class="jdBtn"><i
-                                        class='bx bx-dots-vertical-rounded' data-toggle="tooltip"
-                                        title="Details"></i></a>
                                 <a th:href="@{getJogathon/(id=${jogathon.id})}" class="ejBtn"><i class='bx bx-edit-alt'
                                                                                                  data-toggle="tooltip"
                                                                                                  title="Edit"></i></a>
-                                <a th:href="@{getJogathon/(id=${jogathon.id})}" class="djBtn"><i class='bx bx-trash'
-                                                                                                 data-toggle="tooltip"
-                                                                                                 title="De-Activate"></i></a>
+                                <a th:href="@{getJogathon/(id=${jogathon.id})}" class="djBtn"><i class='bx bx-repost' 
+                                                                                                  data-toggle="tooltip" 
+                                                                                                  title="De-Activate"></i></a>
                             </td>
                         </tr>
                         </tbody>
@@ -186,7 +183,7 @@ Awesome Header by Mark Stafki!
                                 </button>
                             </div>
                             <div class="modal-body">
-                                <p>Are you sure you want to de-activate these Records?</p>
+                                <p>Are you sure you want to de-activate this Jog-A-Thon? Doing so will de-activate all current pledges and person laps. (Note: will auto-create a new current Jog-A-Thon)</p>
                                 <input type="hidden" value="" id="id" name="id"/>
                             </div>
                             <div class="modal-footer">
@@ -197,43 +194,6 @@ Awesome Header by Mark Stafki!
                     </div>
                 </div>
             </form>
-        </div>
-
-        <!-- Details Modal HTML -->
-        <div class="jogathonDetailsForm">
-            <div id="detailsJogathonModal" class="modal fade">
-                <div class="modal-dialog">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Jog-A-Thon Details</h4>
-                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="form-group">
-                                <input type="hidden" value="" id="id" name="id"/>
-                                <label>Run Date</label>
-                                <input type="text" value="" class="form-control" id="runDate" name="runDate" disabled/>
-                            </div>
-                            <div class="form-group">
-                                <label>Comments</label>
-                                <input type="text" value="" class="form-control" id="comments" name="comments"
-                                       disabled/>
-                            </div>
-                            <div class="form-group">
-                                <label>Is Active?</label>
-                                <select id="active" name="active" class="selectpicker mt-2 mb-2 w-100" disabled>
-                                    <option value="true">Active</option>
-                                    <option value="false">Inactive</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <input type="button" class="btn btn-default close" data-dismiss="modal" value="Close">
-                        </div>
-
-                    </div>
-                </div>
-            </div>
         </div>
     </div>
 </div>

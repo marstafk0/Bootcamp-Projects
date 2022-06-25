@@ -16,8 +16,8 @@
     outline: none;
   }
 
-  .add {
-    color:#6c99fa;
+  .table-title #AddButton {
+    background-color:#1385b9;
   }
 
   /* ----------- Table and Modal -------------- */
@@ -131,6 +131,48 @@
   }
   table.table td a.dfBtn {
   	color: #F44336;
+  }
+  table.table td a.tdBtn {
+    color: #1385b9;
+  }
+  table.table td a.personEBtn {
+  	color: #FFC107;
+  }
+  table.table td a.personDEBTN {
+  	color: #F44336;
+  }
+  table.table td a.personDBtn {
+    color: #1385b9;
+  }
+  table.table td a.sdBtn {
+    color: #1385b9;
+  }
+  table.table td a.fdBtn {
+    color: #1385b9;
+  }
+  table.table td a.eplBtn {
+  	color: #FFC107;
+  }
+  table.table td a.dplBtn {
+  	color: #F44336;
+  }
+  table.table td a.pldBtn {
+    color: #1385b9;
+  }
+  table.table td a.ecBtn {
+  	color: #FFC107;
+  }
+  table.table td a.dcBtn {
+  	color: #F44336;
+  }
+  table.table td a.ePBtn {
+  	color: #FFC107;
+  }
+  table.table td a.dPBtn {
+  	color: #F44336;
+  }
+  table.table td a.PdBtn {
+    color: #1385b9;
   }
   table.table td i {
   	font-size: 19px;

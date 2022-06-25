@@ -6,7 +6,7 @@ import com.marstafk.IHMtrackerTool.models.Run;
 public interface RunService {
 
     Run getByPersonId(long id) throws ObjectNotFoundException;
-
+    Run getByRunId(long id) throws ObjectNotFoundException;
     void saveRun(Run run);
 
 }
