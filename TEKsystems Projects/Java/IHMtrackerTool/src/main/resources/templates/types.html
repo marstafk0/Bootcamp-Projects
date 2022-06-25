@@ -14,69 +14,10 @@ Awesome Header by Mark Stafki!
 
 <div th:replace="header :: myNav"></div>
 
-<!-- Table for Person Types -->
-<div class="app-wrapper">
-    <div class="app-content pt-3 p-md-3 p-lg-4">
-        <div class="container-xl mt-5">
-            <div class="table-responsive">
-                <div class="table-wrapper">
-                    <div class="table-title">
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <h2>Manage <b>Person Types</b></h2>
-                            </div>
-                            <div class="col-sm-4">
-                            </div>
-                            <div class="col-sm-4">
-                                <a class="btn addPersonTypeButton" id="AddButton" data-toggle="modal"><i
-                                        class="material-icons">&#xE147;</i> <span>Add Person Types</span></a>
-                            </div>
-                        </div>
-                    </div>
-                    <table class="table table-striped table-hover">
-                        <thead>
-                        <tr>
-                            <th>People</th>
-                            <th>ID</th>
-                            <th>Person Type Name</th>
-                            <th></th>
-                        </tr>
-                        </thead>
-                        <tbody id="myTable">
-                        <tr th:each="personType : ${personTypes}">
-                            <td><a th:href="@{associatedPeople/(id=${personType.id})}" class="assBtn btn btn-secondary"
-                                   data-toggle="modal"><i class='bx bx-folder-open' title="Associated People"></i></a>
-                            </td>
-                            <td th:text="${personType.id}">ID</td>
-                            <td th:text="${personType.statusName}">Person Type Name</td>
-                            <td></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-        </div>
-
-        <!-- Details Person Type Modal -->
-        <div class="personAssDetailsForm">
-            <div id="detailsPersonAssModal" class="modal fade">
-                <div class="modal-dialog modal-xl">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h4 class="modal-title">Associated People</h4>
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                        </div>
-                        <div class="modal-body" id="deets">
-                        </div>
-                        <div class="modal-footer">
-                            <input type="button" class="btn btn-default close" data-dismiss="modal" value="Close">
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
         <!-- Table for Pledge Types -->
+    <!-- Table for Person Types -->
+<div class="app-wrapper">
+  <div class="app-content pt-3 p-md-3 p-lg-4">
         <div class="container-xl">
             <div class="table-responsive">
                 <div class="table-wrapper">
@@ -88,7 +29,7 @@ Awesome Header by Mark Stafki!
                             <div class="col-sm-4">
                             </div>
                             <div class="col-sm-4">
-                                <a class="btn btn-success addPledgeTypeButton" data-toggle="modal"><i
+                                <a class="btn btn-success addPledgeTypeButton" id="AddButton" data-toggle="modal"><i
                                         class="material-icons">&#xE147;</i> <span>Add Pledge Types</span></a>
                             </div>
                         </div>
@@ -98,7 +39,6 @@ Awesome Header by Mark Stafki!
                         <tr>
                             <th>ID</th>
                             <th>Pledge Type Name</th>
-                            <th>Active</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -106,7 +46,6 @@ Awesome Header by Mark Stafki!
                         <tr th:each="pledgeType : ${pledgeTypes}">
                             <td th:text="${pledgeType.id}">ID</td>
                             <td th:text="${pledgeType.pledgeName}">Pledge Type Name</td>
-                            <td th:text="${pledgeType.active}">Active</td>
                             <td>
                                 <a th:href="@{getPledgeType/(id=${pledgeType.id})}" class="PdBtn"><i
                                         class='bx bx-dots-vertical-rounded' data-toggle="tooltip"
@@ -139,13 +78,6 @@ Awesome Header by Mark Stafki!
                                 <div class="form-group">
                                     <label>Plegde Type Name</label>
                                     <input type="text" class="form-control" id="pledgeName" name="pledgeName" required/>
-                                </div>
-                                <div class="form-group">
-                                    <label>Is Active?</label>
-                                    <select id="active" name="active" class="selectpicker mt-2 mb-2 w-100">
-                                        <option value="true">Active</option>
-                                        <option value="false">Inactive</option>
-                                    </select>
                                 </div>
                             </div>
                             <div class="modal-footer">
@@ -249,6 +181,63 @@ Awesome Header by Mark Stafki!
                             <input type="button" class="btn btn-default close" data-dismiss="modal" value="Close">
                         </div>
 
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="container-xl mt-5">
+            <div class="table-responsive">
+                <div class="table-wrapper">
+                    <div class="table-title">
+                        <div class="row">
+                            <div class="col-sm-4">
+                                <h2>Manage <b>Person Types</b></h2>
+                            </div>
+                            <div class="col-sm-4">
+                            </div>
+                            <div class="col-sm-4">
+                            </div>
+                        </div>
+                    </div>
+                    <table class="table table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>People</th>
+                            <th>ID</th>
+                            <th>Person Type Name</th>
+                            <th></th>
+                        </tr>
+                        </thead>
+                        <tbody id="myTable">
+                        <tr th:each="personType : ${personTypes}">
+                            <td><a th:href="@{associatedPeople/(id=${personType.id})}" class="assBtn btn btn-secondary"
+                                  data-toggle="modal"><i class='bx bx-folder-open' title="Associated People"></i></a>
+                            </td>
+                            <td th:text="${personType.id}">ID</td>
+                            <td th:text="${personType.statusName}">Person Type Name</td>
+                            <td></td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Details Person Type Modal -->
+        <div class="personAssDetailsForm">
+            <div id="detailsPersonAssModal" class="modal fade">
+                <div class="modal-dialog modal-xl">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h4 class="modal-title">Associated People</h4>
+                            <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        </div>
+                        <div class="modal-body" id="deets">
+                        </div>
+                        <div class="modal-footer">
+                            <input type="button" class="btn btn-default close" data-dismiss="modal" value="Close">
+                        </div>
                     </div>
                 </div>
             </div>

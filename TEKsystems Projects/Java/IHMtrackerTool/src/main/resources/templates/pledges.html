@@ -88,8 +88,8 @@ Awesome Header by Mark Stafki!
                             <td th:text="${'$' + pledge.oneTime}">One Time</td>
                             <td th:text="${'$' + pledge.perLap}">Per Lap</td>
                             <td th:text="${pledge.week}">Week</td>
-                            <td th:text="${pledge.collected}">Collected</td>
-                            <td th:text="${pledge.receipt}">Receipt</td>
+                            <td th:text="${pledge.collected} ? 'COLLECTED' : 'NOT COLLECTED'">Active</td>
+                            <td th:text="${pledge.receipt} ? 'YES' : 'NO'">Active</td>
                             <td>
                                 <a th:href="@{getPledge/(id=${pledge.id})}" class="pldBtn"><i
                                         class='bx bx-dots-vertical-rounded' data-toggle="tooltip"

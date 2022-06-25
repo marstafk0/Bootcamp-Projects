@@ -134,14 +134,7 @@ public class PersonPledgeController {
     public String addPledgeType(HttpServletRequest request) {
         PledgeType pledgeType = new PledgeType();
         pledgeType.setPledgeName(request.getParameter("pledgeName"));
-        switch (request.getParameter("active")) {
-            case "inactive", "false", "no" -> {
-                pledgeType.setActive(false);
-            }
-            default -> {
-                pledgeType.setActive(true);
-            }
-        }
+        pledgeType.setActive(true);
         pledgeTypeService.savePledgeType(pledgeType);
         return "redirect:/types";
     }

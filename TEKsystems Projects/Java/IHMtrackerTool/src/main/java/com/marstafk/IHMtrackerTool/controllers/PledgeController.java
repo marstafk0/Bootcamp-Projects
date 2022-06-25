@@ -129,12 +129,16 @@ public class PledgeController {
 
             Person person = personService.getPersonById(Long.parseLong(request.getParameter("personId")));
 
-            if (pledge.isCollected() && runService.getByPersonId(person.getId()) != null) {
-                pledge.setTotal(pledge.getOneTime().add((pledge.getPerLap().multiply(new BigDecimal(runService.getByPersonId(person.getId()).getLaps())))));
+            Run run = runService.getByPersonId(person.getId());
+            if (run == null || run.getLaps() == 0) {
+                violations2.add("Please add laps before marking as collected.");
             } else {
-                pledge.setTotal(pledge.getOneTime());
+                if (pledge.isCollected()) {
+                    pledge.setTotal(pledge.getOneTime().add((pledge.getPerLap().multiply(new BigDecimal(run.getLaps())))));
+                } else {
+                    pledge.setTotal(pledge.getOneTime());
+                }
             }
-
             violations = validator.validate(pledge);
             JogathonMaster currJ = jogathonMasterService.getActiveAndDeletion(true, false);
             if (currJ == null) {
@@ -155,13 +159,13 @@ public class PledgeController {
                     Sponsor sponsor = sponsorService.getSponsorById(sponId);
                     sponsor.addPledges(pledge);
                     sponsorService.saveSponsor(sponsor);
-                } catch (NoSuchElementException e) {
+                } catch (NoSuchElementException | ObjectNotFoundException e) {
 
                 }
-                if (jogathonMasterService.getActiveAndDeletion(true, false).getPledges() == null) {
-                    jogathonMasterService.getActiveAndDeletion(true, false).setPledges(new ArrayList<>());
-                }
                 JogathonMaster jogathonMaster = jogathonMasterService.getActiveAndDeletion(true, false);
+                if (jogathonMaster.getPledges() == null) {
+                    jogathonMaster.setPledges(new ArrayList<>());
+                }
                 jogathonMaster.addPledges(pledge);
                 jogathonMasterService.saveJogathon(jogathonMaster);
             }
@@ -227,7 +231,7 @@ public class PledgeController {
                     Sponsor sponsor = sponsorService.getSponsorById(sponId);
                     sponsor.addPledges(pledge);
                     sponsorService.saveSponsor(sponsor);
-                } catch (NoSuchElementException e) {
+                } catch (NoSuchElementException | ObjectNotFoundException e) {
 
                 }
 
