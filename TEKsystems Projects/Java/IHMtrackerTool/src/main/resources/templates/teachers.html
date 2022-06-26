@@ -50,6 +50,7 @@ Awesome Header by Mark Stafki!
                             <th>ID</th>
                             <th>Name</th>
                             <th>Contact</th>
+                            <th>Laps</th>
                             <th>Actions</th>
                         </tr>
                         </thead>
@@ -58,6 +59,9 @@ Awesome Header by Mark Stafki!
                             <td th:text="${teacher.id}">ID</td>
                             <td th:text="${teacher.firstName + ' ' + teacher.lastName}">Name</td>
                             <td th:text="${teacher.contact}">Contact</td>
+                            <td><a th:href="@{lapDetails/(id=${teacher.id})}" class="LBtn"><i class='bx bx-run'
+                              data-toggle="tooltip"
+                              title="Laps"></i></a></td>
                             <td>
                                 <a th:href="@{getTeacher/(id=${teacher.id})}" class="tdBtn"><i
                                         class='bx bx-dots-vertical-rounded' data-toggle="tooltip"
@@ -262,6 +266,34 @@ Awesome Header by Mark Stafki!
                 </div>
             </div>
         </div>
+
+        <!-- Laps Modal -->
+        <div class="editLapsForm">
+          <form th:action="@{editLaps}" method="post">
+              <div id="editLapsModal" class="modal fade">
+                  <div class="modal-dialog">
+                      <div class="modal-content">
+                          <div class="modal-header">
+                              <h4 class="modal-title">Edit Laps</h4>
+                              <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;
+                              </button>
+                          </div>
+                          <div class="modal-body">
+                              <div class="form-group">
+                                  <input type="hidden" value="" id="id" name="id"/>
+                                  <label>Laps Amount</label>
+                                  <input type="text" value="" class="form-control" id="laps" name="laps" required/>
+                              </div>
+                          </div>
+                          <div class="modal-footer">
+                              <input type="button" class="btn btn-default close" data-dismiss="modal" value="Cancel">
+                              <input type="submit" class="btn btn-secondary" value="Save">
+                          </div>
+                      </div>
+                  </div>
+              </div>
+          </form>
+      </div>
     </div>
 </div>
 

@@ -44,7 +44,7 @@ public class PledgeController {
 
     @GetMapping("pledges")
     public String displayPledges(Model model) {
-        model.addAttribute("pledges", pledgeService.getAllPledges(true, false));
+        model.addAttribute("pledges", associatePledgeToDisplay(pledgeService.getAllPledges(true, false)));
         model.addAttribute("persons", personService.getAllPeople(true));
         model.addAttribute("pledgeTypes", pledgeTypeService.getAllPledgeTypes(true));
         model.addAttribute("sponsors", sponsorService.getAllSponsors());
@@ -57,7 +57,7 @@ public class PledgeController {
     public String minMax(Model model) {
         List<Pledge> pledges = pledgeService.getAllPledges(true, false);
         pledges.sort(Comparator.comparing(Pledge::getTotal).reversed());
-        model.addAttribute("pledges", pledges);
+        model.addAttribute("pledges", associatePledgeToDisplay(pledges));
         model.addAttribute("persons", personService.getAllPeople(true));
         model.addAttribute("pledgeTypes", pledgeTypeService.getAllPledgeTypes(true));
         model.addAttribute("sponsors", sponsorService.getAllSponsors());
@@ -70,7 +70,7 @@ public class PledgeController {
     public String weekPledges(Model model) {
         List<Pledge> pledges = pledgeService.getAllPledges(true, false);
         pledges.sort(Comparator.comparing(Pledge::getWeek));
-        model.addAttribute("pledges", pledges);
+        model.addAttribute("pledges", associatePledgeToDisplay(pledges));
         model.addAttribute("persons", personService.getAllPeople(true));
         model.addAttribute("pledgeTypes", pledgeTypeService.getAllPledgeTypes(true));
         model.addAttribute("sponsors", sponsorService.getAllSponsors());
@@ -265,6 +265,26 @@ public class PledgeController {
             violations2.add(e.getMessage());
         }
         return "redirect:/pledges";
+    }
+
+    private List<DisplayPledge> associatePledgeToDisplay(List<Pledge> pledges) {
+        List<DisplayPledge> displayPledges = new ArrayList<>();
+        for (Pledge p : pledges) {
+            String name;
+            String nameTwo = "None";
+            try {
+                Person person = personService.getPersonByPledgeId(p.getId());
+                name = person.getFirstName() + " " + person.getLastName();
+            } catch (ObjectNotFoundException e) {
+                name = "None";
+            }
+            Sponsor sponsor = sponsorService.getSponsorByPledgeId(p.getId());
+            if (sponsor != null) {
+                nameTwo = sponsor.getFirstName() + " " + sponsor.getLastName();
+            }
+            displayPledges.add(new DisplayPledge(p.getId(), name, nameTwo, p.getTotal(), p.getOneTime(), p.getPerLap(), p.getWeek(), p.isCollected(), p.isReceipt()));
+        }
+        return displayPledges;
     }
 
 }

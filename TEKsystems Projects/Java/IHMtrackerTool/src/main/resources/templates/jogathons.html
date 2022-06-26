@@ -66,7 +66,7 @@ Awesome Header by Mark Stafki!
                             <td th:text="${jogathon.id}">ID</td>
                             <td th:text="${jogathon.runDate}">Name</td>
                             <td th:text="${jogathon.comments}">Contact</td>
-                            <td th:text="${jogathon.active} ? 'ACTIVE' : 'INACTIVE'">Active</td>
+                            <td th:text="${jogathon.active} ? 'Active' : 'Inactive'">Active</td>
                             <td>
                                 <a th:href="@{getJogathon/(id=${jogathon.id})}" class="ejBtn"><i class='bx bx-edit-alt'
                                                                                                  data-toggle="tooltip"

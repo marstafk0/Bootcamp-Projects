@@ -420,7 +420,6 @@ public class PersonController {
                 family.addPerson(teacher);
                 familyService.saveFamily(family);
             } catch (NullPointerException e) {
-
             }
         }
         return "redirect:/teachers";
@@ -555,7 +554,18 @@ public class PersonController {
 
             runService.saveRun(run);
         }
-        return "redirect:/students";
+        PersonType pt = personTypeService.getByPersonId(personService.getPersonByRunId(id).getId());
+        switch(pt.getStatusName()) {
+            case "Student" -> {
+                return "redirect:/students";
+            }
+            case "Teacher" -> {
+                return "redirect:/teachers";
+            }
+            default -> {
+                return "redirect:/persons";
+            }
+        }
     }
 
     // ----------------------------- PERSON ----------------------------------- //

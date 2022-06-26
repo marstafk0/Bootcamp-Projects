@@ -72,6 +72,8 @@ Awesome Header by Mark Stafki!
                         <thead>
                         <tr>
                             <th>ID</th>
+                            <th>Earner</th>
+                            <th>Sponsor</th>
                             <th>Total</th>
                             <th>One Time</th>
                             <th>Per Lap</th>
@@ -84,12 +86,14 @@ Awesome Header by Mark Stafki!
                         <tbody id="myTable">
                         <tr th:each="pledge : ${pledges}">
                             <td th:text="${pledge.id}">ID</td>
+                            <td th:text="${pledge.earner}">Earner</td>
+                            <td th:text="${pledge.sponsor}">Sponsor</td>
                             <td th:text="${'$' + pledge.total}">Total</td>
                             <td th:text="${'$' + pledge.oneTime}">One Time</td>
                             <td th:text="${'$' + pledge.perLap}">Per Lap</td>
                             <td th:text="${pledge.week}">Week</td>
-                            <td th:text="${pledge.collected} ? 'COLLECTED' : 'NOT COLLECTED'">Active</td>
-                            <td th:text="${pledge.receipt} ? 'YES' : 'NO'">Active</td>
+                            <td th:text="${pledge.collected} ? 'Collected' : 'Not Collected'">Active</td>
+                            <td th:text="${pledge.receipt} ? 'Yes' : 'No'">Active</td>
                             <td>
                                 <a th:href="@{getPledge/(id=${pledge.id})}" class="pldBtn"><i
                                         class='bx bx-dots-vertical-rounded' data-toggle="tooltip"
