@@ -87,6 +87,7 @@
                         <!--//col-->
 
                         <div class="app-utilities col-auto">
+                          <!-- <span sec:authentication="username">Username</span> -->
                             <div class="app-utility-item app-user-dropdown dropdown">
                                 <a
                                         class="dropdown-toggle"
@@ -110,7 +111,7 @@
                                         <a class="dropdown-item" id="loginBtn" sec:authorize="!isAuthenticated()"
                                            th:href="@{login}">Login</a>
                                         <a class="dropdown-item" id="registerBtn" sec:authorize="!isAuthenticated()"
-                                           th:href="@{register}">Register</a>
+                                           th:href="@{signup_form}">Register</a>
                                         <a class="dropdown-item" sec:authorize="isAuthenticated()" th:href="@{logout}">Log
                                             Out</a>
                                     </li>
@@ -136,9 +137,7 @@
                 >
 
                 <div class="app-branding">
-                    <a class="app-logo" th:href="@{index}"
-                    ><span class="logo-text">Jog-A-Thon</span></a
-                    >
+                    <a class="app-logo" th:href="@{index}"><span class="logo-text">Jog-A-Thon</span></a>
                 </div>
                 <!--//app-branding-->
 

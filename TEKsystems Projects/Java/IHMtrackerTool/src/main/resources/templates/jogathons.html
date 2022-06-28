@@ -6,6 +6,7 @@ Awesome Header by Mark Stafki!
         lang="en-US"
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
 <head>
     <div th:replace="header :: myheader"></div>
@@ -38,7 +39,7 @@ Awesome Header by Mark Stafki!
                             <div class="col-sm-4">
                             </div>
                             <div class="col-sm-4">
-                                <a class="btn addJogathonButton add" id="AddButton" data-toggle="modal"><i class="material-icons">&#xE147;</i>
+                                <a class="btn addJogathonButton add" id="AddButton" data-toggle="modal" sec:authorize="hasAnyAuthority('ADMIN')"><i class="material-icons">&#xE147;</i>
                                     <span>Add Jog-A-Thon</span></a>
                                 <a class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
                                    data-bs-toggle="dropdown" aria-expanded="false"></i> <span>Sort By</span></a>
@@ -70,10 +71,10 @@ Awesome Header by Mark Stafki!
                             <td>
                                 <a th:href="@{getJogathon/(id=${jogathon.id})}" class="ejBtn"><i class='bx bx-edit-alt'
                                                                                                  data-toggle="tooltip"
-                                                                                                 title="Edit"></i></a>
+                                                                                                 title="Edit" sec:authorize="hasAnyAuthority('ADMIN')"></i></a>
                                 <a th:href="@{getJogathon/(id=${jogathon.id})}" class="djBtn"><i class='bx bx-repost' 
                                                                                                   data-toggle="tooltip" 
-                                                                                                  title="De-Activate"></i></a>
+                                                                                                  title="De-Activate" sec:authorize="hasAnyAuthority('ADMIN')"></i></a>
                             </td>
                         </tr>
                         </tbody>

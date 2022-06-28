@@ -127,10 +127,12 @@ public class PledgeController {
                 default -> pledge.setReceipt(true);
             }
 
+            double perLapValue = pledge.getPerLap().doubleValue();
+
             Person person = personService.getPersonById(Long.parseLong(request.getParameter("personId")));
 
             Run run = runService.getByPersonId(person.getId());
-            if (run == null || run.getLaps() == 0) {
+            if (run == null && perLapValue > 0 || run.getLaps() == 0 && perLapValue > 0) {
                 violations2.add("Please add laps before marking as collected.");
             } else {
                 if (pledge.isCollected()) {
@@ -274,13 +276,19 @@ public class PledgeController {
             String nameTwo = "None";
             try {
                 Person person = personService.getPersonByPledgeId(p.getId());
-                name = person.getFirstName() + " " + person.getLastName();
+                if(person != null) {
+                    name = person.getFirstName() + " " + person.getLastName();
+                } else {
+                    name = "None";
+                }
             } catch (ObjectNotFoundException e) {
                 name = "None";
             }
             Sponsor sponsor = sponsorService.getSponsorByPledgeId(p.getId());
             if (sponsor != null) {
                 nameTwo = sponsor.getFirstName() + " " + sponsor.getLastName();
+            } else {
+                nameTwo = "None";
             }
             displayPledges.add(new DisplayPledge(p.getId(), name, nameTwo, p.getTotal(), p.getOneTime(), p.getPerLap(), p.getWeek(), p.isCollected(), p.isReceipt()));
         }

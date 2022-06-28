@@ -1,8 +1,5 @@
-package com.marstafk.IHMtrackerTool.models;
+package com.marstafk.IHMtrackerTool.security;
 
-import com.marstafk.IHMtrackerTool.security.FieldMatch;
-
-import javax.validation.constraints.AssertTrue;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 
@@ -22,19 +19,9 @@ public class UserRegistrationDto {
     @NotEmpty
     private String password;
 
-    @NotEmpty
-    private String confirmPassword;
-
     @Email
     @NotEmpty
     private String email;
-
-    @Email
-    @NotEmpty
-    private String confirmEmail;
-
-    @AssertTrue
-    private Boolean terms;
 
     public String getFirstName() {
         return firstName;
@@ -60,14 +47,6 @@ public class UserRegistrationDto {
         this.password = password;
     }
 
-    public String getConfirmPassword() {
-        return confirmPassword;
-    }
-
-    public void setConfirmPassword(String confirmPassword) {
-        this.confirmPassword = confirmPassword;
-    }
-
     public String getEmail() {
         return email;
     }
@@ -76,20 +55,5 @@ public class UserRegistrationDto {
         this.email = email;
     }
 
-    public String getConfirmEmail() {
-        return confirmEmail;
-    }
-
-    public void setConfirmEmail(String confirmEmail) {
-        this.confirmEmail = confirmEmail;
-    }
-
-    public Boolean getTerms() {
-        return terms;
-    }
-
-    public void setTerms(Boolean terms) {
-        this.terms = terms;
-    }
 }
 

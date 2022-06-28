@@ -1,91 +1,99 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<!--
+Awesome Header by Mark Stafki!
+-->
+<html
+        lang="en-US"
+        xmlns="http://www.w3.org/1999/xhtml"
+        xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+>
 <head>
-    <meta charset="ISO-8859-1">
-    <title>Sign Up Jog-A-Thon</title>
-    <!-- Bootstrap CSS File -->
-    <link
-            href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css"
-            rel="stylesheet"
-            integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor"
-            crossorigin="anonymous"
-    />
+    <div th:replace="header :: myheader"></div>
 </head>
 <body>
-<div class="container text-center">
-    <div>
-        <h1>User Registration - Sign Up</h1>
-    </div>
-    <form th:action="@{process_register}" th:object="${user}"
-          method="post" style="max-width: 600px; margin: 0 auto;">
-        <div class="m-3">
-            <div class="form-group row">
-                <label class="col-4 col-form-label">E-mail: </label>
-                <div class="col-8 mt-3">
-                    <input type="email" th:field="*{email}" class="form-control" required/>
-                    <div th:if="${#fields.hasErrors('email')}">
-                        <p th:each="error : ${#fields.errors('email')}" class="alert alert-danger"
-                           th:text="${error}">Bad email</p>
+
+    <section class="h-100">
+        <div class="container h-100">
+            <div class="row justify-content-sm-center h-100">
+                <div class="col-xxl-4 col-xl-5 col-lg-5 col-md-7 col-sm-9">
+                    <div class="text-center my-5">
+                        <a class="app-logo" th:href="@{index}"><span class="logo-text" style="font-size: 35px;">Jog-A-Thon</span></a>
+                    </div>
+                    <div class="card shadow-lg">
+                        <div class="card-body p-5">
+                            <h1 class="fs-4 card-title fw-bold mb-4">Register</h1>
+                            <form method="POST" th:action="@{signup_form}" th:object="${user}">
+                                <!-- <div class="mb-3">
+                                    <label class="mb-2 text-muted" for="name">Username</label>
+                                    <input type="username" th:field="*{username}" class="form-control"
+                                        required minlength="6" maxlength="20"/>
+                                    <div th:if="${#fields.hasErrors('username')}">
+                                        <p th:each="error : ${#fields.errors('username')}" class="alert alert-danger"
+                                        th:text="${error}">Bad username</p>
+                                    </div>
+                                </div> -->
+
+                                <div class="mb-3">
+                                    <label class="mb-2 text-muted" for="name">First Name</label>
+                                    <input type="text" th:field="*{firstName}" class="form-control"
+                                        minlength="2" maxlength="20"/>
+                                    <div th:if="${#fields.hasErrors('firstName')}">
+                                        <p th:each="error : ${#fields.errors('firstName')}" class="alert alert-danger"
+                                        th:text="${error}">Bad first name</p>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="mb-2 text-muted" for="name">Last Name</label>
+                                    <input type="text" th:field="*{lastName}" class="form-control"
+                                        required minlength="2" maxlength="20"/>
+                                    <div th:if="${#fields.hasErrors('lastName')}">
+                                        <p th:each="error : ${#fields.errors('lastName')}" class="alert alert-danger"
+                                        th:text="${error}">Bad last name</p>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="mb-2 text-muted" for="email">E-Mail Address</label>
+                                    <input type="email" th:field="*{email}" class="form-control" required/>
+                                    <div th:if="${#fields.hasErrors('email')}">
+                                        <p th:each="error : ${#fields.errors('email')}" class="alert alert-danger"
+                                        th:text="${error}">Bad email</p>
+                                    </div>
+                                </div>
+
+                                <div class="mb-3">
+                                    <label class="mb-2 text-muted" for="password">Password</label>
+                                    <input type="password" th:field="*{password}" class="form-control"
+                                        required minlength="6" maxlength="20"/>
+                                    <div th:if="${#fields.hasErrors('password')}">
+                                        <p th:each="error : ${#fields.errors('password')}" class="alert alert-danger"
+                                        th:text="${error}">Bad password</p>
+                                    </div>
+                                </div>
+
+                                <p class="form-text text-muted mb-3">
+                                    By registering you agree with our terms and condition.
+                                </p>
+
+                                <div class="align-items-center d-flex">
+                                    <button type="submit" class="btn btn-primary ms-auto">
+                                        Register	
+                                    </button>
+                                </div>
+                            </form>
+                        </div>
+                        <div class="card-footer py-3 border-0">
+                            <div class="text-center">
+                                Already have an account? <a th:href="@{login}" class="text-dark">Login</a>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-4 col-form-label">Username: </label>
-                <div class="col-8 mt-3">
-                    <input type="username" th:field="*{username}" class="form-control"
-                           required minlength="6" maxlength="20"/>
-                    <div th:if="${#fields.hasErrors('username')}">
-                        <p th:each="error : ${#fields.errors('username')}" class="alert alert-danger"
-                           th:text="${error}">Bad username</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-4 col-form-label">Password: </label>
-                <div class="col-8 mt-3">
-                    <input type="password" th:field="*{password}" class="form-control"
-                           required minlength="6" maxlength="20"/>
-                    <div th:if="${#fields.hasErrors('password')}">
-                        <p th:each="error : ${#fields.errors('password')}" class="alert alert-danger"
-                           th:text="${error}">Bad password</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-4 col-form-label">First Name: </label>
-                <div class="col-8 mt-3">
-                    <input type="text" th:field="*{firstName}" class="form-control"
-                           minlength="2" maxlength="20"/>
-                    <div th:if="${#fields.hasErrors('firstName')}">
-                        <p th:each="error : ${#fields.errors('firstName')}" class="alert alert-danger"
-                           th:text="${error}">Bad first name</p>
-                    </div>
-                </div>
-            </div>
-
-            <div class="form-group row">
-                <label class="col-4 col-form-label">Last Name: </label>
-                <div class="col-8 mt-3">
-                    <input type="text" th:field="*{lastName}" class="form-control"
-                           required minlength="2" maxlength="20"/>
-                    <div th:if="${#fields.hasErrors('lastName')}">
-                        <p th:each="error : ${#fields.errors('lastName')}" class="alert alert-danger"
-                           th:text="${error}">Bad last name</p>
-                    </div>
-                </div>
-            </div>
-
-            <div>
-                <button type="submit" class="btn btn-primary mt-3">Sign Up</button>
             </div>
         </div>
-    </form>
-</div>
-
-<div th:insert="footer :: foot"></div>
+    </section>
 
 </body>
 </html>

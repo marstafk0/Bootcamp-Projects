@@ -6,6 +6,7 @@ Awesome Header by Mark Stafki!
         lang="en-US"
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
 <head>
     <div th:replace="header :: myheader"></div>
@@ -39,7 +40,7 @@ Awesome Header by Mark Stafki!
                                 </div>
                             </div>
                             <div class="col-sm-4">
-                                <a class="btn addPersonButton add" id="AddButton" data-toggle="modal"><i class="material-icons">&#xE147;</i>
+                                <a class="btn addPersonButton add" id="AddButton" data-toggle="modal" sec:authorize="hasAnyAuthority('ADMIN')"><i class="material-icons">&#xE147;</i>
                                     <span>Add New Person</span></a>
                                 <!-- <a class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton1"
                                    data-bs-toggle="dropdown" aria-expanded="false"></i> <span>Sort By</span></a>
@@ -77,10 +78,10 @@ Awesome Header by Mark Stafki!
                                         title="Details"></i></a>
                                 <a th:href="@{getPerson/(id=${person.id})}" class="personEBtn"><i class='bx bx-edit-alt'
                                                                                                   data-toggle="tooltip"
-                                                                                                  title="Edit"></i></a>
+                                                                                                  title="Edit" sec:authorize="hasAnyAuthority('ADMIN')"></i></a>
                                 <a th:href="@{getPerson/(id=${person.id})}" class="personDEBTN"><i class='bx bx-trash'
                                                                                                    data-toggle="tooltip"
-                                                                                                   title="Delete"></i></a>
+                                                                                                   title="Delete" sec:authorize="hasAnyAuthority('ADMIN')"></i></a>
                             </td>
                         </tr>
                         </tbody>
@@ -304,7 +305,7 @@ Awesome Header by Mark Stafki!
                           </div>
                           <div class="modal-footer">
                               <input type="button" class="btn btn-default close" data-dismiss="modal" value="Cancel">
-                              <input type="submit" class="btn btn-secondary" value="Save">
+                              <input type="submit" class="btn btn-secondary" value="Save" sec:authorize="hasAnyAuthority('ADMIN')">
                           </div>
                       </div>
                   </div>

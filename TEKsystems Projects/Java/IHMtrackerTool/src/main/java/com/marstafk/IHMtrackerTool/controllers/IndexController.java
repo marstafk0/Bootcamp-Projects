@@ -70,7 +70,11 @@ public class IndexController {
         }
         classTotals = sortByValue(classTotals);
         Long[] arrayKeys1 = classTotals.keySet().toArray(new Long[classTotals.size()]);
-        classId = arrayKeys1[arrayKeys1.length - 1];
+        try {
+            classId = arrayKeys1[arrayKeys1.length - 1];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            classId = 0;
+        }
         BigDecimal finalClassTotal = classTotals.get(classId);
 
         // Highest student
@@ -86,15 +90,41 @@ public class IndexController {
         }
         studentsTotals = sortByValue(studentsTotals);
         Long[] arrayKeys = studentsTotals.keySet().toArray(new Long[studentsTotals.size()]);
-        studentId = arrayKeys[arrayKeys.length - 1];
-
+        try {
+            studentId = arrayKeys[arrayKeys.length - 1];
+        } catch (ArrayIndexOutOfBoundsException e) {
+            studentId = 0;
+        }
+        Classroom classroom;
+        Person person;
+        Grade grade;
+        try {
+            classroom = classroomService.getClassroomById(classId);
+        } catch (ObjectNotFoundException e) {
+            classroom = new Classroom("None", new ArrayList<>(), true);
+        }
+        try {
+            person = personService.getPersonById(studentId);
+        } catch (ObjectNotFoundException e) {
+            person = new Person("None", "None", "None", new ArrayList<>(), new ArrayList<>(), true);
+        }
+        grade = gradeService.getGradeByPersonId(studentId);
+        if(grade == null) {
+            grade = new Grade("None", new ArrayList<>(), true);
+        }
         model.addAttribute("total", total);
         model.addAttribute("classTotal", finalClassTotal);
-        model.addAttribute("classroom", classroomService.getClassroomById(classId));
-        model.addAttribute("student", personService.getPersonById(studentId));
-        model.addAttribute("studentGrade", gradeService.getGradeByPersonId(studentId));
+        model.addAttribute("classroom", classroom);
+        model.addAttribute("student", person);
+        model.addAttribute("studentGrade", grade);
         //model.addAttribute("user", new User());
         return "index";
+    }
+
+    @GetMapping("login")
+    public String showLogin(Model model) {
+        //model.addAttribute("user", new User());
+        return "login2";
     }
 
     @GetMapping("register")
@@ -104,25 +134,25 @@ public class IndexController {
         return "signup_form";
     }
 
-    @PostMapping("process_register")
-    public String processRegister(@Valid User user, BindingResult result) {
-        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-        String encodedPassword = passwordEncoder.encode(user.getPassword());
-        user.setPassword(encodedPassword);
-
-        if (result.hasErrors()) {
-            return "signup_form";
-        }
-        user.setEnabled(true);
-
-        Role role = roleRepo.findById(2).get();
-        Set<Role> roles = new HashSet<>();
-        roles.add(role);
-        user.setRoles(roles);
-
-        userRepo.save(user);
-        return "redirect:/login";
-    }
+//    @PostMapping("process_register")
+//    public String processRegister(@Valid User user, BindingResult result) {
+//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+//        String encodedPassword = passwordEncoder.encode(user.getPassword());
+//        user.setPassword(encodedPassword);
+//
+//        if (result.hasErrors()) {
+//            return "signup_form";
+//        }
+//        user.setEnabled(true);
+//
+//        Role role = roleRepo.findById(1).get();
+//        Set<Role> roles = new HashSet<>();
+//        roles.add(role);
+//        user.setRoles(roles);
+//
+//        userRepo.save(user);
+//        return "redirect:/login";
+//    }
 
     @GetMapping("chartData")
     @ResponseBody

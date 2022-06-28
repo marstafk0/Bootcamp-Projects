@@ -6,6 +6,7 @@ Awesome Header by Mark Stafki!
         lang="en-US"
         xmlns="http://www.w3.org/1999/xhtml"
         xmlns:th="http://www.thymeleaf.org"
+        xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
 >
 <head>
     <div th:replace="header :: myheader"></div>
@@ -33,7 +34,7 @@ Awesome Header by Mark Stafki!
                             <div class="col-sm-4">
                             </div>
                             <div class="col-sm-4">
-                                <a class="btn addClassroomButton add" id="AddButton" data-toggle="modal"><i class="material-icons">&#xE147;</i><span>Add Classroom</span></a>
+                                <a class="btn addClassroomButton add" id="AddButton" data-toggle="modal" sec:authorize="hasAnyAuthority('ADMIN')"><i class="material-icons">&#xE147;</i><span>Add Classroom</span></a>
                             </div>
                         </div>
                     </div>
@@ -58,10 +59,10 @@ Awesome Header by Mark Stafki!
                             <td th:text="${classroom.gradeNames}">Grades</td>
                             <td>
                                 <a th:href="@{getClassroom/(id=${classroom.id})}" class="ecBtn"><i
-                                        class='bx bx-edit-alt' data-toggle="tooltip" title="Edit"></i></a>
+                                        class='bx bx-edit-alt' data-toggle="tooltip" title="Edit" sec:authorize="hasAnyAuthority('ADMIN')"></i></a>
                                 <a th:href="@{getClassroom/(id=${classroom.id})}" class="dcBtn"><i class='bx bx-trash'
                                                                                                    data-toggle="tooltip"
-                                                                                                   title="Delete"></i></a>
+                                                                                                   title="Delete" sec:authorize="hasAnyAuthority('ADMIN')"></i></a>
                             </td>
                         </tr>
                         </tbody>

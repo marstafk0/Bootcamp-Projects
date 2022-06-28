@@ -1,15 +1,15 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<html lang="en" xmlns:th="http://www.thymeleaf.org"
+xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <body>
 <div id="footer" th:fragment="foot">
 
     <footer class="app-footer">
         <div class="container text-center py-3">
             <!--/* This template is free as long as you keep the footer attribution link. If you'd like to use the template without the attribution link, you can buy the commercial license via our website: themes.3rdwavemedia.com Thank you for your support. :) */-->
-            <small class="copyright">Designed with <span class="sr-only">love</span><i class="fas fa-heart"
-                                                                                       style="color: #fc3200;"></i> by
-                <a class="app-link" href="http://themes.3rdwavemedia.com" target="_blank">Mark Stafki</a> for
-                IHM</small>
+            <div class="text-center mt-5 text-muted">Designed with <i class='bx bxs-heart' style="color: red;"></i> by
+                <a class="app-link" href="https://www.linkedin.com/in/markstafki/" target="_blank">Mark Stafki</a> for
+                IHM<div id="year"></div></div>
 
         </div>
     </footer><!--//app-footer-->
