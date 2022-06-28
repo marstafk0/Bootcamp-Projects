@@ -166,7 +166,7 @@ public class FamilyController {
         Family family = familyService.getFamilyById(Long.parseLong(request.getParameter("id")));
         family.setActive(false);
         familyService.saveFamily(family);
-        return "families";
+        return "redirect:/families";
     }
 
 }

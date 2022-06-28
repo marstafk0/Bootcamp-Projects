@@ -65,6 +65,7 @@ Awesome Header by Mark Stafki!
                                     <li><a class="dropdown-item" th:href="@{weekPledges}">Week</a></li>
                                     <li><a class="dropdown-item" th:href="@{minmax}">Max-Min $</a></li>
                                 </ul>
+                                <a class="btn btn-secondary" sec:authorize="hasAnyAuthority('ADMIN')">Collect Pledges</a>
                             </div>
 
                         </div>
