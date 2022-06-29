@@ -64,4 +64,9 @@ public class PledgeServiceImpl implements PledgeService {
     public List<Pledge> getAllByClassroom(long id) {
         return pledgeRepository.findAllByClassroomId(id);
     }
+
+    @Override
+    public List<Pledge> getAllByJogathonId(long id) {
+        return pledgeRepository.findAllByJogathonId(id);
+    }
 }

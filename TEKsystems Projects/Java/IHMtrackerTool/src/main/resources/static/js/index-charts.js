@@ -99,8 +99,12 @@ var lineChartConfig = {
 	            //Ref: https://stackoverflow.com/questions/38800226/chart-js-add-commas-to-tooltip-and-y-axis
                 label: function(tooltipItem, data) {
 	                if (parseInt(tooltipItem.value) >= 1000) {
+						var res = "$" + tooltipItem.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+						console.log(res);
                         return "$" + tooltipItem.value.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
                     } else {
+						var res = "$" + tooltipItem.value;
+						console.log(res);
 	                    return '$' + tooltipItem.value;
                     }
                 }

@@ -42,4 +42,8 @@ public interface PledgeRepository extends JpaRepository<Pledge, Long> {
             "WHERE pl.active = true AND p.active = true AND g.active = true AND c.active = true AND c.id = :id AND pl.deletion = false", nativeQuery = true)
     List<Pledge> findAllByClassroomId(long id);
 
+    @Query(value = "SELECT p.* FROM pledge p JOIN jogathon_master_pledge jmp ON jmp.pledge_id = p.id " +
+            "JOIN jogathon_master jm ON jmp.jogathon_master_id = jm.id WHERE jm.id = :id", nativeQuery = true)
+    List<Pledge> findAllByJogathonId(long id);
+
 }

@@ -25,4 +25,6 @@ public interface PledgeService {
 
     List<Pledge> getAllByClassroom(long id);
 
+    List<Pledge> getAllByJogathonId(long id);
+
 }

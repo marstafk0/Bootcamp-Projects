@@ -7,6 +7,8 @@ package com.marstafk.IHMtrackerTool.service;
 import com.marstafk.IHMtrackerTool.exceptions.ObjectNotFoundException;
 import com.marstafk.IHMtrackerTool.models.JogathonMaster;
 
+import java.util.List;
+
 /**
  * @author boss_
  */
@@ -16,5 +18,7 @@ public interface JogathonMasterService {
     void saveJogathon(JogathonMaster jogathonMaster);
 
     JogathonMaster getActiveAndDeletion(boolean active, boolean deletion);
+
+    List<JogathonMaster> getAllJogathons();
 
 }

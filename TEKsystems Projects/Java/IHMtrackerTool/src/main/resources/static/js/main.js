@@ -752,24 +752,51 @@ $(document).ready(function () {
 
   document.getElementById("year").innerHTML = 'Copyright © ' + new Date().getFullYear();
 
+  // ------------------------- REPORTS ----------------------------------- //
+
 });
 
-(function () {
-	'use strict'
+$('#jogathon').append($('<option>', {
+  text: 'Select an option...'
+}))
 
-	// Fetch all the forms we want to apply custom Bootstrap validation styles to
-	var forms = document.querySelectorAll('.needs-validation')
+$('#week').append($('<option>', {
+  text: 'Select an option...'
+}))
 
-	// Loop over them and prevent submission
-	Array.prototype.slice.call(forms)
-		.forEach(function (form) {
-			form.addEventListener('submit', function (event) {
-				if (!form.checkValidity()) {
-					event.preventDefault()
-					event.stopPropagation()
-				}
+$('#week').append($('<option>', {
+  value: 0,
+  text: 'All Weeks'
+}));
 
-				form.classList.add('was-validated')
-			}, false)
-		})
-})()
+function getWeeks() {
+  var id = $("#jogathon").find(":selected").val();
+  var href = 'getWeeks/?id=' + id;
+  $.get(href, function(weeks, status) {
+    $('#week').append($('<option>', {
+      text: 'Select an option...'
+    })).prop('selected', true);
+    $("#week").empty()
+    $.each(weeks, function(i, week) {
+      $('#week').append($('<option>', {
+        value: week,
+        text: "Week " + week
+      }));
+    });
+  })
+}
+
+function getPledges() {
+  $("#myTableReport").empty();
+  var id = $("#week").find(":selected").val();
+    var href = 'getPledges/?id=' + id;
+    $.get(href, function(reports, status) {
+      $.each(reports, function(i, report) {
+        var $row = $('<tr>'+
+        '<td>'+report.student+'</td>'+
+        '<td>'+report.total+'</td>'+
+        '</tr>');
+        $('table> tbody').append($row);
+    });
+  })
+}

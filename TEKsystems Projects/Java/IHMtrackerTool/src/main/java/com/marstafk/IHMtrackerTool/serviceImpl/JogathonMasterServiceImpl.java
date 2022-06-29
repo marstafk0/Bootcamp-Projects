@@ -11,6 +11,8 @@ import com.marstafk.IHMtrackerTool.service.JogathonMasterService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 /**
  * @author boss_
  */
@@ -37,5 +39,10 @@ public class JogathonMasterServiceImpl implements JogathonMasterService {
     @Override
     public JogathonMaster getActiveAndDeletion(boolean active, boolean deletion) {
         return jMasterRepo.findByActiveAndDeletion(active, deletion);
+    }
+
+    @Override
+    public List<JogathonMaster> getAllJogathons() {
+        return jMasterRepo.findAll();
     }
 }

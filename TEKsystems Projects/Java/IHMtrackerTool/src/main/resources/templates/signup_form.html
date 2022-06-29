@@ -33,7 +33,11 @@ Awesome Header by Mark Stafki!
                                         th:text="${error}">Bad username</p>
                                     </div>
                                 </div> -->
-
+                                <div th:if="${param.success}">
+                                    <div class="alert alert-success">
+                                        You've successfully registered! Please log in.
+                                    </div>
+                                </div>
                                 <div class="mb-3">
                                     <label class="mb-2 text-muted" for="name">First Name</label>
                                     <input type="text" th:field="*{firstName}" class="form-control"
