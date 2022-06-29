@@ -134,26 +134,6 @@ public class IndexController {
         return "signup_form";
     }
 
-//    @PostMapping("process_register")
-//    public String processRegister(@Valid User user, BindingResult result) {
-//        BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
-//        String encodedPassword = passwordEncoder.encode(user.getPassword());
-//        user.setPassword(encodedPassword);
-//
-//        if (result.hasErrors()) {
-//            return "signup_form";
-//        }
-//        user.setEnabled(true);
-//
-//        Role role = roleRepo.findById(1).get();
-//        Set<Role> roles = new HashSet<>();
-//        roles.add(role);
-//        user.setRoles(roles);
-//
-//        userRepo.save(user);
-//        return "redirect:/login";
-//    }
-
     @GetMapping("chartData")
     @ResponseBody
     public List<List<BigDecimal>> chartData() {

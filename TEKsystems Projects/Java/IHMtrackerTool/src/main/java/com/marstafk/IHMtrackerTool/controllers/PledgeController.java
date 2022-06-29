@@ -128,23 +128,19 @@ public class PledgeController {
             }
 
             double perLapValue = pledge.getPerLap().doubleValue();
+            double oneTimeValue = pledge.getOneTime().doubleValue();
 
             Person person = personService.getPersonById(Long.parseLong(request.getParameter("personId")));
 
-
-            if (perLapValue > 0) {
+            if(pledge.isCollected() && perLapValue > 0) {
                 Run run = runService.getByPersonId(person.getId());
-                if (run == null) {
-                    violations2.add("Please add laps before marking as collected.");
-                }else if (run.getLaps() == 0) {
+                if (run == null || run.getLaps() == 0) {
                     violations2.add("Please add laps before marking as collected.");
                 } else {
-                    if (pledge.isCollected()) {
-                        pledge.setTotal(pledge.getOneTime().add((pledge.getPerLap().multiply(new BigDecimal(run.getLaps())))));
-                    } else {
-                        pledge.setTotal(pledge.getOneTime());
-                    }
+                    pledge.setTotal(pledge.getOneTime().add((pledge.getPerLap().multiply(new BigDecimal(run.getLaps())))));
                 }
+            } else if(!pledge.isCollected()) {
+                pledge.setTotal(new BigDecimal(0.00));
             } else {
                 pledge.setTotal(pledge.getOneTime());
             }
@@ -276,6 +272,23 @@ public class PledgeController {
         }
         return "redirect:/pledges";
     }
+
+//    @PostMapping("collect")
+//    public String collect() {
+//        List<Pledge> all = pledgeService.getAllPledges(true, false);
+//        for (Pledge p : all) {
+//            Run run = new Run();
+//            try {
+//                run = runService.getByPersonId(personService.getPersonByPledgeId(p.getId()).getId());
+//            } catch (ObjectNotFoundException e) {
+//                //skip
+//            }
+//            if (!p.isCollected() && run != null) {
+//                p.setTotal(p.getOneTime().add((p.getPerLap().multiply(new BigDecimal(run.getLaps())))));
+//            }
+//        }
+//        return "redirect:/pledges";
+//    }
 
     private List<DisplayPledge> associatePledgeToDisplay(List<Pledge> pledges) {
         List<DisplayPledge> displayPledges = new ArrayList<>();
